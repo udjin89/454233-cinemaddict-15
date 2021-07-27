@@ -1,7 +1,7 @@
 # Проект «Киноман»
 
 * Студент: [Евгений Ильин](https://up.htmlacademy.ru/ecmascript/15/user/454233).
-* Наставник: `Неизвестно`.
+* Наставник: [Максим Иванов](https://htmlacademy.ru/profile/id342945).
 
 ---
 
