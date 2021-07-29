@@ -4,7 +4,8 @@ import { createSort } from './view/view-sort.js';
 import { createFooterStatistics } from './view/view-footer-statistics.js';
 import { createFilmCard } from './view/view-film-card.js';
 import { createFilmsListEmpty } from './view/view-films-list.js';
-import { createButtonShowMore } from './view/view-show-more';
+import { createButtonShowMore } from './view/view-show-more.js';
+import { createFilmExtraList } from './view/view-film-extra.js';
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -28,6 +29,9 @@ for (let i = 0; i < 5; i++) {
 }
 
 render(siteMainElement, createButtonShowMore(), 'beforeend');
+
+render(siteMainElement, createFilmExtraList(), 'beforeend');
+render(siteMainElement, createFilmExtraList(), 'beforeend');
 
 //footer
 render(siteFooterStatistics, createFooterStatistics(), 'beforeend');
