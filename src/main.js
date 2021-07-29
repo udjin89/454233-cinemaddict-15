@@ -43,5 +43,11 @@ render(siteFilmsList, createButtonShowMore(), 'beforeend');
 render(siteFilmsSection, createFilmExtraList(), 'beforeend');
 render(siteFilmsSection, createFilmExtraList(), 'beforeend');
 
+const siteFilmExtra = siteFilmsSection.querySelectorAll('.films-list--extra');
+for (const film of siteFilmExtra) {
+  const extraContainer = film.querySelector('.films-list__container');
+  render(extraContainer, createFilmCard(), 'beforeend');
+  render(extraContainer, createFilmCard(), 'beforeend');
+}
 //footer
 render(siteFooterStatistics, createFooterStatistics(), 'beforeend');
