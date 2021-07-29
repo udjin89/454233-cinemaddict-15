@@ -6,6 +6,10 @@ import { createFilmCard } from './view/view-film-card.js';
 import { createFilmsListEmpty } from './view/view-films-list.js';
 import { createButtonShowMore } from './view/view-show-more.js';
 import { createFilmExtraList } from './view/view-film-extra.js';
+import { createFilmsSection } from './view/view-films.js';
+
+const FILMS_COUNT = 5;
+
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -20,18 +24,24 @@ render(siteHeaderElement, createProfile(), 'beforeend');
 //main
 render(siteMainElement, createNavigation(), 'beforeend');
 render(siteMainElement, createSort(), 'beforeend');
-render(siteMainElement, createFilmsListEmpty(), 'beforeend');
+//секция фильмов
+render(siteMainElement, createFilmsSection(), 'beforeend');
 
-const siteFilmsList = siteMainElement.querySelector('.films-list__container');
+const siteFilmsSection = siteMainElement.querySelector('.films');
 
-for (let i = 0; i < 5; i++) {
-  render(siteFilmsList, createFilmCard(), 'beforeend');
+render(siteFilmsSection, createFilmsListEmpty(), 'beforeend');
+
+const siteFilmsList = siteFilmsSection.querySelector('.films-list');
+const siteFilmsListContainer = siteFilmsList.querySelector('.films-list__container');
+
+for (let i = 0; i < FILMS_COUNT; i++) {
+  render(siteFilmsListContainer, createFilmCard(), 'beforeend');
 }
-
-render(siteMainElement, createButtonShowMore(), 'beforeend');
-
-render(siteMainElement, createFilmExtraList(), 'beforeend');
-render(siteMainElement, createFilmExtraList(), 'beforeend');
+// кнопка показать больше
+render(siteFilmsList, createButtonShowMore(), 'beforeend');
+// создаем два экстра списка в секции films
+render(siteFilmsSection, createFilmExtraList(), 'beforeend');
+render(siteFilmsSection, createFilmExtraList(), 'beforeend');
 
 //footer
 render(siteFooterStatistics, createFooterStatistics(), 'beforeend');
