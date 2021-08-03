@@ -1,11 +1,16 @@
 
-const createFilmCard = () => (
-  `
+
+const createFilmCard = (movie) => {
+
+  //деструктуируем то что пришло в movie
+  const { film_info, release } = movie;
+
+  return `
   <article class="film-card">
-  <h3 class="film-card__title">The Man with the Golden Arm</h3>
-  <p class="film-card__rating">9.0</p>
+  <h3 class="film-card__title">${film_info.title}</h3>
+  <p class="film-card__rating">${film_info.total_rating}</p>
   <p class="film-card__info">
-    <span class="film-card__year">1955</span>
+    <span class="film-card__year">${film_info.release.date}</span>
     <span class="film-card__duration">1h 59m</span>
     <span class="film-card__genre">Drama</span>
   </p>
@@ -18,7 +23,8 @@ const createFilmCard = () => (
     <button class="film-card__controls-item film-card__controls-item--favorite" type="button">Mark as favorite</button>
   </div>
   </article>
-  `
-);
+  `;
+}
+
 
 export { createFilmCard };

@@ -7,6 +7,8 @@ import { createFilmsListEmpty } from './view/view-films-list.js';
 import { createButtonShowMore } from './view/view-show-more.js';
 import { createFilmExtraList } from './view/view-film-extra.js';
 import { createFilmsSection } from './view/view-films.js';
+import { createFilmDetails } from './view/view-popup.js'
+import { generateMovie } from './mock/generate-movie.js';
 
 const FILMS_COUNT = 5;
 
@@ -21,10 +23,10 @@ const siteFooterStatistics = document.querySelector('.footer__statistics');
 
 //header
 render(siteHeaderElement, createProfile(), 'beforeend');
-//main
+//main -------------------------------------------------
 render(siteMainElement, createNavigation(), 'beforeend');
 render(siteMainElement, createSort(), 'beforeend');
-//секция фильмов
+//секция фильмов -------------------------------------------------
 render(siteMainElement, createFilmsSection(), 'beforeend');
 
 const siteFilmsSection = siteMainElement.querySelector('.films');
@@ -34,10 +36,16 @@ render(siteFilmsSection, createFilmsListEmpty(), 'beforeend');
 const siteFilmsList = siteFilmsSection.querySelector('.films-list');
 const siteFilmsListContainer = siteFilmsList.querySelector('.films-list__container');
 
+//генерация массива с карточками фильмов -------------------------------------------------
+const movies = new Array(FILMS_COUNT).fill().map(generateMovie);
+
+// console.log(movies);
+
 for (let i = 0; i < FILMS_COUNT; i++) {
-  render(siteFilmsListContainer, createFilmCard(), 'beforeend');
+  console.log(movies[i]);
+  render(siteFilmsListContainer, createFilmCard(movies[i]), 'beforeend');
 }
-// кнопка показать больше
+// кнопка показать больше -------------------------------------------------
 render(siteFilmsList, createButtonShowMore(), 'beforeend');
 // создаем два экстра списка в секции films
 render(siteFilmsSection, createFilmExtraList(), 'beforeend');
@@ -51,3 +59,10 @@ for (const film of siteFilmExtra) {
 }
 //footer
 render(siteFooterStatistics, createFooterStatistics(), 'beforeend');
+//++++++++++++++++++++
+// console.log('Start generate movie');
+// console.log(generateMovie());
+
+render(siteFooterStatistics, createFilmDetails(), 'beforeend');
+
+// console.log(movies);
