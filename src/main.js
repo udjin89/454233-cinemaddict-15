@@ -42,7 +42,7 @@ const movies = new Array(FILMS_COUNT).fill().map(generateMovie);
 // console.log(movies);
 
 for (let i = 0; i < FILMS_COUNT; i++) {
-  console.log(movies[i]);
+  // console.log(movies[i]);
   render(siteFilmsListContainer, createFilmCard(movies[i]), 'beforeend');
 }
 // кнопка показать больше -------------------------------------------------
