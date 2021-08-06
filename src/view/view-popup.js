@@ -1,4 +1,18 @@
-const createFilmDetails = () => {
+
+
+const createFilmDetails = (movie) => {
+
+  //деструктуируем то что пришло в movie
+  const { film_info, comments, user_details } = movie;
+  const { title, alternative_title, total_rating, director, writers, actors, poster, age_rating, genre, runtime, release, description } = film_info;
+  const { watchlist, already_watched, favorite } = user_details;
+  const runtimeView = Math.trunc(runtime / 60) + "h " + (runtime - Math.trunc(runtime / 60) * 60) + "m";
+
+  console.log(comments);
+
+  let genres = genre.join();
+  let writersView = writers.join();
+
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
     <div class="film-details__top-container">
@@ -7,50 +21,50 @@ const createFilmDetails = () => {
       </div>
       <div class="film-details__info-wrap">
         <div class="film-details__poster">
-          <img class="film-details__poster-img" src="./images/posters/the-great-flamarion.jpg" alt="">
+          <img class="film-details__poster-img" src="./images/posters/${poster}" alt="">
 
-          <p class="film-details__age">18+</p>
+          <p class="film-details__age">${age_rating}+</p>
         </div>
 
         <div class="film-details__info">
           <div class="film-details__info-head">
             <div class="film-details__title-wrap">
-              <h3 class="film-details__title">The Great Flamarion</h3>
-              <p class="film-details__title-original">Original: The Great Flamarion</p>
+              <h3 class="film-details__title">${title}</h3>
+              <p class="film-details__title-original">${alternative_title}</p>
             </div>
 
             <div class="film-details__rating">
-              <p class="film-details__total-rating">8.9</p>
+              <p class="film-details__total-rating">${total_rating}</p>
             </div>
           </div>
 
           <table class="film-details__table">
             <tr class="film-details__row">
               <td class="film-details__term">Director</td>
-              <td class="film-details__cell">Anthony Mann</td>
+              <td class="film-details__cell">${director}</td>
             </tr>
             <tr class="film-details__row">
-              <td class="film-details__term">Writers</td>
-              <td class="film-details__cell">Anne Wigton, Heinz Herald, Richard Weil</td>
+              <td class="film-details__term">Writer${writers.length > 1 ? 's' : ''}</td>
+              <td class="film-details__cell">${writersView}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Actors</td>
-              <td class="film-details__cell">Erich von Stroheim, Mary Beth Hughes, Dan Duryea</td>
+              <td class="film-details__cell">${actors}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">30 March 1945</td>
+              <td class="film-details__cell">${release.date}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">1h 18m</td>
+              <td class="film-details__cell">${runtimeView}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
-              <td class="film-details__cell">USA</td>
+              <td class="film-details__cell">${release.release_country}</td>
             </tr>
             <tr class="film-details__row">
-              <td class="film-details__term">Genres</td>
+              <td class="film-details__term">Genre${genre.length > 1 ? 's' : ''}</td>
               <td class="film-details__cell">
                 <span class="film-details__genre">Drama</span>
                 <span class="film-details__genre">Film-Noir</span>
@@ -59,15 +73,15 @@ const createFilmDetails = () => {
           </table>
 
           <p class="film-details__film-description">
-            The film opens following a murder at a cabaret in Mexico City in 1936, and then presents the events leading up to it in flashback. The Great Flamarion (Erich von Stroheim) is an arrogant, friendless, and misogynous marksman who displays his trick gunshot act in the vaudeville circuit. His show features a beautiful assistant, Connie (Mary Beth Hughes) and her drunken husband Al (Dan Duryea), Flamarion's other assistant. Flamarion falls in love with Connie, the movie's femme fatale, and is soon manipulated by her into killing her no good husband during one of their acts.
+            ${description}
           </p>
         </div>
       </div>
 
       <section class="film-details__controls">
-        <button type="button" class="film-details__control-button film-details__control-button--watchlist" id="watchlist" name="watchlist">Add to watchlist</button>
-        <button type="button" class="film-details__control-button film-details__control-button--active film-details__control-button--watched" id="watched" name="watched">Already watched</button>
-        <button type="button" class="film-details__control-button film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>
+        <button type="button" class="film-details__control-button film-details__control-button--watchlist ${watchlist ? "film-details__control-button--active" : ""}" id="watchlist" name="watchlist">Add to watchlist</button>
+        <button type="button" class="film-details__control-button  film-details__control-button--watched ${already_watched ? "film-details__control-button--active" : ""}" id="watched" name="watched">Already watched</button>
+        <button type="button" class="film-details__control-button film-details__control-button--favorite ${favorite ? "film-details__control-button--active" : ""}" id="favorite" name="favorite">Add to favorites</button>
       </section>
     </div>
 
@@ -81,10 +95,10 @@ const createFilmDetails = () => {
               <img src="./images/emoji/smile.png" width="55" height="55" alt="emoji-smile">
             </span>
             <div>
-              <p class="film-details__comment-text">Interesting setting and a good cast</p>
+              <p class="film-details__comment-text">${comments.coment}</p>
               <p class="film-details__comment-info">
                 <span class="film-details__comment-author">Tim Macoveev</span>
-                <span class="film-details__comment-day">2019/12/31 23:59</span>
+                <span class="film-details__comment-day">${comments.date}</span>
                 <button class="film-details__comment-delete">Delete</button>
               </p>
             </div>

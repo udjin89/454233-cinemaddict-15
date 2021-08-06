@@ -6,4 +6,8 @@ const getRandomInteger = (a = 0, b = 1) => {
 
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
-export { getRandomInteger };
+const getRandomFloat = (a = 0, b = 10) => {
+
+  return (Math.random() * 10).toFixed(1);
+};
+export { getRandomInteger, getRandomFloat };
