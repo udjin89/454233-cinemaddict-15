@@ -25,7 +25,7 @@ const generatePoster = () => {
   ];
   const randomIndex = getRandomInteger(0, poster.length - 1);
   return poster[randomIndex];
-}
+};
 const generateTitle = () => {
   const title = [
     'The Dance of Life',
@@ -38,7 +38,7 @@ const generateTitle = () => {
   ];
   const randomIndex = getRandomInteger(0, title.length - 1);
   return title[randomIndex];
-}
+};
 const generateDescription = () => {
   const texts = [
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -63,7 +63,7 @@ const generateDescription = () => {
   }
 
   return description;
-}
+};
 
 const generateDirector = () => {
   const director = [
@@ -74,7 +74,7 @@ const generateDirector = () => {
   ];
   const randomIndex = getRandomInteger(0, director.length - 1);
   return director[randomIndex];
-}
+};
 
 const generateAlterTitle = () => {
   const title = [
@@ -86,7 +86,7 @@ const generateAlterTitle = () => {
   ];
   const randomIndex = getRandomInteger(0, title.length - 1);
   return title[randomIndex];
-}
+};
 const generateWriters = () => {
   const writer = [
     'Takeshi Kitano',
@@ -140,7 +140,7 @@ const generateActors = () => {
   }
   // console.log(actors);
   return actors;
-}
+};
 const generateCountry = () => {
   const country = [
     'Angola',
@@ -156,7 +156,7 @@ const generateCountry = () => {
   ];
   const randomIndex = getRandomInteger(0, country.length - 1);
   return country[randomIndex];
-}
+};
 const generateGenres = () => {
   const genre = [
     'Comedy',
@@ -181,34 +181,33 @@ const generateGenres = () => {
 
   }
   return genres;
-}
+};
 
 const generateMovie = () => ({
-  "id": getRandomInteger(0, 5000000),
-  "comments": generateComments(),
-  "film_info": {
-    "title": generateTitle(),
-    "alternative_title": generateAlterTitle(),
-    "total_rating": getRandomFloat(),
-    "poster": generatePoster(),
-    "age_rating": getRandomInteger(0, 18),
-    "director": generateDirector(),
-    "writers": generateWriters(),
-    "actors": generateActors(),
-    "release": {
-      "date": generateDate(),
-      "release_country": generateCountry(),
+  'id': getRandomInteger(0, 5000000),
+  'comments': generateComments(),
+  'film_info': {
+    'title': generateTitle(),
+    'alternative_title': generateAlterTitle(),
+    'total_rating': getRandomFloat(),
+    'poster': generatePoster(),
+    'age_rating': getRandomInteger(0, 18),
+    'director': generateDirector(),
+    'writers': generateWriters(),
+    'actors': generateActors(),
+    'release': {
+      'date': generateDate(),
+      'release_country': generateCountry(),
     },
-    "runtime": getRandomInteger(MIN_TIME, MAX_TIME),
-    "genre": generateGenres(),
-    "description": generateDescription(),
+    'runtime': getRandomInteger(MIN_TIME, MAX_TIME),
+    'genre': generateGenres(),
+    'description': generateDescription(),
   },
-  "user_details": {
-    "watchlist": Boolean(getRandomInteger(0, 1)),
-    "already_watched": Boolean(getRandomInteger(0, 1)),
-    "watching_date": generateDate(),
-    "favorite": Boolean(getRandomInteger(0, 1)),
-  }
+  'isWatchlist': Boolean(getRandomInteger(0, 1)),
+  'isWatched': Boolean(getRandomInteger(0, 1)),
+  'watching_date': generateDate(),
+  'idFavorite': Boolean(getRandomInteger(0, 1)),
+
 });
 
 export { generateMovie };

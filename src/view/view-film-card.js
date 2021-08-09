@@ -2,9 +2,9 @@
 const createFilmCard = (movie) => {
 
   //деструктуируем то что пришло в movie
-  const { film_info, comments, user_details } = movie;
+  const { film_info, comments, isWatchlist, isWatched, idFavorite } = movie;
   const { title, total_rating, poster, genre, runtime, release } = film_info;
-  const { watchlist, already_watched, favorite } = user_details;
+  // const { x } = user_details;
   // console.log(movie);
   // console.log(comments);
   const countComments = comments.length;
@@ -31,13 +31,13 @@ const createFilmCard = (movie) => {
   <p class="film-card__description">${curDescription}</p>
   <a class="film-card__comments">${countComments}</a>
   <div class="film-card__controls">
-    <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${watchlist ? "film-card__controls-item--active" : ""}" type="button">Add to watchlist</button>
-    <button class="film-card__controls-item film-card__controls-item--mark-as-watched ${already_watched ? "film-card__controls-item--active" : ""}" type="button">Mark as watched</button>
-    <button class="film-card__controls-item film-card__controls-item--favorite ${favorite ? "film-card__controls-item--active" : ""}" type="button">Mark as favorite</button>
+    <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${isWatchlist ? "film-card__controls-item--active" : ""}" type="button">Add to watchlist</button>
+    <button class="film-card__controls-item film-card__controls-item--mark-as-watched ${isWatched ? "film-card__controls-item--active" : ""}" type="button">Mark as watched</button>
+    <button class="film-card__controls-item film-card__controls-item--favorite ${idFavorite ? "film-card__controls-item--active" : ""}" type="button">Mark as favorite</button>
   </div>
   </article>
   `;
-}
+};
 
 
 export { createFilmCard };
