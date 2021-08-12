@@ -1,18 +1,19 @@
 import { createElement } from '../mock/utils.js';
 
-const createFooterStatistics = () => (
-  `<p>130 23391 movies inside</p>
+const createFilmsListContainer = () => (
+  `<div class="films-list__container">
+
+    </div>
   `
 );
-
-export default class footerStat {
+// Класс filmsListContainer, экспортируем по умолчанию, для удобства
+export default class filmsListContainer {
   constructor() {
     this._element = null; //здесь будет храниться DOM элемент
   }
 
   getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
-
-    return createFooterStatistics();
+    return createFilmsListContainer();
   }
 
   getElement() {

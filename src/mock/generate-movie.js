@@ -174,7 +174,7 @@ const generateGenres = () => {
   for (let i = 0; i < randomCountWriters; i++) {
     const randomIndex = getRandomInteger(0, genre.length - 1);
     // console.log(writer[randomIndex]);
-    let exist = genres.find((elem) => { return elem == genre[randomIndex] });
+    let exist = genres.find((elem) => { return elem === genre[randomIndex] });
     if (!exist) {
       genres.push(genre[randomIndex]);
     }
@@ -186,12 +186,12 @@ const generateGenres = () => {
 const generateMovie = () => ({
   'id': getRandomInteger(0, 5000000),
   'comments': generateComments(),
-  'film_info': {
+  'filmInfo': {
     'title': generateTitle(),
-    'alternative_title': generateAlterTitle(),
-    'total_rating': getRandomFloat(),
+    'alternativeTitle': generateAlterTitle(),
+    'totalRating': getRandomFloat(),
     'poster': generatePoster(),
-    'age_rating': getRandomInteger(0, 18),
+    'ageRating': getRandomInteger(0, 18),
     'director': generateDirector(),
     'writers': generateWriters(),
     'actors': generateActors(),

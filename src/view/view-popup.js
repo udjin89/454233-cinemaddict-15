@@ -1,10 +1,10 @@
-
+import { createElement } from '../mock/utils.js';
 
 const createFilmDetails = (movie) => {
 
   //деструктуируем то что пришло в movie
-  const { film_info, comments, isWatchlist, isWatched, idFavorite } = movie;
-  const { title, alternative_title, total_rating, director, writers, actors, poster, age_rating, genre, runtime, release, description } = film_info;
+  const { filmInfo, comments, isWatchlist, isWatched, idFavorite } = movie;
+  const { title, alternativeTitle, totalRating, director, writers, actors, poster, ageRating, genre, runtime, release, description } = filmInfo;
   const runtimeView = Math.trunc(runtime / 60) + "h " + (runtime - Math.trunc(runtime / 60) * 60) + "m";
 
   // console.log(genre);
@@ -57,18 +57,18 @@ const createFilmDetails = (movie) => {
         <div class="film-details__poster">
           <img class="film-details__poster-img" src="./images/posters/${poster}" alt="">
 
-          <p class="film-details__age">${age_rating}+</p>
+          <p class="film-details__age">${ageRating}+</p>
         </div>
 
         <div class="film-details__info">
           <div class="film-details__info-head">
             <div class="film-details__title-wrap">
               <h3 class="film-details__title">${title}</h3>
-              <p class="film-details__title-original">${alternative_title}</p>
+              <p class="film-details__title-original">${alternativeTitle}</p>
             </div>
 
             <div class="film-details__rating">
-              <p class="film-details__total-rating">${total_rating}</p>
+              <p class="film-details__total-rating">${totalRating}</p>
             </div>
           </div>
 
@@ -119,6 +119,7 @@ const createFilmDetails = (movie) => {
     <div class="film-details__bottom-container">
       <section class="film-details__comments-wrap">
         <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">4</span></h3>
+        <ul class="film-details__comments-list">
           ${renderComents}
         </ul>
 
@@ -155,7 +156,35 @@ const createFilmDetails = (movie) => {
     </div>
   </form>
 </section>
-`
+`;
+};
+
+export default class popup {
+  constructor(movie) {
+    this._movie = movie;
+    this._element = null; //здесь будет храниться DOM элемент
+  }
+
+  getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
+
+    return createFilmDetails(this._movie);
+  }
+
+  getElement() {
+    if (!this._element) { //Если в поле _element, ничего нет то мы присваиваем результат функции createElement
+      //в createElement отправляем разметку
+      //Разметка из метода getTemplate, который вызывает createMenuTemplate
+      // console.log(filter);
+
+      this._element = createElement(this.getTemplate());
+    }
+    // Если уже что то находится в  _element, просто возвращаем это
+    // console.log(this._element);
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null; //затираем значение(разметку которая там)
+  }
 }
 
-export { createFilmDetails };

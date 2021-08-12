@@ -1,27 +1,22 @@
-// let activeClass = "film-card__controls-item--active";
-const createFilmCard = (movie) => {
+import { createElement } from '../mock/utils.js';
 
+const createFilmCard = (movie) => {
   //деструктуируем то что пришло в movie
-  const { film_info, comments, isWatchlist, isWatched, idFavorite } = movie;
-  const { title, total_rating, poster, genre, runtime, release } = film_info;
+  const { filmInfo, comments, isWatchlist, isWatched, idFavorite } = movie;
+  const { title, totalRating, poster, genre, runtime, release } = filmInfo;
   // const { x } = user_details;
   // console.log(movie);
   // console.log(comments);
   const countComments = comments.length;
   // console.log(countComments);
   //если более 140 символов, добавляем "..."
-  const curDescription = film_info.description.length > 140 ? film_info.description.slice(0, 139).concat('...') : film_info.description;
-  let activeClassWatch, activeClassAlready, activeClassFavorite;
-  // watchlist ? activeClassWatch = "film-card__controls-item--active" : activeClassWatch = "";
-  // already_watched ? activeClassAlready = "film-card__controls-item--active" : activeClassWatch = "";
-  // favorite ? activeClassFavorite = "film-card__controls-item--active" : activeClassWatch = "";
+  const curDescription = filmInfo.description.length > 140 ? filmInfo.description.slice(0, 139).concat('...') : filmInfo.description;
 
   const runtimeView = Math.trunc(runtime / 60) + "h " + (runtime - Math.trunc(runtime / 60) * 60) + "m";
 
-  return `
-  <article class="film-card">
+  return `<article class="film-card">
   <h3 class="film-card__title">${title}</h3>
-  <p class="film-card__rating">${total_rating}</p>
+  <p class="film-card__rating">${totalRating}</p>
   <p class="film-card__info">
     <span class="film-card__year">${release.date}</span>
     <span class="film-card__duration">${runtimeView}</span>
@@ -38,6 +33,33 @@ const createFilmCard = (movie) => {
   </article>
   `;
 };
+// Класс filmCard, экспортируем по умолчанию, для удобства
+export default class filmCard {
+  constructor(movie) {
+    this._movieCard = movie;
+    this._element = null; //здесь будет храниться DOM элемент
+  }
 
+  getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
 
-export { createFilmCard };
+    return createFilmCard(this._movieCard);
+  }
+
+  getElement() {
+    if (!this._element) { //Если в поле _element, ничего нет то мы присваиваем результат функции createElement
+      //в createElement отправляем разметку
+      //Разметка из метода getTemplate, который вызывает createMenuTemplate
+      // console.log(filter);
+
+      this._element = createElement(this.getTemplate());
+    }
+    // Если уже что то находится в  _element, просто возвращаем это
+    // console.log(this._element);
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null; //затираем значение(разметку которая там)
+  }
+}
+
