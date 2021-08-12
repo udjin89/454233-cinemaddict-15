@@ -119,6 +119,7 @@ const createFilmDetails = (movie) => {
     <div class="film-details__bottom-container">
       <section class="film-details__comments-wrap">
         <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">4</span></h3>
+        <ul class="film-details__comments-list">
           ${renderComents}
         </ul>
 
@@ -155,7 +156,7 @@ const createFilmDetails = (movie) => {
     </div>
   </form>
 </section>
-`
+`;
 };
 
 export default class popup {
@@ -178,7 +179,7 @@ export default class popup {
       this._element = createElement(this.getTemplate());
     }
     // Если уже что то находится в  _element, просто возвращаем это
-    console.log(this._element);
+    // console.log(this._element);
     return this._element;
   }
 

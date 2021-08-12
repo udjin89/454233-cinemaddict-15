@@ -1,21 +1,20 @@
 import { createElement } from '../mock/utils.js';
 
-const createFilmExtraList = () => (
+const createFilmExtraList = (title) => (
   `<section class="films-list films-list--extra">
-  <h2 class="films-list__title">Top rated</h2>
-  <div class="films-list__container">
-  </div>
+  <h2 class="films-list__title">${title}</h2>
   </section>
   `
 );
 export default class filmExtraList {
-  constructor() {
+  constructor(title) {
+    this._title = title;
     this._element = null; //здесь будет храниться DOM элемент
   }
 
   getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
 
-    return createFilmExtraList();
+    return createFilmExtraList(this._title);
   }
 
   getElement() {

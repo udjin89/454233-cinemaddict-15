@@ -21,12 +21,52 @@ const siteBody = document.querySelector('body');
 const siteMainElement = document.querySelector('.main');
 const siteHeaderElement = document.querySelector('.header');
 const siteFooterStatistics = document.querySelector('.footer__statistics');
+
+
 //------------------------------------------------------
 //+++++++++++ФУНКЦИЯ СОЗДАНИЯ КАРТОЧКИ ФИЛЬМА ++++++++++
 //------------------------------------------------------
 const renderCardFilm = (container, movie) => {
-  render(container.getElement(), movie.getElement(), RenderPosition.BEFOREEND);
+  const cardFilm = new FilmCardView(movie); //Создаем класс с карточкой фильма
+  const cardPopup = new PopupView(movie);   //Создаем класс Попап из того же фильма
+
+  const openCardPopup = () => {
+    // render(siteBody, new PopupView(movie).getElement(), RenderPosition.BEFOREEND);
+    siteBody.appendChild(cardPopup.getElement());
+    siteBody.classList.add('hide-overflow');
+  };
+
+  const removeCardPopup = () => {
+    siteBody.removeChild(cardPopup.getElement());
+    siteBody.classList.remove('hide-overflow');
+  };
+
+  const onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      removeCardPopup();
+      document.removeEventListener('keydown', onEscKeyDown);
+    }
+  };
+
+  cardFilm.getElement().querySelector('.film-card__poster').addEventListener('click', () => {
+    openCardPopup();
+    document.addEventListener('keydown', onEscKeyDown);
+  });
+  cardFilm.getElement().querySelector('.film-card__title').addEventListener('click', () => {
+    openCardPopup();
+    document.addEventListener('keydown', onEscKeyDown);
+  });
+  cardFilm.getElement().querySelector('.film-card__comments').addEventListener('click', () => {
+    openCardPopup();
+    document.addEventListener('keydown', onEscKeyDown);
+  });
+  cardPopup.getElement().querySelector('.film-details__close-btn').addEventListener('click', () => {
+    removeCardPopup();
+  });
+  render(container.getElement(), cardFilm.getElement(), RenderPosition.BEFOREEND);
 };
+
 //------------------------------------------------------
 //----генерация массива с карточками фильмов -----------
 //------------------------------------------------------
@@ -65,7 +105,7 @@ else {
   for (let i = 0; i < Math.min(movies.length, FILMS_BY_STEP); i++) {
     // console.log(movies[i]);
     // render(filmListContainer.getElement(), new FilmCardView(movies[i]).getElement(), RenderPosition.BEFOREEND);
-    renderCardFilm(filmListContainer, new FilmCardView(movies[i]));
+    renderCardFilm(filmListContainer, movies[i]);
   }
   //------------------------------------------------------
   //++++++++++++++++++++++  КНОПКА показать больше  ++++++
@@ -93,11 +133,22 @@ else {
   }
 }
 
-
+//------------------------------------------------------
+//++++++++++++++++++++++  EXTRA LIST  ++++++++++++++++++
+//------------------------------------------------------
 // создаем два экстра списка в секции films
-const topFilmRate = new FilmExtraListView();
+// const sectionFilmsExtra =
+const topFilmRate = new FilmExtraListView('Top rates');
+// добавляем в секцию films -> films-list--extra
 render(sectionFilms.getElement(), topFilmRate.getElement(), RenderPosition.BEFOREEND);
-const mostComment = new FilmExtraListView();
+//создаем контейнер в films-list, в котором будут карточки фильмов
+const filmListContainerExtra = new FilmsListContainerView();
+//Добавляем контейнер в films-list--extra
+render(topFilmRate.getElement(), filmListContainerExtra.getElement(), RenderPosition.BEFOREEND);
+render(filmListContainerExtra.getElement(), new FilmCardView(movies[0]).getElement(), RenderPosition.BEFOREEND);
+render(filmListContainerExtra.getElement(), new FilmCardView(movies[1]).getElement(), RenderPosition.BEFOREEND);
+
+const mostComment = new FilmExtraListView('Most commented');
 render(sectionFilms.getElement(), mostComment.getElement(), RenderPosition.BEFOREEND);
 
 
