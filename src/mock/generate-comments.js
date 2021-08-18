@@ -1,5 +1,7 @@
 import { getRandomInteger } from '../utils/utils.js';
 import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
 
 const MIN_COUNT_COMMENTS = 0;
 const MAX_COUNT_COMMENTS = 5;
