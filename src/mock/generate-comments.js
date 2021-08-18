@@ -1,4 +1,4 @@
-import { getRandomInteger } from '../mock/utils.js';
+import { getRandomInteger } from '../utils/utils.js';
 import dayjs from 'dayjs';
 
 const MIN_COUNT_COMMENTS = 0;

@@ -1,34 +1,28 @@
-import { createElement } from '../mock/utils.js';
+import AbstractView from './abstract.js';
 
 const createButtonShowMore = () => (
   `<button class="films-list__show-more">Show more</button>
   `
 );
 // Класс sort, экспортируем по умолчанию, для удобства
-export default class buttonShow {
+export default class buttonShow extends AbstractView {
   constructor() {
-    this._element = null; //здесь будет храниться DOM элемент
+    super();
+    this._clickButtonShowMore = this._clickButtonShowMore.bind(this);
   }
 
   getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
-
     return createButtonShowMore();
   }
 
-  getElement() {
-    if (!this._element) { //Если в поле _element, ничего нет то мы присваиваем результат функции createElement
-      //в createElement отправляем разметку
-      //Разметка из метода getTemplate, который вызывает createMenuTemplate
-      // console.log(filter);
-      this._element = createElement(this.getTemplate());
-    }
-    // Если уже что то находится в  _element, просто возвращаем это
-    // console.log(this._element);
-    return this._element;
+  _clickButtonShowMore(evt) {
+    evt.preventDefault();
+    this._callback.clickButtonShowMore();
   }
 
-  removeElement() {
-    this._element = null; //затираем значение(разметку которая там)
+  setShowMore(callback) {
+    this._callback.clickButtonShowMore = callback;
+    this.getElement().addEventListener('click', this._clickButtonShowMore);
   }
 }
 

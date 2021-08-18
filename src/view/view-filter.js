@@ -1,4 +1,4 @@
-import { createElement } from '../mock/utils.js';
+import AbstractView from './abstract.js';
 
 const filmToFilterMap = {
   watchlist: (films) => films.filter((film) => film.isWatchlist).length,
@@ -26,29 +26,13 @@ const createFiltersTemplate = (filters) => {
 </nav>`;
 };
 // Класс filter, экспортируем по умолчанию, для удобства
-export default class filter {
+export default class filter extends AbstractView {
   constructor(filters) {
+    super();
     this._filters = filters; //сохраняем преданные данные
-    this._element = null; //здесь будет храниться DOM элемент
   }
 
   getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
     return createFiltersTemplate(this._filters);
-  }
-
-  getElement() {
-    if (!this._element) { //Если в поле _element, ничего нет то мы присваиваем результат функции createElement
-      //в createElement отправляем разметку
-      //Разметка из метода getTemplate, который вызывает createFiltersTemplate
-      // console.log(filter);
-      this._element = createElement(this.getTemplate());
-    }
-    // Если уже что то находится в  _element, просто возвращаем это
-    // console.log(this._element);
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null; //затираем значение(разметку которая там)
   }
 }

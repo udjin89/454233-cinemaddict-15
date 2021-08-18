@@ -1,5 +1,4 @@
-// Функция из интернета по генерации случайного числа из диапазона
-// Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
+import Abstract from "../view/abstract";
 
 const RenderPosition = {
   AFTERBEGIN: 'afterbegin',
@@ -15,7 +14,14 @@ const RenderPosition = {
 //------------------------------------------------------
 //container - куда будем вставлять, element - то что вставляем, place - место в container, куда вставляем
 const render = (container, element, place) => {
-  // console.log(element);
+
+  if (container instanceof Abstract) {
+    container = container.getElement();
+  }
+  if (element instanceof Abstract) {
+    element = element.getElement();
+  }
+
   switch (place) {
     case RenderPosition.AFTERBEGIN: container.prepend(element);
       break;
@@ -37,15 +43,5 @@ const createElement = (template) => { // принимает разметку
 // Единственный нюанс, что HTML в строке должен иметь общую обёртку,
 // то есть быть чем-то вроде <nav><a>Link 1</a><a>Link 2</a></nav>,
 // а не просто <a>Link 1</a><a>Link 2</a>
-const getRandomInteger = (a = 0, b = 1) => {
-  const lower = Math.ceil(Math.min(a, b));
-  const upper = Math.floor(Math.max(a, b));
 
-  return Math.floor(lower + Math.random() * (upper - lower + 1));
-};
-const getRandomFloat = (a = 0, b = 10) => {
-  return (Math.random() * 10).toFixed(1);
-};
-
-
-export { getRandomInteger, getRandomFloat, RenderPosition, createElement, render };
+export { RenderPosition, createElement, render };

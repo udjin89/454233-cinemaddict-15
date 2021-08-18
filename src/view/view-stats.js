@@ -1,4 +1,4 @@
-import { createElement } from '../mock/utils.js';
+import AbstractView from './abstract.js';
 
 const createStats = () => (
   `<section class="statistic">
@@ -50,30 +50,10 @@ const createStats = () => (
 
   `
 );
-export default class stats {
-  constructor() {
-    this._element = null; //здесь будет храниться DOM элемент
-  }
+export default class stats extends AbstractView {
 
   getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
 
     return createStats();
-  }
-
-  getElement() {
-    if (!this._element) { //Если в поле _element, ничего нет то мы присваиваем результат функции createElement
-      //в createElement отправляем разметку
-      //Разметка из метода getTemplate, который вызывает createMenuTemplate
-      // console.log(filter);
-
-      this._element = createElement(this.getTemplate());
-    }
-    // Если уже что то находится в  _element, просто возвращаем это
-    // console.log(this._element);
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null; //затираем значение(разметку которая там)
   }
 }

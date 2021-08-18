@@ -1,18 +1,15 @@
-import { createElement } from '../mock/utils.js';
+import AbstractView from './abstract.js';
 
 const createFilmCard = (movie) => {
   //деструктуируем то что пришло в movie
   const { filmInfo, comments, isWatchlist, isWatched, idFavorite } = movie;
   const { title, totalRating, poster, genre, runtime, release } = filmInfo;
-  // const { x } = user_details;
-  // console.log(movie);
-  // console.log(comments);
   const countComments = comments.length;
-  // console.log(countComments);
+
   //если более 140 символов, добавляем "..."
   const curDescription = filmInfo.description.length > 140 ? filmInfo.description.slice(0, 139).concat('...') : filmInfo.description;
 
-  const runtimeView = Math.trunc(runtime / 60) + "h " + (runtime - Math.trunc(runtime / 60) * 60) + "m";
+  const runtimeView = `${Math.trunc(runtime / 60)}h ${(runtime - Math.trunc(runtime / 60) * 60)}m`;
 
   return `<article class="film-card">
   <h3 class="film-card__title">${title}</h3>
@@ -34,32 +31,29 @@ const createFilmCard = (movie) => {
   `;
 };
 // Класс filmCard, экспортируем по умолчанию, для удобства
-export default class filmCard {
+// filmCard делаем дочерним от Abstract, и он наследует все методы
+export default class filmCard extends AbstractView {
   constructor(movie) {
+    super(); // наследуем конструктор из class Abstract
     this._movieCard = movie;
-    this._element = null; //здесь будет храниться DOM элемент
+
+    this._clickFilm = this._clickFilm.bind(this); //?????
   }
 
   getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
-
     return createFilmCard(this._movieCard);
   }
 
-  getElement() {
-    if (!this._element) { //Если в поле _element, ничего нет то мы присваиваем результат функции createElement
-      //в createElement отправляем разметку
-      //Разметка из метода getTemplate, который вызывает createMenuTemplate
-      // console.log(filter);
-
-      this._element = createElement(this.getTemplate());
-    }
-    // Если уже что то находится в  _element, просто возвращаем это
-    // console.log(this._element);
-    return this._element;
+  _clickFilm(evt) {
+    evt.preventDefault();
+    this._callback.clickFilm(); //???
   }
 
-  removeElement() {
-    this._element = null; //затираем значение(разметку которая там)
+  setClickFilm(callback) {
+    this._callback.clickFilm = callback;
+    this.getElement().querySelector('.film-card__poster').addEventListener('click', this._clickFilm);
+    this.getElement().querySelector('.film-card__title').addEventListener('click', this._clickFilm);
+    this.getElement().querySelector('.film-card__comments').addEventListener('click', this._clickFilm);
   }
 }
 
