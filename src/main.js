@@ -12,9 +12,9 @@ import FilmExtraListView from './view/view-film-extra.js';
 import PopupView from './view/view-popup.js';
 
 import { generateMovie } from './mock/generate-movie.js';
-import { RenderPosition, render } from './mock/utils.js';
+import { RenderPosition, render } from './utils/render.js';
 
-const FILMS_COUNT = 7;
+const FILMS_COUNT = 11;
 const FILMS_BY_STEP = 5;
 
 const siteBody = document.querySelector('body');
@@ -49,22 +49,15 @@ const renderCardFilm = (container, movie) => {
     }
   };
 
-  cardFilm.getElement().querySelector('.film-card__poster').addEventListener('click', () => {
+  cardFilm.setClickFilm(() => {
     openCardPopup();
     document.addEventListener('keydown', onEscKeyDown);
   });
-  cardFilm.getElement().querySelector('.film-card__title').addEventListener('click', () => {
-    openCardPopup();
-    document.addEventListener('keydown', onEscKeyDown);
-  });
-  cardFilm.getElement().querySelector('.film-card__comments').addEventListener('click', () => {
-    openCardPopup();
-    document.addEventListener('keydown', onEscKeyDown);
-  });
-  cardPopup.getElement().querySelector('.film-details__close-btn').addEventListener('click', () => {
+
+  cardPopup.setClosePopup(() => {
     removeCardPopup();
   });
-  render(container.getElement(), cardFilm.getElement(), RenderPosition.BEFOREEND);
+  render(container, cardFilm, RenderPosition.BEFOREEND);
 };
 
 //------------------------------------------------------
@@ -74,33 +67,33 @@ const movies = new Array(FILMS_COUNT).fill().map(generateMovie);
 //------------------------------------------------------
 //+++++++++++++++++++++ ПРОФАЙЛ ++++++++++++++++++++++++
 //------------------------------------------------------
-render(siteHeaderElement, new ProfileView().getElement(), RenderPosition.BEFOREEND);
+render(siteHeaderElement, new ProfileView(), RenderPosition.BEFOREEND);
 //------------------------------------------------------
 //++++++++++++++++++++++ MAIN ++++++++++++++++++++++++++
 //------------------------------------------------------
 //Вставляем в .main класс меню, создаем экземпляр класса, а метод getElement возвращает разметку, которая храниться в this._element
-render(siteMainElement, new FilterView(movies).getElement(), RenderPosition.BEFOREEND);
-render(siteMainElement, new SortView().getElement(), RenderPosition.BEFOREEND);
+render(siteMainElement, new FilterView(movies), RenderPosition.BEFOREEND);
+render(siteMainElement, new SortView(), RenderPosition.BEFOREEND);
 
 //------------------------------------------------------
 //++++++++++++++++++++++  Секция ФИЛЬМОВ  ++++++++++++++
 //------------------------------------------------------
 
 const sectionFilms = new FilmsSectionView(); // сохраняем в переменную класс с секцией, что бы потом обращаться к разметке методом getElement
-render(siteMainElement, sectionFilms.getElement(), RenderPosition.BEFOREEND); // добавили секцию (пустая)
+render(siteMainElement, sectionFilms, RenderPosition.BEFOREEND); // добавили секцию (пустая)
 
 //создаем секцию со списком, в которой будет еще контейнер
 const filmsList = new FilmsListView();
 // добавляем в секцию films, новую секцию films-list
-render(sectionFilms.getElement(), filmsList.getElement(), RenderPosition.BEFOREEND);
+render(sectionFilms, filmsList, RenderPosition.BEFOREEND);
 
 if (!movies.length) {
-  render(filmsList.getElement(), new NoFilms().getElement(), RenderPosition.BEFOREEND);
+  render(filmsList, new NoFilms(), RenderPosition.BEFOREEND);
 }
 else {
   //создаем контейнер в films-list, в котором будут карточки фильмов
   const filmListContainer = new FilmsListContainerView();
-  render(filmsList.getElement(), filmListContainer.getElement(), RenderPosition.BEFOREEND);
+  render(filmsList, filmListContainer, RenderPosition.BEFOREEND);
 
   for (let i = 0; i < Math.min(movies.length, FILMS_BY_STEP); i++) {
     // console.log(movies[i]);
@@ -113,15 +106,13 @@ else {
   if (movies.length > FILMS_BY_STEP) {
 
     const buttonShowMore = new ButtonShowMoreView(); // сохраняем класс с кнопкой для обращения по методу getElement()
-    render(filmsList.getElement(), buttonShowMore.getElement(), RenderPosition.BEFOREEND);
+    render(filmsList, buttonShowMore, RenderPosition.BEFOREEND);
 
     let renderedFilmsCount = FILMS_BY_STEP;
     // console.log(siteFilmsList);
     //получаем разметку из класса и уже на нее вешаем обработчик события.
-    buttonShowMore.getElement().addEventListener('click', (evt) => {
-      evt.preventDefault();
-      movies.slice(renderedFilmsCount, renderedFilmsCount + FILMS_BY_STEP)
-        .forEach((movie) => render(filmListContainer.getElement(), new FilmCardView(movie).getElement(), RenderPosition.BEFOREEND));
+    buttonShowMore.setShowMore(() => {
+      movies.slice(renderedFilmsCount, renderedFilmsCount + FILMS_BY_STEP).forEach((movie) => renderCardFilm(filmListContainer, movie));
 
       renderedFilmsCount += FILMS_BY_STEP;
 
@@ -140,23 +131,26 @@ else {
 // const sectionFilmsExtra =
 const topFilmRate = new FilmExtraListView('Top rates');
 // добавляем в секцию films -> films-list--extra
-render(sectionFilms.getElement(), topFilmRate.getElement(), RenderPosition.BEFOREEND);
+render(sectionFilms, topFilmRate, RenderPosition.BEFOREEND);
 //создаем контейнер в films-list, в котором будут карточки фильмов
 const filmListContainerExtra = new FilmsListContainerView();
 //Добавляем контейнер в films-list--extra
-render(topFilmRate.getElement(), filmListContainerExtra.getElement(), RenderPosition.BEFOREEND);
+render(topFilmRate, filmListContainerExtra, RenderPosition.BEFOREEND);
 render(filmListContainerExtra.getElement(), new FilmCardView(movies[0]).getElement(), RenderPosition.BEFOREEND);
 render(filmListContainerExtra.getElement(), new FilmCardView(movies[1]).getElement(), RenderPosition.BEFOREEND);
 
 const mostComment = new FilmExtraListView('Most commented');
 render(sectionFilms.getElement(), mostComment.getElement(), RenderPosition.BEFOREEND);
-
-
+//создаем контейнер в films-list, в котором будут карточки фильмов
+const filmListContainerExtra2 = new FilmsListContainerView();
+render(mostComment.getElement(), filmListContainerExtra2.getElement(), RenderPosition.BEFOREEND);
+render(filmListContainerExtra2.getElement(), new FilmCardView(movies[4]).getElement(), RenderPosition.BEFOREEND);
+render(filmListContainerExtra2.getElement(), new FilmCardView(movies[5]).getElement(), RenderPosition.BEFOREEND);
 //------------------------------------------------------
 //++++++++++++++++++++++  FOOTER  ++++++++++++++++++++++
 //------------------------------------------------------
 
-render(siteFooterStatistics, new FooterStatView().getElement(), RenderPosition.BEFOREEND);
+render(siteFooterStatistics, new FooterStatView(), RenderPosition.BEFOREEND);
 
 //------------------------------------------------------
 //++++++++++++++++++++++  POPUP  ++++++++++++++++++++++

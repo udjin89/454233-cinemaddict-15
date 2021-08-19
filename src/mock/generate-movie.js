@@ -1,6 +1,7 @@
 import { generateComments } from '../mock/generate-comments.js';
-import { getRandomInteger, getRandomFloat } from '../mock/utils.js';
+import { getRandomInteger, getRandomFloat } from '../utils/utils.js';
 import dayjs from 'dayjs';
+
 const MIN_COUNT_DESCRIPTION = 1;
 const MAX_COUNT_DESCRIPTION = 5;
 const MIN_TIME = 30;

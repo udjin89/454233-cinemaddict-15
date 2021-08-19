@@ -1,30 +1,30 @@
-import { createElement } from '../mock/utils.js';
+import AbstractView from './abstract.js';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
 
 const createFilmDetails = (movie) => {
 
   //деструктуируем то что пришло в movie
   const { filmInfo, comments, isWatchlist, isWatched, idFavorite } = movie;
   const { title, alternativeTitle, totalRating, director, writers, actors, poster, ageRating, genre, runtime, release, description } = filmInfo;
-  const runtimeView = Math.trunc(runtime / 60) + "h " + (runtime - Math.trunc(runtime / 60) * 60) + "m";
-
+  const runtimeView = `${Math.trunc(runtime / 60)}h ${(runtime - Math.trunc(runtime / 60) * 60)}m`;
   // console.log(genre);
   // console.log(comments);
-  let genres = genre.join();
-  let writersView = writers.join();
+  // let genres = genre.join();
+  const writersView = writers.join();
 
-  const genreTemplate = (genre, index) => {
-    return `<span class="film-details__genre">${genre}</span>`;
-  };
+  const genreTemplate = (genreElement) => `<span class="film-details__genre">${genreElement}</span>`;
 
-  const genresItems = (genre) => {
+  const genresItems = (genreParam) => {
 
-    const genresItemsTemplate = genre.map((item, index) => genreTemplate(item, index)).join('');
+    const genresItemsTemplate = genreParam.map((item, index) => genreTemplate(item, index)).join('');
     // console.log(genresItemsTemplate);
     return genresItemsTemplate;
   };
 
-  const commentTemplate = (com) => {
-    return `<li class="film-details__comment">
+  const commentTemplate = (com) => (
+    `<li class="film-details__comment">
     <span class="film-details__comment-emoji">
       <img src="./images/emoji/${com.emotion}.png" width="55" height="55" alt="emoji-smile">
     </span>
@@ -32,16 +32,16 @@ const createFilmDetails = (movie) => {
       <p class="film-details__comment-text">${com.comment}</p>
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${com.author}</span>
-        <span class="film-details__comment-day">${com.date}</span>
+        <span class="film-details__comment-day">${dayjs().to(dayjs(com.date))}</span>
         <button class="film-details__comment-delete">Delete</button>
       </p>
     </div>
-  </li>`;
-  };
+  </li>`
+  );
 
-  const commentsItems = (comments) => {
+  const commentsItems = (commentsItem) => {
 
-    const commentsItemsTemplate = comments.map((item, index) => commentTemplate(item, index)).join('');
+    const commentsItemsTemplate = commentsItem.map((item, index) => commentTemplate(item, index)).join('');
     return commentsItemsTemplate;
   };
   const renderComents = commentsItems(comments);
@@ -159,10 +159,12 @@ const createFilmDetails = (movie) => {
 `;
 };
 
-export default class popup {
+export default class popup extends AbstractView {
   constructor(movie) {
+    super();
     this._movie = movie;
-    this._element = null; //здесь будет храниться DOM элемент
+
+    this._clickClosePopup = this._clickClosePopup.bind(this);
   }
 
   getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
@@ -170,21 +172,14 @@ export default class popup {
     return createFilmDetails(this._movie);
   }
 
-  getElement() {
-    if (!this._element) { //Если в поле _element, ничего нет то мы присваиваем результат функции createElement
-      //в createElement отправляем разметку
-      //Разметка из метода getTemplate, который вызывает createMenuTemplate
-      // console.log(filter);
-
-      this._element = createElement(this.getTemplate());
-    }
-    // Если уже что то находится в  _element, просто возвращаем это
-    // console.log(this._element);
-    return this._element;
+  _clickClosePopup(evt) {
+    evt.preventDefault();
+    this._callback.clickClosePopup(); //???
   }
 
-  removeElement() {
-    this._element = null; //затираем значение(разметку которая там)
+  setClosePopup(callback) {
+    this._callback.clickClosePopup = callback;
+    this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._clickClosePopup);
   }
 }
 
