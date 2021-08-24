@@ -14,7 +14,7 @@ import PopupView from './view/view-popup.js';
 import { generateMovie } from './mock/generate-movie.js';
 import { RenderPosition, render } from './utils/render.js';
 
-const FILMS_COUNT = 11;
+const FILMS_COUNT = 6;
 const FILMS_BY_STEP = 5;
 
 const siteBody = document.querySelector('body');

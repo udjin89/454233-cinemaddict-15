@@ -23,9 +23,9 @@ const createFilmCard = (movie) => {
   <p class="film-card__description">${curDescription}</p>
   <a class="film-card__comments">${countComments}</a>
   <div class="film-card__controls">
-    <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${isWatchlist ? "film-card__controls-item--active" : ""}" type="button">Add to watchlist</button>
-    <button class="film-card__controls-item film-card__controls-item--mark-as-watched ${isWatched ? "film-card__controls-item--active" : ""}" type="button">Mark as watched</button>
-    <button class="film-card__controls-item film-card__controls-item--favorite ${idFavorite ? "film-card__controls-item--active" : ""}" type="button">Mark as favorite</button>
+    <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${isWatchlist ? 'film-card__controls-item--active' : ''}" type="button">Add to watchlist</button>
+    <button class="film-card__controls-item film-card__controls-item--mark-as-watched ${isWatched ? 'film-card__controls-item--active' : ''}" type="button">Mark as watched</button>
+    <button class="film-card__controls-item film-card__controls-item--favorite ${idFavorite ? 'film-card__controls-item--active' : ''}" type="button">Mark as favorite</button>
   </div>
   </article>
   `;
@@ -42,6 +42,11 @@ export default class filmCard extends AbstractView {
 
   getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
     return createFilmCard(this._movieCard);
+  }
+
+  _isWatchlist(callback) {
+    this._callback.clickAddWatchList = callback;
+    this.getElement().querySelector('.film-card__controls-item--add-to-watchlist').addEventListener('click', this._clickFilm);
   }
 
   _clickFilm(evt) {

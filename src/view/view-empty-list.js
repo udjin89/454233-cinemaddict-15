@@ -1,8 +1,15 @@
 import AbstractView from './abstract.js';
 
-const createEmptyList = () => (
+const FILTERTYPES = {
+  'allMovies': 'There are no movies in our database',
+  'watchlist': 'There are no movies to watch now',
+  'history': 'There are no watched movies now',
+  'favorites': 'There are no favorite movies now',
+};
+
+const createEmptyList = (filterType) => (
   `<section class="films-list">
-  <h2 class="films-list__title">There are no movies in our database</h2>
+  <h2 class="films-list__title">${FILTERTYPES[filterType]}</h2>
 
   <!--
     Значение отображаемого текста зависит от выбранного фильтра:
@@ -19,8 +26,13 @@ const createEmptyList = () => (
 // Класс noFilms, экспортируем по умолчанию, для удобства
 // Делаем его потомком от class Abstract
 export default class noFilms extends AbstractView {
+  constructor(filterType = 'allMovies') {
+    super();
+    this._filterType = filterType; //сохраняем преданные данные
+  }
+
   getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
 
-    return createEmptyList();
+    return createEmptyList(this._filterType);
   }
 }
