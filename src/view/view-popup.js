@@ -6,7 +6,7 @@ dayjs.extend(relativeTime);
 const createFilmDetails = (movie) => {
 
   //деструктуируем то что пришло в movie
-  const { filmInfo, comments, isWatchlist, isWatched, idFavorite } = movie;
+  const { filmInfo, comments, isWatchlist, isWatched, isFavorite } = movie;
   const { title, alternativeTitle, totalRating, director, writers, actors, poster, ageRating, genre, runtime, release, description } = filmInfo;
   const runtimeView = `${Math.trunc(runtime / 60)}h ${(runtime - Math.trunc(runtime / 60) * 60)}m`;
   // console.log(genre);
@@ -112,7 +112,7 @@ const createFilmDetails = (movie) => {
       <section class="film-details__controls">
         <button type="button" class="film-details__control-button film-details__control-button--watchlist ${isWatchlist ? "film-details__control-button--active" : ""}" id="watchlist" name="watchlist">Add to watchlist</button>
         <button type="button" class="film-details__control-button  film-details__control-button--watched ${isWatched ? "film-details__control-button--active" : ""}" id="watched" name="watched">Already watched</button>
-        <button type="button" class="film-details__control-button film-details__control-button--favorite ${idFavorite ? "film-details__control-button--active" : ""}" id="favorite" name="favorite">Add to favorites</button>
+        <button type="button" class="film-details__control-button film-details__control-button--favorite ${isFavorite ? "film-details__control-button--active" : ""}" id="favorite" name="favorite">Add to favorites</button>
       </section>
     </div>
 

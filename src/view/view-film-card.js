@@ -2,7 +2,7 @@ import AbstractView from './abstract.js';
 
 const createFilmCard = (movie) => {
   //деструктуируем то что пришло в movie
-  const { filmInfo, comments, isWatchlist, isWatched, idFavorite } = movie;
+  const { filmInfo, comments, isWatchlist, isWatched, isFavorite } = movie;
   const { title, totalRating, poster, genre, runtime, release } = filmInfo;
   const countComments = comments.length;
 
@@ -25,7 +25,7 @@ const createFilmCard = (movie) => {
   <div class="film-card__controls">
     <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${isWatchlist ? 'film-card__controls-item--active' : ''}" type="button">Add to watchlist</button>
     <button class="film-card__controls-item film-card__controls-item--mark-as-watched ${isWatched ? 'film-card__controls-item--active' : ''}" type="button">Mark as watched</button>
-    <button class="film-card__controls-item film-card__controls-item--favorite ${idFavorite ? 'film-card__controls-item--active' : ''}" type="button">Mark as favorite</button>
+    <button class="film-card__controls-item film-card__controls-item--favorite ${isFavorite ? 'film-card__controls-item--active' : ''}" type="button">Mark as favorite</button>
   </div>
   </article>
   `;
@@ -38,15 +38,43 @@ export default class filmCard extends AbstractView {
     this._movieCard = movie;
 
     this._clickFilm = this._clickFilm.bind(this); //?????
+    this._clickWatchList = this._clickWatchList.bind(this);
+    this._clickAsWatchedList = this._clickAsWatchedList.bind(this);
+    this._clickFavorite = this._clickFavorite.bind(this);
   }
 
   getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
     return createFilmCard(this._movieCard);
   }
 
-  _isWatchlist(callback) {
+  _clickWatchList(evt) {
+    evt.preventDefault();
+    this._callback.clickAddWatchList(); // метод записан с обьекте callback
+  }
+
+  setWatchListHandlerClick(callback) {
     this._callback.clickAddWatchList = callback;
-    this.getElement().querySelector('.film-card__controls-item--add-to-watchlist').addEventListener('click', this._clickFilm);
+    this.getElement().querySelector('.film-card__controls-item--add-to-watchlist').addEventListener('click', this._clickWatchList);
+  }
+
+  _clickAsWatchedList(evt) {
+    evt.preventDefault();
+    this._callback.clickAddAsWatchedList(); // метод записан с обьекте callback
+  }
+
+  setAsWatchedListHandlerClick(callback) {
+    this._callback.clickAddAsWatchedList = callback;
+    this.getElement().querySelector('.film-card__controls-item--mark-as-watched').addEventListener('click', this._clickAsWatchedList);
+  }
+
+  _clickFavorite(evt) {
+    evt.preventDefault();
+    this._callback.clickAddFavorite(); // метод записан с обьекте callback
+  }
+
+  setFavoriteHandlerClick(callback) {
+    this._callback.clickAddFavorite = callback;
+    this.getElement().querySelector('.film-card__controls-item--favorite').addEventListener('click', this._clickFavorite);
   }
 
   _clickFilm(evt) {

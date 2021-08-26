@@ -44,4 +44,18 @@ const createElement = (template) => { // принимает разметку
 // то есть быть чем-то вроде <nav><a>Link 1</a><a>Link 2</a></nav>,
 // а не просто <a>Link 1</a><a>Link 2</a>
 
-export { RenderPosition, createElement, render };
+//------------------------------------------------------
+//+++++++++++++++ REPLACE ++++++++++++++++++++++++
+//------------------------------------------------------
+//------------------------------------------------------
+//+++++++++++++++ REMOVE ++++++++++++++++++++++++
+//------------------------------------------------------
+const removeComponent = (component) => {
+
+  if (!(component instanceof Abstract)) {
+    throw new Error(`remove method. Can't remove component: ${component}`);
+  }
+  component.getElement().remove(); // Как работает ? Почему удаляет из DOM ?
+  component.removeElement();
+};
+export { RenderPosition, createElement, render, removeComponent };

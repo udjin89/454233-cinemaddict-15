@@ -1,8 +1,8 @@
-import FilmsListView from './view/view-films-list.js';
-import NoFilms from './view/view-empty-list.js';
-import FilmsListContainerView from './view/view-film-list-container.js';
-import ButtonShowMoreView from './view/view-show-more.js';
-import { RenderPosition, render } from './utils/render.js';
+import FilmsListView from '../view/view-films-list.js';
+import NoFilms from '../view/view-empty-list.js';
+import FilmsListContainerView from '../view/view-film-list-container.js';
+import ButtonShowMoreView from '../view/view-show-more.js';
+import { RenderPosition, render, removeComponent } from '../utils/render.js';
 import FilmCardPresenter from './film-card.js';
 
 const FILMS_BY_STEP = 5;
@@ -12,23 +12,26 @@ export default class FilmList {
 
     this._filmsContainer = filmsContainer;
 
+    this._renderedFilmsCount = FILMS_BY_STEP; //хранит количество отрисованных фильмов
     this._filmsList = new FilmsListView(); //films-list
     this._emptyList = new NoFilms();
     this._filmListContainer = new FilmsListContainerView();
+    this._buttonShowMore = new ButtonShowMoreView();
 
+    // this._handleChangeData = this._handleChangeData.bind(this);
 
   }
 
   init(films) {
+    // Метод для инициализации (начала работы) модуля
     this._films = films.slice();
-    // Метод для инициализации (начала работы) модуля,
     render(this._filmsContainer, this._filmsList, RenderPosition.BEFOREEND); // добавили секцию (пустая) films
 
     this._renderFilmList();
   }
 
-  _renderProfile() {
-    // Метод для рендеринга профайла с иконкой
+  _handleChangeData() {
+
   }
 
   _renderSort() {
@@ -53,38 +56,36 @@ export default class FilmList {
     }
   }
 
-  _renderNoFilms(filterType) {
+  _renderNoFilms() {
     // Метод для рендеринга заглушки
-    switch (filterType) {
+    render(this._filmsList, this._emptyList, RenderPosition.BEFOREEND);
+    // switch (filterType) {
 
-      case 'allMovies': render(this._filmsList, this._emptyList('allMovies'), RenderPosition.BEFOREEND); break;
-      case 'watchlist': render(this._filmsList, this._emptyList('watchlist'), RenderPosition.BEFOREEND); break;
-      case 'history': render(this._filmsList, this._emptyList('history'), RenderPosition.BEFOREEND); break;
-      case 'favorites': render(this._filmsList, this._emptyList('favorites'), RenderPosition.BEFOREEND); break;
-      default: render(this._filmsList, this._emptyList, RenderPosition.BEFOREEND); break;
-    }
+    //   case 'allMovies': render(this._filmsList, this._emptyList('allMovies'), RenderPosition.BEFOREEND); break;
+    //   case 'watchlist': render(this._filmsList, this._emptyList('watchlist'), RenderPosition.BEFOREEND); break;
+    //   case 'history': render(this._filmsList, this._emptyList('history'), RenderPosition.BEFOREEND); break;
+    //   case 'favorites': render(this._filmsList, this._emptyList('favorites'), RenderPosition.BEFOREEND); break;
+    //   default: render(this._filmsList, this._emptyList, RenderPosition.BEFOREEND); break;
+    // }
 
   }
 
+  _handleShowMoreButtonClick() {
+    //отрисовываем карточки фильмов
+    this._renderFilmCards(this._renderedFilmsCount, this._renderedFilmsCount + FILMS_BY_STEP);
+    // прибавляем к счетчику
+    this._renderedFilmsCount += FILMS_BY_STEP;
+    // проверяем отрисованы ли все карточки фильмов
+    if (this._renderedFilmsCount >= this._films.length) {
+      removeComponent(this._buttonShowMore);
+    }
+  }
+
   _renderButtonShowMore() {
-    // Метод, куда уйдёт логика по отрисовке кнопки допоказа фильмов
-
-    const buttonShowMore = new ButtonShowMoreView();
-    render(this._filmsList, buttonShowMore, RenderPosition.BEFOREEND);
-
-    let renderedFilmsCount = FILMS_BY_STEP;
-    // console.log(siteFilmsList);
-    //получаем разметку из класса и уже на нее вешаем обработчик события.
-    buttonShowMore.setShowMore(() => {
-      this._films.slice(renderedFilmsCount, renderedFilmsCount + FILMS_BY_STEP).forEach((movie) => renderCardFilm(this._filmListContainer, movie));
-
-      renderedFilmsCount += FILMS_BY_STEP;
-
-      if (renderedFilmsCount >= this._films.length) {
-        buttonShowMore.getElement().remove(); // Как работает ? Почему удаляет из DOM ?
-        buttonShowMore.removeElement();
-      }
-    });
+    // Отрисовка кнопки
+    render(this._filmsList, this._buttonShowMore, RenderPosition.BEFOREEND);
+    //на созданый класс кнопки вызываем метод, который определен внутри кнопки. Передаем туда колбек(он выполнится при клике)
+    this._buttonShowMore.setShowMore(this._handleShowMoreButtonClick);
 
   }
 

@@ -207,7 +207,7 @@ const generateMovie = () => ({
   'isWatchlist': Boolean(getRandomInteger(0, 1)),
   'isWatched': Boolean(getRandomInteger(0, 1)),
   'watching_date': generateDate(),
-  'idFavorite': Boolean(getRandomInteger(0, 1)),
+  'isFavorite': Boolean(getRandomInteger(0, 1)),
 
 });
 
