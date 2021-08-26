@@ -19,10 +19,16 @@ export default class FilmCard {
     this._view.setAsWatchedListHandlerClick(this._handleAsWatchedClick);
     this._view.setFavoriteHandlerClick(this._handleFavoriteClick);
 
+    this._view.setClickFilm(this._handleClickFilm);
+
     this._viewPopup = new PopupView(this._film);
-    console.log(this._film);
+
+    this._viewPopup.setClosePopup(() => {
+      this._removeCardPopup();
+    });
     this._renderFilm();
   }
+
   _changeData(updateFilm) {
 
   }
@@ -64,35 +70,31 @@ export default class FilmCard {
     );
   }
 
+  _onEscKeyDown(evt) {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      this._removeCardPopup();
+      document.removeEventListener('keydown', this._onEscKeyDown);
+    }
+  }
+
+  _removeCardPopup() {
+    document.querySelector('body').removeChild(this._viewPopup.getElement());
+    document.querySelector('body').classList.remove('hide-overflow');
+  }
+
+  _openCardPopup() {
+    document.querySelector('body').appendChild(this._viewPopup.getElement());
+    document.querySelector('body').classList.add('hide-overflow');
+  }
+
+  _handleClickFilm() {
+    this._openCardPopup();
+    document.addEventListener('keydown', this._onEscKeyDown);
+
+  }
+
   _renderFilm() {
-
-    // const openCardPopup = () => {
-    //   // render(siteBody, new PopupView(movie).getElement(), RenderPosition.BEFOREEND);
-    //   siteBody.appendChild(cardPopup.getElement());
-    //   siteBody.classList.add('hide-overflow');
-    // };
-
-    // const removeCardPopup = () => {
-    //   siteBody.removeChild(cardPopup.getElement());
-    //   siteBody.classList.remove('hide-overflow');
-    // };
-
-    // const onEscKeyDown = (evt) => {
-    //   if (evt.key === 'Escape' || evt.key === 'Esc') {
-    //     evt.preventDefault();
-    //     removeCardPopup();
-    //     document.removeEventListener('keydown', onEscKeyDown);
-    //   }
-    // };
-
-    // cardFilm.setClickFilm(() => {
-    //   openCardPopup();
-    //   document.addEventListener('keydown', onEscKeyDown);
-    // });
-
-    // cardPopup.setClosePopup(() => {
-    //   removeCardPopup();
-    // });
     render(this._filmContainer, this._view, RenderPosition.BEFOREEND);
   }
 

@@ -72,6 +72,8 @@ export default class FilmList {
 
   _handleShowMoreButtonClick() {
     //отрисовываем карточки фильмов
+    console.log(this._renderedFilmsCount);
+    console.log(this._renderedFilmsCount + FILMS_BY_STEP);
     this._renderFilmCards(this._renderedFilmsCount, this._renderedFilmsCount + FILMS_BY_STEP);
     // прибавляем к счетчику
     this._renderedFilmsCount += FILMS_BY_STEP;
