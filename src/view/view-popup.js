@@ -110,9 +110,9 @@ const createFilmDetails = (movie) => {
       </div>
 
       <section class="film-details__controls">
-        <button type="button" class="film-details__control-button film-details__control-button--watchlist ${isWatchlist ? "film-details__control-button--active" : ""}" id="watchlist" name="watchlist">Add to watchlist</button>
-        <button type="button" class="film-details__control-button  film-details__control-button--watched ${isWatched ? "film-details__control-button--active" : ""}" id="watched" name="watched">Already watched</button>
-        <button type="button" class="film-details__control-button film-details__control-button--favorite ${isFavorite ? "film-details__control-button--active" : ""}" id="favorite" name="favorite">Add to favorites</button>
+        <button type="button" class="film-details__control-button film-details__control-button--watchlist ${isWatchlist ? 'film-details__control-button--active' : ''}" id="watchlist" name="watchlist">Add to watchlist</button>
+        <button type="button" class="film-details__control-button  film-details__control-button--watched ${isWatched ? 'film-details__control-button--active' : ''}" id="watched" name="watched">Already watched</button>
+        <button type="button" class="film-details__control-button film-details__control-button--favorite ${isFavorite ? 'film-details__control-button--active' : ''}" id="favorite" name="favorite">Add to favorites</button>
       </section>
     </div>
 
@@ -170,6 +170,36 @@ export default class popup extends AbstractView {
   getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
 
     return createFilmDetails(this._movie);
+  }
+
+  _clickWatchList(evt) {
+    evt.preventDefault();
+    this._callback.clickAddWatchList(); // метод записан с обьекте callback
+  }
+
+  setWatchListHandlerClick(callback) {
+    this._callback.clickAddWatchList = callback;
+    this.getElement().querySelector('.film-details__control-button--watchlist').addEventListener('click', this._clickWatchList);
+  }
+
+  _clickAsWatchedList(evt) {
+    evt.preventDefault();
+    this._callback.clickAddAsWatchedList(); // метод записан с обьекте callback
+  }
+
+  setAsWatchedListHandlerClick(callback) {
+    this._callback.clickAddAsWatchedList = callback;
+    this.getElement().querySelector('.film-details__control-button--watched').addEventListener('click', this._clickAsWatchedList);
+  }
+
+  _clickFavorite(evt) {
+    evt.preventDefault();
+    this._callback.clickAddFavorite(); // метод записан с обьекте callback
+  }
+
+  setFavoriteHandlerClick(callback) {
+    this._callback.clickAddFavorite = callback;
+    this.getElement().querySelector('.film-details__control-button--favorite').addEventListener('click', this._clickFavorite);
   }
 
   _clickClosePopup(evt) {

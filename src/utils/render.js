@@ -47,6 +47,24 @@ const createElement = (template) => { // принимает разметку
 //------------------------------------------------------
 //+++++++++++++++ REPLACE ++++++++++++++++++++++++
 //------------------------------------------------------
+const replace = (newElement, oldElement) => {
+  if (newElement === null || oldElement === null) {
+    throw new Error('No element to replace');
+  }
+  if (oldElement instanceof Abstract) {
+    oldElement = oldElement.getElement();
+  }
+  if (newElement instanceof Abstract) {
+    newElement = newElement.getElement();
+  }
+  //Свойство Node.parentElement только для чтения, возвращает родителя узла DOM Element
+  const parent = oldElement.parentElement;
+  if (parent === 0) {
+    throw new Error('No parent Element');
+  }
+  // стандартный метод
+  parent.replaceChild(newElement, oldElement);
+};
 //------------------------------------------------------
 //+++++++++++++++ REMOVE ++++++++++++++++++++++++
 //------------------------------------------------------
@@ -58,4 +76,4 @@ const removeComponent = (component) => {
   component.getElement().remove(); // Как работает ? Почему удаляет из DOM ?
   component.removeElement();
 };
-export { RenderPosition, createElement, render, removeComponent };
+export { RenderPosition, createElement, render, removeComponent, replace };
