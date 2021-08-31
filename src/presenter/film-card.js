@@ -58,6 +58,12 @@ export default class FilmCard {
 
   }
 
+  destroy() {
+    removeComponent(this._view);
+    removeComponent(this._viewPopup);
+    this._removeCardPopup();
+  }
+
   closePopup() {
     if (this._mode === Mode.OPEN) {
       this._removeCardPopup();
@@ -106,14 +112,15 @@ export default class FilmCard {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
       this._removeCardPopup();
-      this._mode = Mode.CLOSE;
-      document.removeEventListener('keydown', this._onEscKeyDown);
+      //this._mode = Mode.CLOSE;
+      //document.removeEventListener('keydown', this._onEscKeyDown);
     }
   }
 
   _removeCardPopup() {
     removeComponent(this._viewPopup);
     document.querySelector('body').classList.remove('hide-overflow');
+    document.removeEventListener('keydown', this._onEscKeyDown);
     this._mode = Mode.CLOSE;
   }
 

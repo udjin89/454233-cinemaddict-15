@@ -57,8 +57,8 @@ export default class FilmList {
   }
 
   _clearFilmsList() {
-    this._filmCardPresenter.forEach((presenter) => presenter.destroy());
-    this._films.clear();
+    Object.values(this._filmCardPresenter).forEach((presenter) => presenter.destroy());
+    this._filmCardPresenter = {};
     this._renderedFilmsCount = FILMS_BY_STEP;
     removeComponent(this._buttonShowMore);
   }
@@ -81,7 +81,7 @@ export default class FilmList {
     }
     this._sortFilms(type);
     this._clearFilmsList();
-    this._renderFilmCards(0, 5);
+    this._renderFilmList();
     // - Очищаем список
     // - Рендерим список заново
   }
@@ -169,4 +169,6 @@ export default class FilmList {
       }
     }
   }
+
+
 }
