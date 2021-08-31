@@ -44,4 +44,36 @@ const createElement = (template) => { // принимает разметку
 // то есть быть чем-то вроде <nav><a>Link 1</a><a>Link 2</a></nav>,
 // а не просто <a>Link 1</a><a>Link 2</a>
 
-export { RenderPosition, createElement, render };
+//------------------------------------------------------
+//+++++++++++++++ REPLACE ++++++++++++++++++++++++
+//------------------------------------------------------
+const replace = (newElement, oldElement) => {
+  if (newElement === null || oldElement === null) {
+    throw new Error('No element to replace');
+  }
+  if (oldElement instanceof Abstract) {
+    oldElement = oldElement.getElement();
+  }
+  if (newElement instanceof Abstract) {
+    newElement = newElement.getElement();
+  }
+  //Свойство Node.parentElement только для чтения, возвращает родителя узла DOM Element
+  const parent = oldElement.parentElement;
+  if (parent === 0) {
+    throw new Error('No parent Element');
+  }
+  // стандартный метод
+  parent.replaceChild(newElement, oldElement);
+};
+//------------------------------------------------------
+//+++++++++++++++ REMOVE ++++++++++++++++++++++++
+//------------------------------------------------------
+const removeComponent = (component) => {
+
+  if (!(component instanceof Abstract)) {
+    throw new Error(`remove method. Can't remove component: ${component}`);
+  }
+  component.getElement().remove(); // Как работает ? Почему удаляет из DOM ?
+  component.removeElement();
+};
+export { RenderPosition, createElement, render, removeComponent, replace };
