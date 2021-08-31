@@ -15,7 +15,8 @@ export const sortByDate = (dateA, dateB) => {
 
   return dayjs(dateA.filmInfo.release.date).diff(dayjs(dateB.filmInfo.release.date));
 };
-export const sortByRating = (rateA, rateB) => {
 
-  return rateA - rateB;
+export const sortByRating = (a, b) => {
+  console.log(a.filmInfo.totalRating + '-' + b.filmInfo.totalRating);
+  return a.filmInfo.totalRating > b.filmInfo.totalRating ? 1 : -1;
 };

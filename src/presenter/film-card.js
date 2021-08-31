@@ -1,6 +1,6 @@
 import FilmCardView from '../view/view-film-card.js';
 import PopupView from '../view/view-popup.js';
-import { RenderPosition, render, replace } from '../utils/render.js';
+import { RenderPosition, render, replace, removeComponent } from '../utils/render.js';
 
 const Mode = {
   CLOSE: 'CLOSE',
@@ -24,7 +24,7 @@ export default class FilmCard {
     this._removeCardPopup = this._removeCardPopup.bind(this);
     this._handleClickFilm = this._handleClickFilm.bind(this);
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
-    this.closePopup = this.closePopup(this);
+    this.closePopup = this.closePopup.bind(this);
     // ---------------------------------------
   }
 
@@ -43,6 +43,7 @@ export default class FilmCard {
     this._viewPopup = new PopupView(this._film);
 
     this._viewPopup.setClosePopup(() => {
+      console.log(this);
       this._removeCardPopup();
     });
 
@@ -51,12 +52,13 @@ export default class FilmCard {
       return;
     }
     replace(this._view, prevFilmView);
+  }
 
+  setButtonClosePopup() {
 
   }
 
   closePopup() {
-    console.log('start change mode for all preseter');
     if (this._mode === Mode.OPEN) {
       this._removeCardPopup();
     }
@@ -109,14 +111,8 @@ export default class FilmCard {
     }
   }
 
-  fuck() {
-    console.log('fuck');
-  }
-
-
-
   _removeCardPopup() {
-    document.querySelector('body').removeChild(this._viewPopup.getElement());
+    removeComponent(this._viewPopup);
     document.querySelector('body').classList.remove('hide-overflow');
     this._mode = Mode.CLOSE;
   }

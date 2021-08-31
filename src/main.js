@@ -74,7 +74,7 @@ render(siteHeaderElement, new ProfileView(), RenderPosition.BEFOREEND);
 //------------------------------------------------------
 //Вставляем в .main класс меню, создаем экземпляр класса, а метод getElement возвращает разметку, которая храниться в this._element
 render(siteMainElement, new FilterView(movies), RenderPosition.BEFOREEND);
-render(siteMainElement, new SortView(), RenderPosition.BEFOREEND);
+// render(siteMainElement, new SortView(), RenderPosition.BEFOREEND);
 
 //------------------------------------------------------
 //++++++++++++++++++++++  Секция ФИЛЬМОВ  ++++++++++++++

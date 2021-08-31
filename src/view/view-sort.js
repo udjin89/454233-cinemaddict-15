@@ -1,11 +1,11 @@
 import AbstractView from './abstract.js';
-import { SortType } from '../const.js';
+import { sortType } from '../const.js';
 
 const createSort = () => (
   `<ul class="sort">
-  <li><a href="#" class="sort__button data-sort-type="${SortType.DEFAULT}">Sort by default</a></li>
-  <li><a href="#" class="sort__button data-sort-type="${SortType.DATA}">Sort by date</a></li>
-  <li><a href="#" class="sort__button data-sort-type="${SortType.RATING} sort__button--active">Sort by rating</a></li>
+  <li><a href="#" class="sort__button" data-sort-type="${sortType.DEFAULT}">Sort by default</a></li>
+  <li><a href="#" class="sort__button" data-sort-type="${sortType.DATA}">Sort by date</a></li>
+  <li><a href="#" class="sort__button sort__button--active" data-sort-type="${sortType.RATING}">Sort by rating</a></li>
 </ul>
 `);
 // Класс sort, экспортируем по умолчанию, для удобства
@@ -21,11 +21,16 @@ export default class sort extends AbstractView {
   }
 
   _sortTypeChangeHandler(evt) {
+
     if (evt.target.tagName !== 'A') {
       return;
     }
-    evt.target.addClassList('sort__button--active');
     evt.preventDefault();
+    this.getElement().querySelectorAll('.sort__button').forEach((elem) => {
+      elem.classList.remove('sort__button--active');
+    });
+    evt.target.classList.add('sort__button--active');
+    console.log(evt.target);
     this._callback.sortTypeChange(evt.target.dataset.sortType);
   }
 
