@@ -61,7 +61,8 @@ export default class FilmCard {
     this._viewPopup.setWatchListHandlerClick(this._handleWatchListClick);
     this._viewPopup.setAsWatchedListHandlerClick(this._handleAsWatchedClick);
     this._viewPopup.setFavoriteHandlerClick(this._handleFavoriteClick);
-    this._viewPopup.setFormSubmitHandler();
+
+    //this._viewPopup.setFormSubmitHandler();
     this._viewPopup.setClosePopup(() => {
       // console.log(this);
       this._removeCardPopup();
@@ -70,6 +71,7 @@ export default class FilmCard {
 
   _restoreHandlers() {
     this._setPopupHandlers();
+
   }
 
   setButtonClosePopup() {

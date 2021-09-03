@@ -212,7 +212,7 @@ export default class popup extends AbstractView {
     this.updateElement();
   }
 
-  _restoreHandlers() {
+  restoreHandlers() {
     this._setInnerHandlers();
   }
 
@@ -226,7 +226,6 @@ export default class popup extends AbstractView {
 
   _setInnerHandlers() {
     this.getElement().querySelector('.film-details__comment-input').addEventListener('input', this._descriptionInputHandler);
-
   }
 
   _formSubmitHandler(evt) {

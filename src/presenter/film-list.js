@@ -50,9 +50,11 @@ export default class FilmList {
   _handleChangeFilm(updateFilm, modePopup) {
     this._films = updateFilmById(this._films, updateFilm);
     this._filmCardPresenter[updateFilm.id].init(updateFilm);
+
     if (modePopup === Mode.OPEN) {
       console.log('State OPEn POPUP');
       this._filmCardPresenter[updateFilm.id].replacePopup();
+      console.log('State OPEn POPUPEdn');
       // this._filmCardPresenter[updateFilm.id].setButtonClosePopup();
     }
   }
