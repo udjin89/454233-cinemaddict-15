@@ -163,18 +163,87 @@ export default class popup extends AbstractView {
   constructor(movie) {
     super();
     this._movie = movie;
-
+    this._data = popup.parseInfoToState(movie);
     this._clickClosePopup = this._clickClosePopup.bind(this);
+    this._clickWatchList = this._clickWatchList.bind(this);
+    this._clickAsWatchedList = this._clickAsWatchedList.bind(this);
+    this._clickFavorite = this._clickFavorite.bind(this);
+
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._descriptionInputHandler = this._descriptionInputHandler.bind(this);
+    this._setInnerHandlers = this._setInnerHandlers.bind(this);
+
+    this._setInnerHandlers();
   }
 
   getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
 
-    return createFilmDetails(this._movie);
+    // return createFilmDetails(this._movie);
+    return createFilmDetails(this._data);
+  }
+
+  updateElement() {
+    const prevElement = this.getElement();
+    const parent = prevElement.parentElement;
+    this.removeElement();
+
+    const newElement = this.getElement();
+
+    parent.replaceChild(newElement, prevElement);
+    this.restoreHandlers();
+  }
+
+  updateData(update, justDataUpdating) {
+    console.log(update.description);
+    if (!update) {
+      return;
+    }
+
+    this._data = Object.assign(
+      {},
+      this._data,
+      update,
+    );
+
+    if (justDataUpdating) {
+      return;
+    }
+
+    this.updateElement();
+  }
+
+  _restoreHandlers() {
+    this._setInnerHandlers();
+  }
+
+  _descriptionInputHandler(evt) {
+    evt.preventDefault();
+    // console.log('input text');
+    this.updateData({
+      description: evt.target.value,
+    }, true);
+  }
+
+  _setInnerHandlers() {
+    this.getElement().querySelector('.film-details__comment-input').addEventListener('input', this._descriptionInputHandler);
+
+  }
+
+  _formSubmitHandler(evt) {
+    evt.preventDefault();
+    // this._callback.formSubmit(this._movie);
+    this._callback.formSubmit(popup.parseStateToInfo(this._data));
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
   }
 
   _clickWatchList(evt) {
     evt.preventDefault();
     this._callback.clickAddWatchList(); // метод записан с обьекте callback
+    // this.restoreHandlers();
   }
 
   setWatchListHandlerClick(callback) {
@@ -210,6 +279,16 @@ export default class popup extends AbstractView {
   setClosePopup(callback) {
     this._callback.clickClosePopup = callback;
     this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._clickClosePopup);
+  }
+
+  static parseInfoToState(movie) { // переводим данные в состояние
+    return Object.assign(
+      {}, movie, {},
+    );
+  }
+
+  static parseStateToInfo(data) { // состояние в данные, которые отправятся на сервер
+    return Object.assign({}, data);
   }
 }
 

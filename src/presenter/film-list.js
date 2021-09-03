@@ -47,13 +47,14 @@ export default class FilmList {
     this._renderFilmList();
   }
 
-  _handleChangeFilm(updateFilm) {
+  _handleChangeFilm(updateFilm, modePopup) {
     this._films = updateFilmById(this._films, updateFilm);
     this._filmCardPresenter[updateFilm.id].init(updateFilm);
-  }
-
-  _handleChangeData() {
-
+    if (modePopup === Mode.OPEN) {
+      console.log('State OPEn POPUP');
+      this._filmCardPresenter[updateFilm.id].replacePopup();
+      // this._filmCardPresenter[updateFilm.id].setButtonClosePopup();
+    }
   }
 
   _clearFilmsList() {
@@ -64,14 +65,14 @@ export default class FilmList {
   }
 
   _sortFilms(type) {
-    console.log(type);
+    // console.log(type);
     switch (type) {
       case sortType.DATE: this._films.sort(sortByDate); break;
       case sortType.RATING: this._films.sort(sortByRating); break;
       default: this._films = this._defaultFilms.slice(); break;
     }
     this._currentSortType = type;
-    console.log('sort');
+    // console.log('sort');
   }
 
   _handleSortTypeChange(type) {
@@ -82,8 +83,6 @@ export default class FilmList {
     this._sortFilms(type);
     this._clearFilmsList();
     this._renderFilmList();
-    // - Очищаем список
-    // - Рендерим список заново
   }
 
   _renderSort() {
