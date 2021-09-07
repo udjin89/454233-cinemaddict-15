@@ -12,11 +12,11 @@ export const updateFilmById = (items, update) => {
 };
 
 export const sortByDate = (dateA, dateB) => {
-  console.log(dateB);
+  // console.log(dateB);
   return dayjs(dateA.filmInfo.release.date).diff(dayjs(dateB.filmInfo.release.date));
 };
 
 export const sortByRating = (a, b) => {
-  console.log(a.filmInfo.totalRating + '-' + b.filmInfo.totalRating);
+  // console.log(a.filmInfo.totalRating + '-' + b.filmInfo.totalRating);
   return a.filmInfo.totalRating > b.filmInfo.totalRating ? 1 : -1;
 };
