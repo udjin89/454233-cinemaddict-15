@@ -11,11 +11,12 @@ import ButtonShowMoreView from './view/view-show-more.js';
 import FilmExtraListView from './view/view-film-extra.js';
 import PopupView from './view/view-popup.js';
 
-import FilmListPresenter from './presenter/film-list.js'
+import FilmsModel from './model/movies.js';
+import FilmListPresenter from './presenter/film-list.js';
 import { generateMovie } from './mock/generate-movie.js';
 import { RenderPosition, render } from './utils/render.js';
 
-const FILMS_COUNT = 6;
+const FILMS_COUNT = 11;
 const FILMS_BY_STEP = 5;
 
 const siteBody = document.querySelector('body');
@@ -65,6 +66,11 @@ const siteFooterStatistics = document.querySelector('.footer__statistics');
 //----генерация массива с карточками фильмов -----------
 //------------------------------------------------------
 const movies = new Array(FILMS_COUNT).fill().map(generateMovie);
+
+
+const filmsModel = new FilmsModel(); // создаем класс модели списка фильмов
+filmsModel.setFilms(movies); // передаем в модель данные
+// console.log(filmsModel.getFilms());
 //------------------------------------------------------
 //+++++++++++++++++++++ ПРОФАЙЛ ++++++++++++++++++++++++
 //------------------------------------------------------
@@ -79,8 +85,11 @@ render(siteMainElement, new FilterView(movies), RenderPosition.BEFOREEND);
 //------------------------------------------------------
 //++++++++++++++++++++++  Секция ФИЛЬМОВ  ++++++++++++++
 //------------------------------------------------------
-const filmsPresenter = new FilmListPresenter(siteMainElement);
-filmsPresenter.init(movies);
+//siteMainElement - куда рендерим
+//filmsModelм модель с данными (фильмов)
+const filmsPresenter = new FilmListPresenter(siteMainElement, filmsModel);
+filmsPresenter.init(); //теперь мы не будем напрямую передавать данные, презентер сам возьмет их из модели
+// filmsPresenter.init(movies);
 // const sectionFilms = new FilmsSectionView(); // сохраняем в переменную класс с секцией, что бы потом обращаться к разметке методом getElement
 // render(siteMainElement, sectionFilms, RenderPosition.BEFOREEND); // добавили секцию (пустая)
 

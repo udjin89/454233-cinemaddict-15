@@ -6,7 +6,8 @@ import ButtonShowMoreView from '../view/view-show-more.js';
 import { RenderPosition, render, removeComponent, replace } from '../utils/render.js';
 import FilmCardPresenter from './film-card.js';
 import { updateFilmById, sortByDate, sortByRating } from '../utils/common.js';
-import { sortType } from '../const.js';
+import { sortType, UpdateType, UserAction } from '../const.js';
+import { AbstractObserver } from '../model/abstract-observer.js';
 
 const FILMS_BY_STEP = 5;
 const Mode = {
@@ -16,9 +17,9 @@ const Mode = {
 
 
 export default class FilmList {
-  constructor(filmsContainer) {
-
-    this._filmsContainer = filmsContainer;
+  constructor(filmsContainer, filmsModel) {
+    this._filmsModel = filmsModel; //данные
+    this._filmsContainer = filmsContainer; //контейнер куда рендерим
 
     this._renderedFilmsCount = FILMS_BY_STEP; //хранит количество отрисованных фильмов
     this._currentSortType = sortType.DEFAULT;
@@ -27,27 +28,48 @@ export default class FilmList {
     this._filmsList = new FilmsListView(); //films-list
     this._emptyList = new NoFilms();
     this._filmListContainer = new FilmsListContainerView();
-    this._buttonShowMore = new ButtonShowMoreView();
-    this._sortComponent = new SortView();
+
+    // this._buttonShowMore = new ButtonShowMoreView();
+    // this._sortComponent = new SortView();
+
+    this._buttonShowMore = null;
+    this._sortComponent = null;
 
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleChangeFilm = this._handleChangeFilm.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+    this._handleViewAction = this._handleViewAction.bind(this);
+    this._handleModelEvent = this._handleModelEvent.bind(this);
+
+    this._filmsModel.addObserver(this._handleModelEvent);
 
   }
 
-  init(films) {
+  init() {
     // Метод для инициализации (начала работы) модуля
     this._renderSort();
-    this._defaultFilms = films.slice();
-    this._films = films.slice();
+    // console.log('init');
+    // console.log(this._filmsModel.getFilms());
+    // this._defaultFilms = films.slice();
+    // this._films = films.slice();
     render(this._filmsContainer, this._filmsList, RenderPosition.BEFOREEND); // добавили секцию (пустая) films
 
     this._renderFilmList();
   }
 
+  _getFilmsList() {
+    console.log(this._currentSortType);
+    switch (this._currentSortType) {
+      case sortType.DATE: return this._filmsModel.getFilms().sort(sortByDate);
+      case sortType.RATING: return this._filmsModel.getFilms().sort(sortByRating);
+      default: return this._filmsModel.getFilms();//получаем из модели, с помощью метода getFilms данные, то есть обьект со всеми фильмами
+    }
+  }
+
   _handleChangeFilm(updateFilm, modePopup) {
+    // здесь вызываем обновление модели
+
     this._films = updateFilmById(this._films, updateFilm);
     this._filmCardPresenter[updateFilm.id].init(updateFilm);
 
@@ -56,6 +78,49 @@ export default class FilmList {
       this._filmCardPresenter[updateFilm.id].replacePopup();
       console.log('State OPEn POPUPEdn');
       // this._filmCardPresenter[updateFilm.id].setButtonClosePopup();
+    }
+  }
+
+  _handleViewAction(actionType, updateType, update) {
+    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
+    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
+    // update - обновленные данные
+    // console.log('go');
+    console.log(actionType, updateType, update);
+    // this._filmsModel.updateFilmById(UpdateType.MINOR, update);
+    // Здесь будем вызывать обновление модели.
+    switch (actionType) {
+      case UserAction.UPDATE_FILM:
+        this._filmsModel.updateFilmById(updateType, update);
+        break;
+      case UserAction.ADD_COMMENT:
+        // this._filmsModel.addTask(updateType, update);
+        break;
+      case UserAction.DELETE_COMMENT:
+        // this._filmsModel.deleteTask(updateType, update);
+        break;
+    }
+
+
+  }
+
+  _handleModelEvent(updateType, data) {
+    console.log(updateType, data);
+    // В зависимости от типа изменений решаем, что делать:
+    switch (updateType) {
+      case UpdateType.PATCH:
+        break;
+      case UpdateType.MINOR:
+        // - обновить список, когда добавили в избранное, просмотренное или в список желаний
+        // добавление и удаление комментария
+        this._clearFilmsList();
+        this._renderFilmCards();
+        break;
+      case UpdateType.MAJOR:
+        // - обновить всё, когда поменяли фильтр
+        this._clearFilmsList();
+        this._renderFilmCards();
+        break;
     }
   }
 
@@ -78,19 +143,25 @@ export default class FilmList {
   }
 
   _handleSortTypeChange(type) {
-    console.log(type);
+    // console.log(type);
     if (this._currentSortType === type) {
       return;
     }
-    this._sortFilms(type);
+    this._currentSortType = type;
+    // this._sortFilms(type);
     this._clearFilmsList();
     this._renderFilmList();
   }
 
   _renderSort() {
     // Метод для рендеринга сортировки
-    render(this._filmsContainer, this._sortComponent, RenderPosition.BEFOREEND);
+    // render(this._filmsContainer, this._sortComponent, RenderPosition.BEFOREEND);
+    if (this._sortComponent !== null) {
+      this._sortComponent = null;
+    }
+    this._sortComponent = new SortView(this._currentSortType);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
+    render(this._filmsContainer, this._sortComponent, RenderPosition.BEFOREEND);
   }
 
   _renderFilter() {
@@ -105,20 +176,24 @@ export default class FilmList {
 
   _renderFilmCard(filmCard) {
     // Метод для рендеринга одного фильма
-    const filmCardPresenter = new FilmCardPresenter(this._filmListContainer, this._handleChangeFilm, this._handleModeChange);
+    const filmCardPresenter = new FilmCardPresenter(this._filmListContainer, this._handleViewAction, this._handleModeChange);
     filmCardPresenter.init(filmCard);
     //записываем в массив презентеры по id
     this._filmCardPresenter[filmCard.id] = filmCardPresenter;
   }
 
-  _renderFilmCards(from, to) {
-    // Метод для рендеринга фильмов /from - с номера какого фильма отрисовываем, to - номер до какого отрисовываем
-    //из списка всех фильмов "вырезаем" слайсом, те фильмы которые нужно отрендерить
-    // потом с помощью forEach для каждого фильма вызываем рендер
-    // !!! Важная особенность если to больше чем есть фильмов, то метод slice не создаст еще элеметов
-    this._films.slice(from, to).forEach((elem) => {
-      this._renderFilmCard(elem);
-    });
+  // _renderFilmCards(from, to) {
+  //   // Метод для рендеринга фильмов /from - с номера какого фильма отрисовываем, to - номер до какого отрисовываем
+  //   //из списка всех фильмов "вырезаем" слайсом, те фильмы которые нужно отрендерить
+  //   // потом с помощью forEach для каждого фильма вызываем рендер
+  //   // !!! Важная особенность если to больше чем есть фильмов, то метод slice не создаст еще элеметов
+  //   this._films.slice(from, to).forEach((elem) => {
+  //     this._renderFilmCard(elem);
+  //   });
+  // }
+  _renderFilmCards(films) {
+    // передали фильмы, которые нужно отрисовать
+    films.forEach((film) => { this._renderFilmCard(film); });
   }
 
   _renderNoFilms() {
@@ -137,11 +212,20 @@ export default class FilmList {
 
   _handleShowMoreButtonClick() {
     //отрисовываем карточки фильмов
-    this._renderFilmCards(this._renderedFilmsCount, this._renderedFilmsCount + FILMS_BY_STEP);
+    // this._renderFilmCards(this._renderedFilmsCount, this._renderedFilmsCount + FILMS_BY_STEP);
     // прибавляем к счетчику
-    this._renderedFilmsCount += FILMS_BY_STEP;
+    // const newRenderedFilmsCount = Math.min(filmsCount, this._renderedFilmsCount + FILMS_BY_STEP);
+    // получаем количество всех фильмов
+    const filmsCount = this._getFilmsList().length;
+    // вычисляем номер последнего фильма который надо дорисовать
+    const newRenderedFilmsCount = Math.min(filmsCount, this._renderedFilmsCount + FILMS_BY_STEP);
+    console.log(`отрисованные ${this._renderedFilmsCount}, отрисовать до ${newRenderedFilmsCount}`);
+    // "вырезаем" из всего массива фильмов те, которые надо дорисовать
+    const films = this._getFilmsList().slice(this._renderedFilmsCount, newRenderedFilmsCount);
+    this._renderFilmCards(films);
+    this._renderedFilmsCount = newRenderedFilmsCount;
     // проверяем отрисованы ли все карточки фильмов
-    if (this._renderedFilmsCount >= this._films.length) {
+    if (this._renderedFilmsCount >= filmsCount) {
       removeComponent(this._buttonShowMore);
     }
   }
@@ -156,16 +240,20 @@ export default class FilmList {
 
   _renderFilmList() {
     // Главный метод по отрисовке, который будет вызывать остальные
-    if (!this._films.length) {
+    if (!this._getFilmsList().length) {
       this._renderNoFilms();
     }
     else {
       //создаем контейнер в films-list, в котором будут карточки фильмов
       render(this._filmsList, this._filmListContainer, RenderPosition.BEFOREEND);
+      // получаем количество фильмов из модели
+      const filmsCount = this._getFilmsList().length;
+      // получаем уже отсортированные фильмы с помощью this._getFilmsList()
+      const films = this._getFilmsList().slice(0, Math.min(filmsCount, FILMS_BY_STEP));
       // вызываем метод отрисовки всех фильмов
-      this._renderFilmCards(0, Math.min(this._films.length, FILMS_BY_STEP));
+      this._renderFilmCards(films);
 
-      if (this._films.length > FILMS_BY_STEP) {
+      if (filmsCount > FILMS_BY_STEP) {
         this._renderButtonShowMore();
       }
     }

@@ -3,9 +3,9 @@ import { sortType } from '../const.js';
 
 const createSort = () => (
   `<ul class="sort">
-  <li><a href="#" class="sort__button" data-sort-type="${sortType.DEFAULT}">Sort by default</a></li>
+  <li><a href="#" class="sort__button sort__button--active" data-sort-type="${sortType.DEFAULT}">Sort by default</a></li>
   <li><a href="#" class="sort__button" data-sort-type="${sortType.DATE}">Sort by date</a></li>
-  <li><a href="#" class="sort__button sort__button--active" data-sort-type="${sortType.RATING}">Sort by rating</a></li>
+  <li><a href="#" class="sort__button " data-sort-type="${sortType.RATING}">Sort by rating</a></li>
 </ul>
 `);
 // Класс sort, экспортируем по умолчанию, для удобства

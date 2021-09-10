@@ -10,7 +10,7 @@ const createFilmDetails = (movie) => {
   const { title, alternativeTitle, totalRating, director, writers, actors, poster, ageRating, genre, runtime, release, description } = filmInfo;
   const runtimeView = `${Math.trunc(runtime / 60)}h ${(runtime - Math.trunc(runtime / 60) * 60)}m`;
   // console.log(genre);
-  console.log('---' + movie.comments.emotion);
+  // console.log('---' + movie.comments.emotion);
 
   const currentEmoji = movie.comments.emotion ? movie.comments.emotion : '';
 
