@@ -6,7 +6,7 @@ import ButtonShowMoreView from '../view/view-show-more.js';
 import { RenderPosition, render, removeComponent, replace } from '../utils/render.js';
 import FilmCardPresenter from './film-card.js';
 import { updateFilmById, sortByDate, sortByRating } from '../utils/common.js';
-import { sortType, UpdateType, UserAction } from '../const.js';
+import { sortType, UpdateType, UserAction, FilterType } from '../const.js';
 import { AbstractObserver } from '../model/abstract-observer.js';
 
 const FILMS_BY_STEP = 5;
@@ -17,16 +17,18 @@ const Mode = {
 
 
 export default class FilmList {
-  constructor(filmsContainer, filmsModel) {
+  constructor(filmsContainer, filmsModel, filterModel) {
     this._filmsModel = filmsModel; //данные
     this._filmsContainer = filmsContainer; //контейнер куда рендерим
+    this._filterModel = filterModel; //данные фильтра
 
     this._renderedFilmsCount = FILMS_BY_STEP; //хранит количество отрисованных фильмов
     this._currentSortType = sortType.DEFAULT;
+    this._filterType = FilterType.ALL;
     this._filmCardPresenter = {};//
 
     this._filmsList = new FilmsListView(); //films-list
-    this._emptyList = new NoFilms();
+
     this._filmListContainer = new FilmsListContainerView();
 
     // this._buttonShowMore = new ButtonShowMoreView();
@@ -59,12 +61,18 @@ export default class FilmList {
   }
 
   _getFilmsList() {
+    const filterType = this._filterModel.getFilter(); //забираем из модели тип фильтра
+    const filmData = this._filmsModel.getFilms().slice();
+    const filtredFilms = filterTypeToFilterFilms[filterType](filmData);
+
     console.log(this._currentSortType);
     switch (this._currentSortType) {
-      case sortType.DATE: return this._filmsModel.getFilms().sort(sortByDate);
-      case sortType.RATING: return this._filmsModel.getFilms().sort(sortByRating);
-      default: return this._filmsModel.getFilms();//получаем из модели, с помощью метода getFilms данные, то есть обьект со всеми фильмами
+      case sortType.DATE: return filmData.sort(sortByDate);
+      case sortType.RATING: return filmData.sort(sortByRating);
+      //default://получаем из модели, с помощью метода getFilms данные, то есть обьект со всеми фильмами
     }
+
+    return filmData.slice();
   }
 
   _handleChangeFilm(updateFilm, modePopup) {
@@ -87,7 +95,7 @@ export default class FilmList {
     // update - обновленные данные
     // console.log('go');
     console.log(actionType, updateType, update);
-    // this._filmsModel.updateFilmById(UpdateType.MINOR, update);
+    this._filmsModel.updateFilmById(UpdateType.MINOR, update);
     // Здесь будем вызывать обновление модели.
     switch (actionType) {
       case UserAction.UPDATE_FILM:
@@ -131,16 +139,16 @@ export default class FilmList {
     removeComponent(this._buttonShowMore);
   }
 
-  _sortFilms(type) {
-    // console.log(type);
-    switch (type) {
-      case sortType.DATE: this._films.sort(sortByDate); break;
-      case sortType.RATING: this._films.sort(sortByRating); break;
-      default: this._films = this._defaultFilms.slice(); break;
-    }
-    this._currentSortType = type;
-    // console.log('sort');
-  }
+  // _sortFilms(type) {
+  //   // console.log(type);
+  //   switch (type) {
+  //     case sortType.DATE: this._films.sort(sortByDate); break;
+  //     case sortType.RATING: this._films.sort(sortByRating); break;
+  //     default: this._films = this._defaultFilms.slice(); break;
+  //   }
+  //   this._currentSortType = type;
+  //   // console.log('sort');
+  // }
 
   _handleSortTypeChange(type) {
     // console.log(type);
@@ -170,9 +178,13 @@ export default class FilmList {
   }
 
   _handleModeChange() {
+    //this._renderPopup(film);
     // console.log(this._filmCardPresenter);
     Object.values(this._filmCardPresenter).forEach((presenter) => { presenter.closePopup(); });
   }
+  //_renderPopup(film){
+  //  this._popupPresenter = new FilmPopup()
+  //}
 
   _renderFilmCard(filmCard) {
     // Метод для рендеринга одного фильма
@@ -198,6 +210,9 @@ export default class FilmList {
 
   _renderNoFilms() {
     // Метод для рендеринга заглушки
+    this._emptyList = new NoFilms(this._filterType);
+
+
     render(this._filmsList, this._emptyList, RenderPosition.BEFOREEND);
     // switch (filterType) {
 
@@ -231,11 +246,13 @@ export default class FilmList {
   }
 
   _renderButtonShowMore() {
-    // Отрисовка кнопки
-    render(this._filmsList, this._buttonShowMore, RenderPosition.BEFOREEND);
+    //создаем кнопку
+    this._buttonShowMore = new ButtonShowMoreView();
+
     //на созданый класс кнопки вызываем метод, который определен внутри кнопки. Передаем туда колбек(он выполнится при клике)
     this._buttonShowMore.setShowMore(this._handleShowMoreButtonClick);
-
+    // Отрисовка кнопки
+    render(this._filmsList, this._buttonShowMore, RenderPosition.BEFOREEND);
   }
 
   _renderFilmList() {

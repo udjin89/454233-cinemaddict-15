@@ -14,4 +14,12 @@ const UpdateType = {
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
 };
-export { sortType, UserAction, UpdateType };
+
+const FilterType = {
+  ALL: 'all',
+  WATCHLIST: 'watchlist',
+  HISTORY: 'history',
+  FAVORITES: 'favorites',
+};
+
+export { sortType, UserAction, UpdateType, FilterType };

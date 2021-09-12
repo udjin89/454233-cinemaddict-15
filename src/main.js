@@ -12,9 +12,12 @@ import FilmExtraListView from './view/view-film-extra.js';
 import PopupView from './view/view-popup.js';
 
 import FilmsModel from './model/movies.js';
+import FilterModel from './model/filters.js';
 import FilmListPresenter from './presenter/film-list.js';
+import FilterPrester from './presenter/filters.js';
 import { generateMovie } from './mock/generate-movie.js';
 import { RenderPosition, render } from './utils/render.js';
+import { FilterType } from './const.js';
 
 const FILMS_COUNT = 11;
 const FILMS_BY_STEP = 5;
@@ -70,6 +73,8 @@ const movies = new Array(FILMS_COUNT).fill().map(generateMovie);
 
 const filmsModel = new FilmsModel(); // создаем класс модели списка фильмов
 filmsModel.setFilms(movies); // передаем в модель данные
+
+const filterModel = new FilterModel();
 // console.log(filmsModel.getFilms());
 //------------------------------------------------------
 //+++++++++++++++++++++ ПРОФАЙЛ ++++++++++++++++++++++++
@@ -79,7 +84,11 @@ render(siteHeaderElement, new ProfileView(), RenderPosition.BEFOREEND);
 //++++++++++++++++++++++ MAIN ++++++++++++++++++++++++++
 //------------------------------------------------------
 //Вставляем в .main класс меню, создаем экземпляр класса, а метод getElement возвращает разметку, которая храниться в this._element
-render(siteMainElement, new FilterView(movies), RenderPosition.BEFOREEND);
+
+const filterPresenter = new FilterPrester(siteMainElement, filterModel, filmsModel);
+filterPresenter.init();
+
+// render(siteMainElement, new FilterView(movies, FilterType.ALL), RenderPosition.BEFOREEND);
 // render(siteMainElement, new SortView(), RenderPosition.BEFOREEND);
 
 //------------------------------------------------------
@@ -87,7 +96,7 @@ render(siteMainElement, new FilterView(movies), RenderPosition.BEFOREEND);
 //------------------------------------------------------
 //siteMainElement - куда рендерим
 //filmsModelм модель с данными (фильмов)
-const filmsPresenter = new FilmListPresenter(siteMainElement, filmsModel);
+const filmsPresenter = new FilmListPresenter(siteMainElement, filmsModel, filterModel);
 filmsPresenter.init(); //теперь мы не будем напрямую передавать данные, презентер сам возьмет их из модели
 // filmsPresenter.init(movies);
 // const sectionFilms = new FilmsSectionView(); // сохраняем в переменную класс с секцией, что бы потом обращаться к разметке методом getElement

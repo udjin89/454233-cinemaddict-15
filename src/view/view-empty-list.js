@@ -1,10 +1,11 @@
 import AbstractView from './abstract.js';
+import { FilterType } from '../const.js';
 
 const FILTERTYPES = {
-  'allMovies': 'There are no movies in our database',
-  'watchlist': 'There are no movies to watch now',
-  'history': 'There are no watched movies now',
-  'favorites': 'There are no favorite movies now',
+  [FilterType.ALL]: 'There are no movies in our database',
+  [FilterType.WATCHLIST]: 'There are no movies to watch now',
+  [FilterType.HISTORY]: 'There are no watched movies now',
+  [FilterType.FAVORITES]: 'There are no favorite movies now',
 };
 
 const createEmptyList = (filterType) => (
@@ -26,7 +27,7 @@ const createEmptyList = (filterType) => (
 // Класс noFilms, экспортируем по умолчанию, для удобства
 // Делаем его потомком от class Abstract
 export default class noFilms extends AbstractView {
-  constructor(filterType = 'allMovies') {
+  constructor(filterType = FilterType.ALL) {
     super();
     this._filterType = filterType; //сохраняем преданные данные
   }
