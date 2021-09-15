@@ -15,19 +15,19 @@ const generateFilter = (films) => Object.entries(filmToFilterMap).map(([filterNa
 
 const createFiltersTemplate = (filters, currentFilterType) => {
   console.log(filters);
-  const filmFilter = generateFilter(filters);
-  console.log(currentFilterType);
+  // const filmFilter = generateFilter(filters);
+  // console.log(currentFilterType);
   // console.log(filmFilter.find((filter) => { return filter.name === 'watchlist' }).count);
   // console.log(filmFilter.find((filter) => { return filter.name === 'history' }).count);
   // console.log(filmFilter.find((filter) => { return filter.name === 'favorites' }).count);
   return `<nav class="main-navigation">
   <div class="main-navigation__items">
-    <a href="#all" class="main-navigation__item ${currentFilterType === 'all' ? 'main-navigation__item--active' : ''}">All movies</a>
-    <a href="#watchlist" class="main-navigation__item ${currentFilterType === 'watchlist' ? 'main-navigation__item--active' : ''}">Watchlist <span class="main-navigation__item-count">${filmFilter.find((filterType) => { return filterType.name === 'watchlist' }).count}</span></a>
-    <a href="#history" class="main-navigation__item ${currentFilterType === 'history' ? 'main-navigation__item--active' : ''}">History <span class="main-navigation__item-count">${filmFilter.find((filterType) => { return filterType.name === 'history' }).count}</span> </a>
-  <a href="#favorites" class="main-navigation__item ${currentFilterType === 'favorites' ? 'main-navigation__item--active' : ''}">Favorites <span class="main-navigation__item-count">${filmFilter.find((filterType) => { return filterType.name === 'favorites' }).count}</span></a>
+    <a href="#all" data-type="all" class="main-navigation__item ${currentFilterType === 'all' ? 'main-navigation__item--active' : ''}">All movies</a>
+    <a href="#watchlist" data-type="watchlist" class="main-navigation__item ${currentFilterType === 'watchlist' ? 'main-navigation__item--active' : ''}">Watchlist <span class="main-navigation__item-count">${filters.find((filterType) => { return filterType.type === 'watchlist' }).count}</span></a>
+    <a href="#history" data-type="history" class="main-navigation__item ${currentFilterType === 'history' ? 'main-navigation__item--active' : ''}">History <span class="main-navigation__item-count">${filters.find((filterType) => { return filterType.type === 'history' }).count}</span> </a>
+  <a href="#favorites" data-type="favorites" class="main-navigation__item ${currentFilterType === 'favorites' ? 'main-navigation__item--active' : ''}">Favorites <span class="main-navigation__item-count">${filters.find((filterType) => { return filterType.type === 'favorites' }).count}</span></a>
   </div >
-  <a href="#stats" class="main-navigation__additional">Stats</a>
+  <a href="#stats" data-type="stats" class="main-navigation__additional">Stats</a>
 </nav > `;
 };
 // Класс filter, экспортируем по умолчанию, для удобства
@@ -54,7 +54,7 @@ export default class filter extends AbstractView {
       elem.classList.remove('main-navigation__item--active');
     });
     evt.target.classList.add('main-navigation__item--active');
-    this._callback.filterTypeChange(evt.target.value);
+    this._callback.filterTypeChange(evt.target.dataset.type);
   }
 
   setFilterTypeChangeHandler(callback) {

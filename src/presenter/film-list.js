@@ -8,7 +8,7 @@ import FilmCardPresenter from './film-card.js';
 import { updateFilmById, sortByDate, sortByRating } from '../utils/common.js';
 import { sortType, UpdateType, UserAction, FilterType } from '../const.js';
 import { AbstractObserver } from '../model/abstract-observer.js';
-
+import { filterTypeToFilterFilms } from '../utils/filter.js';
 const FILMS_BY_STEP = 5;
 const Mode = {
   CLOSE: 'CLOSE',
@@ -44,6 +44,7 @@ export default class FilmList {
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
 
+    this._filterModel.addObserver(this._handleModelEvent);
     this._filmsModel.addObserver(this._handleModelEvent);
 
   }
@@ -67,12 +68,12 @@ export default class FilmList {
 
     console.log(this._currentSortType);
     switch (this._currentSortType) {
-      case sortType.DATE: return filmData.sort(sortByDate);
-      case sortType.RATING: return filmData.sort(sortByRating);
+      case sortType.DATE: return filtredFilms.sort(sortByDate);
+      case sortType.RATING: return filtredFilms.sort(sortByRating);
       //default://получаем из модели, с помощью метода getFilms данные, то есть обьект со всеми фильмами
     }
 
-    return filmData.slice();
+    return filtredFilms.slice();
   }
 
   _handleChangeFilm(updateFilm, modePopup) {
@@ -122,12 +123,14 @@ export default class FilmList {
         // - обновить список, когда добавили в избранное, просмотренное или в список желаний
         // добавление и удаление комментария
         this._clearFilmsList();
-        this._renderFilmCards();
+        this._renderFilmList();
+        // this._renderFilmCards();
         break;
       case UpdateType.MAJOR:
         // - обновить всё, когда поменяли фильтр
         this._clearFilmsList();
-        this._renderFilmCards();
+        this._renderFilmList();
+        // this._renderFilmCards();
         break;
     }
   }
@@ -257,19 +260,19 @@ export default class FilmList {
 
   _renderFilmList() {
     // Главный метод по отрисовке, который будет вызывать остальные
-    if (!this._getFilmsList().length) {
+    if (this._filmsModel.isEmpty()) {
       this._renderNoFilms();
     }
     else {
       //создаем контейнер в films-list, в котором будут карточки фильмов
       render(this._filmsList, this._filmListContainer, RenderPosition.BEFOREEND);
-      // получаем количество фильмов из модели
-      const filmsCount = this._getFilmsList().length;
       // получаем уже отсортированные фильмы с помощью this._getFilmsList()
-      const films = this._getFilmsList().slice(0, Math.min(filmsCount, FILMS_BY_STEP));
+      const films = this._getFilmsList();
+      // получаем количество фильмов из модели
+      const filmsCount = films.length;
       // вызываем метод отрисовки всех фильмов
-      this._renderFilmCards(films);
-
+      this._renderFilmCards(films.slice(0, Math.min(filmsCount, FILMS_BY_STEP)));
+      this._renderSort();
       if (filmsCount > FILMS_BY_STEP) {
         this._renderButtonShowMore();
       }

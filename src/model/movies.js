@@ -29,4 +29,8 @@ export default class Films extends AbstractObserver {
     // этот метод наследуется от абстрактного
     this._notify(updateType, update);
   }
+
+  isEmpty() {
+    return this._films.length === 0;
+  }
 }

@@ -1,6 +1,13 @@
 import FilterView from '../view/view-filter.js';
 import { RenderPosition, render, removeComponent, replace } from '../utils/render.js';
-import { FilterType } from '../const.js';
+import { FilterType, UpdateType } from '../const.js';
+import { filterTypeToFilterFilms } from '../utils/filter.js';
+// const filterTypeToFilterFilms = {
+//   [FilterType.ALL]: (films) => films.length,
+//   [FilterType.WATCHLIST]: (films) => films.filter((film) => film.isWatchlist).length,
+//   [FilterType.HISTORY]: (films) => films.filter((film) => film.isWatched).length,
+//   [FilterType.FAVORITES]: (films) => films.filter((film) => film.isFavorite).length,
+// };
 
 export default class Filter {
 
@@ -19,7 +26,8 @@ export default class Filter {
   }
 
   init() {
-    const filters = this._getFilters;
+    const filters = this._getFilters();
+
     const prevFilterComponent = this._filterComponent;
     //
     this._filterComponent = new FilterView(filters, this._filterModel.getFilter());
@@ -27,11 +35,11 @@ export default class Filter {
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
 
     if (prevFilterComponent === null) {
-      render(this._filterContainer, this._filterComponent, RenderPosition.BEFOREEND);
+      render(this._container, this._filterComponent, RenderPosition.BEFOREEND);
       return;
     }
 
-    replace(this._filterComponent, prevFilterComponent);
+    replace(this._container, prevFilterComponent);
     removeComponent(prevFilterComponent);
   }
 
@@ -39,11 +47,17 @@ export default class Filter {
     this.init();
   }
 
-  _handleItemTypeClick(filterType) {
+  // _handleItemTypeClick(filterType) {
 
+  // }
+
+  _handleFilterTypeChange(filterType) {
+    if (this._filterModel.getFilter() === filterType && this._filterModel.getFilter() !== 'STATISTICS') { return; }
+    if (this._filterModel.getFilter() === 'STATISTICS') {
+      console.log('Stat open');
+    }
+    this._filterModel.setFilter(UpdateType.MAJOR, filterType);
   }
-
-  _handleFilterTypeChange() { }
 
   _getFilters() {
     const films = this._filmsModel.getFilms();
@@ -56,17 +70,17 @@ export default class Filter {
       {
         type: FilterType.WATCHLIST,
         name: 'Watchlist',
-        count: filterTypeToFilterFilms[FilterType.FAVORITE](films).length,
+        count: filterTypeToFilterFilms[FilterType.WATCHLIST](films).length,
       },
       {
         type: FilterType.HISTORY,
         name: 'History',
-        count: filterTypeToFilterFilms[FilterType.FAVORITE](films).length,
+        count: filterTypeToFilterFilms[FilterType.HISTORY](films).length,
       },
       {
         type: FilterType.FAVORITES,
         name: 'Favorites',
-        count: filterTypeToFilterFilms[FilterType.FAVORITE](films).length,
+        count: filterTypeToFilterFilms[FilterType.FAVORITES](films).length,
       },
     ];
   }
