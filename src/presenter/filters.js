@@ -52,11 +52,20 @@ export default class Filter {
   // }
 
   _handleFilterTypeChange(filterType) {
+    console.log('filer type' + filterType);
+
     if (this._filterModel.getFilter() === filterType && this._filterModel.getFilter() !== 'STATISTICS') { return; }
-    if (this._filterModel.getFilter() === 'STATISTICS') {
+
+    if (filterType === FilterType.STATISTICS) {
       console.log('Stat open');
+
+      //скрыть список
+      // показать статистику
+
     }
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
+
+    console.log('-> ' + this._filterModel.getFilter());
   }
 
   _getFilters() {
@@ -81,6 +90,11 @@ export default class Filter {
         type: FilterType.FAVORITES,
         name: 'Favorites',
         count: filterTypeToFilterFilms[FilterType.FAVORITES](films).length,
+      },
+      {
+        type: FilterType.STATISTICS,
+        name: 'stats',
+        count: films.length,
       },
     ];
   }

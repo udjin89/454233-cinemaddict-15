@@ -20,7 +20,7 @@ const FilterType = {
   WATCHLIST: 'watchlist',
   HISTORY: 'history',
   FAVORITES: 'favorites',
-  STATISTICS: 'stat',
+  STATISTICS: 'stats',
 };
 
 export { sortType, UserAction, UpdateType, FilterType };

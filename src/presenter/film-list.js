@@ -44,12 +44,13 @@ export default class FilmList {
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
 
-    this._filterModel.addObserver(this._handleModelEvent);
-    this._filmsModel.addObserver(this._handleModelEvent);
+
 
   }
 
   init() {
+    this._filterModel.addObserver(this._handleModelEvent);
+    this._filmsModel.addObserver(this._handleModelEvent);
     // Метод для инициализации (начала работы) модуля
     this._renderSort();
     // console.log('init');
@@ -61,12 +62,18 @@ export default class FilmList {
     this._renderFilmList();
   }
 
+  destroy() {
+    this._clearFilmsList();
+    this._filterModel.removeObserver(this._handleModelEvent);
+    this._filmsModel.removeObserver(this._handleModelEvent);
+  }
+
   _getFilmsList() {
     const filterType = this._filterModel.getFilter(); //забираем из модели тип фильтра
     const filmData = this._filmsModel.getFilms().slice();
     const filtredFilms = filterTypeToFilterFilms[filterType](filmData);
 
-    console.log(this._currentSortType);
+    // console.log(this._currentSortType);
     switch (this._currentSortType) {
       case sortType.DATE: return filtredFilms.sort(sortByDate);
       case sortType.RATING: return filtredFilms.sort(sortByRating);
@@ -272,7 +279,7 @@ export default class FilmList {
       const filmsCount = films.length;
       // вызываем метод отрисовки всех фильмов
       this._renderFilmCards(films.slice(0, Math.min(filmsCount, FILMS_BY_STEP)));
-      this._renderSort();
+      // this._renderSort();
       if (filmsCount > FILMS_BY_STEP) {
         this._renderButtonShowMore();
       }
