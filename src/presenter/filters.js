@@ -39,7 +39,7 @@ export default class Filter {
       return;
     }
 
-    replace(this._container, prevFilterComponent);
+    replace(this._filterComponent, prevFilterComponent);
     removeComponent(prevFilterComponent);
   }
 

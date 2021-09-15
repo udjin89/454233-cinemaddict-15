@@ -54,6 +54,7 @@ export default class filter extends AbstractView {
       elem.classList.remove('main-navigation__item--active');
     });
     evt.target.classList.add('main-navigation__item--active');
+    console.log('fuck' + evt.target.dataset.type);
     this._callback.filterTypeChange(evt.target.dataset.type);
   }
 
