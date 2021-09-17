@@ -9,12 +9,13 @@ import FilmCardView from './view/view-film-card.js';
 import FooterStatView from './view/view-footer-statistics.js';
 import ButtonShowMoreView from './view/view-show-more.js';
 import FilmExtraListView from './view/view-film-extra.js';
-import PopupView from './view/view-popup.js';
+import StatsView from './view/view-stats.js';
 
 import FilmsModel from './model/movies.js';
 import FilterModel from './model/filters.js';
 import FilmListPresenter from './presenter/film-list.js';
-import FilterPrester from './presenter/filters.js';
+import FilterPresenter from './presenter/filters.js';
+import ProfilePresenter from './presenter/profile.js';
 import { generateMovie } from './mock/generate-movie.js';
 import { RenderPosition, render } from './utils/render.js';
 import { FilterType } from './const.js';
@@ -79,18 +80,26 @@ const filterModel = new FilterModel();
 //------------------------------------------------------
 //+++++++++++++++++++++ ПРОФАЙЛ ++++++++++++++++++++++++
 //------------------------------------------------------
-render(siteHeaderElement, new ProfileView(), RenderPosition.BEFOREEND);
+// console.log(filmsModel);
+const profilePresenter = new ProfilePresenter(siteHeaderElement, filmsModel);
+profilePresenter.init();
+
+// render(siteHeaderElement, new ProfileView(), RenderPosition.BEFOREEND);
+
+
+// const statsPresenter = new StatsPresenter();
+// statsPresenter.init();
 //------------------------------------------------------
 //++++++++++++++++++++++ MAIN ++++++++++++++++++++++++++
 //------------------------------------------------------
 //Вставляем в .main класс меню, создаем экземпляр класса, а метод getElement возвращает разметку, которая храниться в this._element
 
-const filterPresenter = new FilterPrester(siteMainElement, filterModel, filmsModel);
+const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel);
 filterPresenter.init();
 
 // render(siteMainElement, new FilterView(movies, FilterType.ALL), RenderPosition.BEFOREEND);
 // render(siteMainElement, new SortView(), RenderPosition.BEFOREEND);
-
+// render(siteMainElement, new StatsView(), RenderPosition.BEFOREEND);
 //------------------------------------------------------
 //++++++++++++++++++++++  Секция ФИЛЬМОВ  ++++++++++++++
 //------------------------------------------------------

@@ -15,30 +15,4 @@ export default class Filter extends AbstractObserver {
   getFilter() {
     return this._activeFilter;
   }
-
-  getFilter1() {
-    const films = this._filmsModel.getFilms();
-    return [
-      {
-        type: FilterType.ALL,
-        name: 'All Movies',
-        count: films.length,
-      },
-      {
-        type: FilterType.WATCHLIST,
-        name: 'Watchlist',
-        count: filterTypeToFilterFilms[FilterType.FAVORITE](films).length,
-      },
-      {
-        type: FilterType.HISTORY,
-        name: 'History',
-        count: filterTypeToFilterFilms[FilterType.FAVORITE](films).length,
-      },
-      {
-        type: FilterType.FAVORITES,
-        name: 'Favorites',
-        count: filterTypeToFilterFilms[FilterType.FAVORITE](films).length,
-      },
-    ];
-  }
 }

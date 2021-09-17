@@ -1,23 +1,30 @@
 import AbstractView from './abstract.js';
 import { sortType } from '../const.js';
 
-const createSort = () => (
+const createSortItem = (type, name, isActive = false) => {
+  const activeClass = isActive ? 'sort__button--active' : '';
+  return `<li><a href="#" class="sort__button ${activeClass}" data-sort-type="${type}">Sort by ${name}</a></li>`;
+};
+
+const createSortList = (initialSortType) => (
   `<ul class="sort">
-  <li><a href="#" class="sort__button sort__button--active" data-sort-type="${sortType.DEFAULT}">Sort by default</a></li>
-  <li><a href="#" class="sort__button" data-sort-type="${sortType.DATE}">Sort by date</a></li>
-  <li><a href="#" class="sort__button " data-sort-type="${sortType.RATING}">Sort by rating</a></li>
+  ${createSortItem(sortType.DEFAULT, 'default', initialSortType === sortType.DEFAULT)}
+  ${createSortItem(sortType.DATE, 'date', initialSortType === sortType.DATE)}
+  ${createSortItem(sortType.RATING, 'rating', initialSortType === sortType.RATING)}
+
 </ul>
 `);
 // Класс sort, экспортируем по умолчанию, для удобства
 export default class sort extends AbstractView {
-  constructor() {
+  constructor(initialSortType) {
     super();
+    this._initialSortType = initialSortType;
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
   }
 
   getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
 
-    return createSort();
+    return createSortList(this._initialSortType);
   }
 
   _sortTypeChangeHandler(evt) {

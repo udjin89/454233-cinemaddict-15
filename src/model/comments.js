@@ -6,8 +6,9 @@ export default class Comments extends AbstractObserver {
     this._comments = []; // храним тут список фильмов
   }
 
-  setComments(comments) {
+  setComments(updateType, comments) {
     this._comments = comments.slice(); //записываем массив обьектов(фильмов), получение данных
+    this._notify(updateType, comments);
   }
 
   getComments() {

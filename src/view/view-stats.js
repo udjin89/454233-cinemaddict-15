@@ -1,4 +1,6 @@
+
 import AbstractView from './abstract.js';
+
 
 const createStats = () => (
   `<section class="statistic">
@@ -43,7 +45,8 @@ const createStats = () => (
     </ul>
 
     <div class="statistic__chart-wrap">
-      <canvas class="statistic__chart" width="1000"></canvas>
+      <canvas class="statistic__chart" width="1000">
+      </canvas>
     </div>
 
   </section>

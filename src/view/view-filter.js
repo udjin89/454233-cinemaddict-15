@@ -14,7 +14,7 @@ const generateFilter = (films) => Object.entries(filmToFilterMap).map(([filterNa
 );
 
 const createFiltersTemplate = (filters, currentFilterType) => {
-  console.log(filters);
+  // console.log(filters);
   // const filmFilter = generateFilter(filters);
   // console.log(currentFilterType);
   // console.log(filmFilter.find((filter) => { return filter.name === 'watchlist' }).count);
@@ -27,9 +27,10 @@ const createFiltersTemplate = (filters, currentFilterType) => {
     <a href="#history" data-type="history" class="main-navigation__item ${currentFilterType === 'history' ? 'main-navigation__item--active' : ''}">History <span class="main-navigation__item-count">${filters.find((filterType) => { return filterType.type === 'history' }).count}</span> </a>
   <a href="#favorites" data-type="favorites" class="main-navigation__item ${currentFilterType === 'favorites' ? 'main-navigation__item--active' : ''}">Favorites <span class="main-navigation__item-count">${filters.find((filterType) => { return filterType.type === 'favorites' }).count}</span></a>
   </div >
-  <a href="#stats" data-type="stats" class="main-navigation__additional">Stats</a>
+  <a href="#stats" data-type="stats" class="main-navigation__additional ${currentFilterType === 'stats' ? 'main-navigation__item--active' : ''}">Stats</a>
 </nav > `;
 };
+
 // Класс filter, экспортируем по умолчанию, для удобства
 export default class filter extends AbstractView {
   constructor(filters, currentFilterType) {

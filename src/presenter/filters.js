@@ -52,14 +52,17 @@ export default class Filter {
   // }
 
   _handleFilterTypeChange(filterType) {
-    console.log('filer type' + filterType);
+    console.log('filer type-> ' + filterType);
 
     if (this._filterModel.getFilter() === filterType && this._filterModel.getFilter() !== 'STATISTICS') { return; }
 
     if (filterType === FilterType.STATISTICS) {
       console.log('Stat open');
+      // removeComponent(this._filterComponent);
+
 
       //скрыть список
+
       // показать статистику
 
     }

@@ -142,7 +142,7 @@ export default class FilmCard {
     // console.log(this._film);
     this._changeData(
       UserAction.UPDATE_FILM,
-      UpdateType.MINOR,
+      UpdateType.PATCH,
       Object.assign(
         {},
         this._film,
