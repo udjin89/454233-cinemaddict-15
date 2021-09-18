@@ -26,6 +26,7 @@ export default class Profile {
     }
 
     const status = this.getStatus();
+    console.log('get status in profile.js -> ' + status)
     this._profile = new ProfileView(status);
 
     render(this._container, this._profile, RenderPosition.BEFOREEND);
@@ -45,7 +46,7 @@ export default class Profile {
   getStatus() {
     let count = 0;
     const films = this._getFilms();
-    getRatingUser(films);
+    return getRatingUser(films);
     // // elem.isWatched ? count++ : ;
     // films.reduce((accumulator, currentValue) => {
     //   // console.log(currentValue.isWatched);

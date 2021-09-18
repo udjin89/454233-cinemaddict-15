@@ -9,8 +9,9 @@ const createProfile = (status) => (
 );
 // Класс profile, экспортируем по умолчанию, для удобства
 export default class profile extends AbstractView {
-  constructor(status = 'no status') {
+  constructor(status) {
     super();
+    console.log('view -> ' + status);
     this._status = status;
   }
 

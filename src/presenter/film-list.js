@@ -133,6 +133,7 @@ export default class FilmList {
   _handleModelEvent(updateType, data) { // колбек, который предается в модель, она будет выполнена при изменении модели
     // console.log(updateType, data);
     // В зависимости от типа изменений решаем, что делать:
+
     switch (updateType) {
       case UpdateType.PATCH:
         this._updateCard(data);
