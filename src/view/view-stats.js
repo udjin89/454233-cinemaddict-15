@@ -1,4 +1,9 @@
+
+import { ShowPeriod } from '../const.js';
+import { filterWatchedFilmsInPeriod } from '../utils/stats.js';
 import AbstractView from './abstract.js';
+import SmartView from './smart.js';
+
 
 const createStats = () => (
   `<section class="statistic">
@@ -43,17 +48,29 @@ const createStats = () => (
     </ul>
 
     <div class="statistic__chart-wrap">
-      <canvas class="statistic__chart" width="1000"></canvas>
+      <canvas class="statistic__chart" width="1000">
+      </canvas>
     </div>
 
   </section>
 
   `
 );
-export default class stats extends AbstractView {
+export default class Stats extends SmartView {
+  constructor(state, rankName) {
+    super();
+    this._chart = null;
+    this._period = ShowPeriod.ALL_TIME;
+    this._state = state;
+    this._rankName = rankName;
+  }
 
   getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
 
-    return createStats();
+    return createStats(this._rankName, this._state, this._getWatchedFilms);
+  }
+
+  _getWatchedFilms() {
+    return filterWatchedFilmsInPeriod(this._state);
   }
 }

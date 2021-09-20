@@ -1,5 +1,6 @@
 import FilmCardView from '../view/view-film-card.js';
 import PopupView from '../view/view-popup.js';
+import { sortType, UpdateType, UserAction } from '../const.js';
 import { RenderPosition, render, replace, removeComponent } from '../utils/render.js';
 
 const Mode = {
@@ -79,7 +80,7 @@ export default class FilmCard {
   }
 
   destroy() {
-    console.log('destroy');
+    // console.log('destroy');
     removeComponent(this._view);
     removeComponent(this._viewPopup);
     this._removeCardPopup();
@@ -102,7 +103,11 @@ export default class FilmCard {
   }
 
   _handleWatchListClick() {
+    // в this._changeData хранится колбек, переданный из film-list.js при создании презентера карточки фильма
+    //_handleViewAction(actionType, updateType, update)
     this._changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
       Object.assign(
         {},
         this._film,
@@ -115,7 +120,11 @@ export default class FilmCard {
   }
 
   _handleAsWatchedClick() {
+    // в this._changeData хранится колбек, переданный из film-list.js при создании презентера карточки фильма
+    //_handleViewAction(actionType, updateType, update)
     this._changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
       Object.assign(
         {},
         this._film,
@@ -128,8 +137,12 @@ export default class FilmCard {
   }
 
   _handleFavoriteClick() {
+    // в this._changeData хранится колбек, переданный из film-list.js при создании презентера карточки фильма
+    //_handleViewAction(actionType, updateType, update)
     // console.log(this._film);
     this._changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.PATCH,
       Object.assign(
         {},
         this._film,

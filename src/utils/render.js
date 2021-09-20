@@ -14,7 +14,8 @@ const RenderPosition = {
 //------------------------------------------------------
 //container - куда будем вставлять, element - то что вставляем, place - место в container, куда вставляем
 const render = (container, element, place) => {
-
+  // console.log("go render->");
+  // console.log(element);
   if (container instanceof Abstract) {
     container = container.getElement();
   }
