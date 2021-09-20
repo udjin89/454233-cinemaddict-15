@@ -3,6 +3,7 @@ import SortView from '../view/view-sort.js';
 import StatsView from '../view/view-stats.js';
 import ChartsView from '../view/view-chart.js';
 import NoFilms from '../view/view-empty-list.js';
+import LoadingView from '../view/view-loading.js';
 import FilmsListContainerView from '../view/view-film-list-container.js';
 import ButtonShowMoreView from '../view/view-show-more.js';
 import { RenderPosition, render, removeComponent, replace } from '../utils/render.js';
@@ -30,11 +31,12 @@ export default class FilmList {
     this._currentSortType = sortType.DEFAULT;
     this._filterType = FilterType.ALL;
     this._filmCardPresenter = {};//
+    this._isLoading = true;
 
     this._filmsList = new FilmsListView(); //films-list
     this._emptyList = new NoFilms(this._filterType);
     this._filmListContainer = new FilmsListContainerView();
-
+    this._loadingComponent = new LoadingView();
     // this._buttonShowMore = new ButtonShowMoreView();
     // this._sortComponent = new SortView();
 
@@ -47,8 +49,6 @@ export default class FilmList {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
-
-
 
   }
 
@@ -165,6 +165,12 @@ export default class FilmList {
 
         // this._renderFilmCards();
         break;
+
+      case UpdateType.INIT:
+        this._isLoading = false;
+        removeComponent(this._loadingComponent);
+        this._renderFilmList();
+        break;
     }
   }
 
@@ -231,9 +237,6 @@ export default class FilmList {
     // console.log(this._filmCardPresenter);
     Object.values(this._filmCardPresenter).forEach((presenter) => { presenter.closePopup(); });
   }
-  //_renderPopup(film){
-  //  this._popupPresenter = new FilmPopup()
-  //}
 
   _renderFilmCard(filmCard) {
     // Метод для рендеринга одного фильма
@@ -243,21 +246,13 @@ export default class FilmList {
     this._filmCardPresenter[filmCard.id] = filmCardPresenter;
   }
 
-  // _renderFilmCards(from, to) {
-  //   // Метод для рендеринга фильмов /from - с номера какого фильма отрисовываем, to - номер до какого отрисовываем
-  //   //из списка всех фильмов "вырезаем" слайсом, те фильмы которые нужно отрендерить
-  //   // потом с помощью forEach для каждого фильма вызываем рендер
-  //   // !!! Важная особенность если to больше чем есть фильмов, то метод slice не создаст еще элеметов
-  //   this._films.slice(from, to).forEach((elem) => {
-  //     this._renderFilmCard(elem);
-  //   });
-  // }
   _renderFilmCards(films) {
     // передали фильмы, которые нужно отрисовать
     films.forEach((film) => { this._renderFilmCard(film); });
   }
 
   _renderNoFilms() {
+    removeComponent(this._loadingComponent);
     // Метод для рендеринга заглушки
     render(this._filmsList, this._emptyList, RenderPosition.BEFOREEND);
     // switch (filterType) {
@@ -269,6 +264,11 @@ export default class FilmList {
     //   default: render(this._filmsList, this._emptyList, RenderPosition.BEFOREEND); break;
     // }
 
+  }
+
+  _renderLoading() {
+    console.log('work');
+    render(siteMainElement, this._loadingComponent, RenderPosition.BEFOREEND);
   }
 
   _handleShowMoreButtonClick() {
@@ -302,6 +302,10 @@ export default class FilmList {
   }
 
   _renderFilmList() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
     // Главный метод по отрисовке, который будет вызывать остальные
     if (this._filmsModel.isEmpty()) {
       this._renderNoFilms();
@@ -335,5 +339,17 @@ export default class FilmList {
     }
   }
 
+  show() {
+    this._emptyList.show();
+    this._sortComponent.show();
+    this._buttonShowMore.show();
+    this._filmsList.show();
+  }
 
+  hide() {
+    this._emptyList.hide();
+    this._sortComponent.hide();
+    this._buttonShowMore.hide();
+    this._filmsList.hide();
+  }
 }

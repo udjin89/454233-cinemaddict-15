@@ -1,6 +1,6 @@
 import ProfileView from '../view/view-profile.js';
 import { RenderPosition, render, removeComponent, replace } from '../utils/render.js';
-import { getRatingUser } from '../utils/stats.js';
+import { getRatingUser, countWatchedFilms } from '../utils/stats.js';
 export default class Profile {
   constructor(container, filmsModel) {
     this._container = container; //контейнер куда рендерим
@@ -44,9 +44,9 @@ export default class Profile {
   }
 
   getStatus() {
-    let count = 0;
+    // let count = 0;
     const films = this._getFilms();
-    return getRatingUser(films);
+    return getRatingUser(countWatchedFilms(films));
     // // elem.isWatched ? count++ : ;
     // films.reduce((accumulator, currentValue) => {
     //   // console.log(currentValue.isWatched);
@@ -54,7 +54,7 @@ export default class Profile {
     //     count++;
     //   }
     // });
-    console.log('->>>>' + getRatingUser(films));
+    // console.log('->>>>' + getRatingUser(films));
   }
 
 }

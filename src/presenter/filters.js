@@ -58,16 +58,11 @@ export default class Filter {
 
     if (filterType === FilterType.STATISTICS) {
       console.log('Stat open');
-      // removeComponent(this._filterComponent);
-
-
-      //скрыть список
-
-      // показать статистику
+      this._handleSiteMenuClick(FilterType.STATISTICS);
 
     }
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
-
+    this._handleSiteMenuClick(filterType);
     console.log('-> ' + this._filterModel.getFilter());
   }
 
@@ -102,6 +97,10 @@ export default class Filter {
     ];
   }
 
+  setMenuClickHandler(callback) {
+    this._handleSiteMenuClick = callback;
+
+  }
 
 }
 

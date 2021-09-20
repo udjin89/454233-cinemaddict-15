@@ -1,4 +1,5 @@
 import { createElement } from '../utils/render.js';
+import { VISUALLY_HIDDEN } from '../const.js';
 
 // Класс Abstract, экспортируем по умолчанию, для удобства
 export default class Abstract {
@@ -28,5 +29,13 @@ export default class Abstract {
 
   removeElement() {
     this._element = null; //затираем значение(разметку которая там)
+  }
+
+  show() {
+    this.getElement().classList.remove(VISUALLY_HIDDEN);
+  }
+
+  hide() {
+    this.getElement().classList.add(VISUALLY_HIDDEN);
   }
 }

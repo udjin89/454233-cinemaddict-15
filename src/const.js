@@ -1,3 +1,5 @@
+const VISUALLY_HIDDEN = 'visually-hidden';
+
 const sortType = {
   DEFAULT: 'default',
   DATE: 'date',
@@ -13,6 +15,7 @@ const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
 
 const FilterType = {
@@ -22,5 +25,11 @@ const FilterType = {
   FAVORITES: 'favorites',
   STATISTICS: 'stats',
 };
-
-export { sortType, UserAction, UpdateType, FilterType };
+const ShowPeriod = {
+  ALL_TIME: 'all-time',
+  DAY: 'day',
+  WEEK: 'week',
+  MONTH: 'month',
+  YEAR: 'year',
+};
+export { sortType, UserAction, UpdateType, FilterType, ShowPeriod, VISUALLY_HIDDEN };

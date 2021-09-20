@@ -57,14 +57,14 @@ const renderCharts = (films) => {
         },
       },
       scales: {
-        scaleLabel: {
-          display: true,
-          fontSize: 8,
-          fontColor: "#4a4a4a"
-        },
+        // scaleLabel: {
+        //   display: true,
+        //   fontSize: 8,
+        //   fontColor: "#4a4a4a"
+        // },
         yAxes: [{
           ticks: {
-            fontColor: '#ffffff',
+            fontColor: '#00ffff',
             padding: 0,
             fontSize: 30,
           },
