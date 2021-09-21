@@ -22,10 +22,12 @@ const Mode = {
 
 
 export default class FilmList {
-  constructor(filmsContainer, filmsModel, filterModel) {
+  constructor(filmsContainer, filmsModel, filterModel, api) {
+    // console.log(api)
     this._filmsModel = filmsModel; //данные
     this._filmsContainer = filmsContainer; //контейнер куда рендерим
     this._filterModel = filterModel; //данные фильтра
+    this._api = api;
 
     this._renderedFilmsCount = FILMS_BY_STEP; //хранит количество отрисованных фильмов
     this._currentSortType = sortType.DEFAULT;
@@ -55,13 +57,6 @@ export default class FilmList {
   init() {
     this._filterModel.addObserver(this._handleModelEvent);
     this._filmsModel.addObserver(this._handleModelEvent);
-    // Метод для инициализации (начала работы) модуля
-
-    // console.log('init');
-    // console.log(this._filmsModel.getFilms());
-    // this._defaultFilms = films.slice();
-    // this._films = films.slice();
-    // render(this._filmsContainer, this._filmsList, RenderPosition.BEFOREEND); // добавили секцию (пустая) films
 
     this._renderFilmList();
   }
@@ -116,7 +111,11 @@ export default class FilmList {
     // Здесь будем вызывать обновление модели.
     switch (actionType) {
       case UserAction.UPDATE_FILM:
-        this._filmsModel.updateFilmById(updateType, update);
+
+        this._api.updateFilm(update).then((response) => {
+          this._filmsModel.updateFilmById(updateType, response);
+        });
+        // this._filmsModel.updateFilmById(updateType, update);
         // this._filmCardPresenter[filmCard.id].replacePopup();
         break;
       case UserAction.ADD_COMMENT:
@@ -148,7 +147,7 @@ export default class FilmList {
         break;
       case UpdateType.MAJOR:
         // - обновить всё, когда поменяли фильтр
-        console.log('major data -> ' + data);
+        // console.log('major data -> ' + data);
 
         this._clearFilmsList({ resetRenderedFilmsCount: true, resetSortType: true });
 
@@ -193,17 +192,6 @@ export default class FilmList {
     removeComponent(this._sortComponent);
     removeComponent(this._buttonShowMore);
   }
-
-  // _sortFilms(type) {
-  //   // console.log(type);
-  //   switch (type) {
-  //     case sortType.DATE: this._films.sort(sortByDate); break;
-  //     case sortType.RATING: this._films.sort(sortByRating); break;
-  //     default: this._films = this._defaultFilms.slice(); break;
-  //   }
-  //   this._currentSortType = type;
-  //   // console.log('sort');
-  // }
 
   _handleSortTypeChange(type) {
     // console.log(type);
@@ -255,19 +243,10 @@ export default class FilmList {
     removeComponent(this._loadingComponent);
     // Метод для рендеринга заглушки
     render(this._filmsList, this._emptyList, RenderPosition.BEFOREEND);
-    // switch (filterType) {
-
-    //   case 'allMovies': render(this._filmsList, this._emptyList('allMovies'), RenderPosition.BEFOREEND); break;
-    //   case 'watchlist': render(this._filmsList, this._emptyList('watchlist'), RenderPosition.BEFOREEND); break;
-    //   case 'history': render(this._filmsList, this._emptyList('history'), RenderPosition.BEFOREEND); break;
-    //   case 'favorites': render(this._filmsList, this._emptyList('favorites'), RenderPosition.BEFOREEND); break;
-    //   default: render(this._filmsList, this._emptyList, RenderPosition.BEFOREEND); break;
-    // }
-
   }
 
   _renderLoading() {
-    console.log('work');
+    // console.log('work');
     render(siteMainElement, this._loadingComponent, RenderPosition.BEFOREEND);
   }
 
@@ -349,7 +328,7 @@ export default class FilmList {
   hide() {
     this._emptyList.hide();
     this._sortComponent.hide();
-    this._buttonShowMore.hide();
+    // this._buttonShowMore.hide();
     this._filmsList.hide();
   }
 }

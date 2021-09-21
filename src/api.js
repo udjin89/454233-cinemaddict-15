@@ -1,4 +1,5 @@
 import MoviesModel from './model/movies.js';
+import { sortType, UpdateType, UserAction, FilterType } from './const.js';
 
 const Method = {
   GET: 'GET',
@@ -22,7 +23,7 @@ export default class Api {
       .then((movies) => movies.map(MoviesModel.adaptToClient));
   }
 
-  updateTask(movie) {
+  updateFilm(movie) {
     return this._load({
       url: `movies/${movie.id}`,
       method: Method.PUT,

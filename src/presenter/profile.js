@@ -26,17 +26,16 @@ export default class Profile {
     }
 
     const status = this.getStatus();
-    console.log('get status in profile.js -> ' + status)
+    // console.log('get status in profile.js -> ' + status)
     this._profile = new ProfileView(status);
 
     render(this._container, this._profile, RenderPosition.BEFOREEND);
   }
 
   _handleModelEvent() {
-    console.log('profile change model');
+    // console.log('profile change model');
     removeComponent(this._profile);
     this.init();
-
   }
 
   _getFilms() {
@@ -44,17 +43,9 @@ export default class Profile {
   }
 
   getStatus() {
-    // let count = 0;
+
     const films = this._getFilms();
     return getRatingUser(countWatchedFilms(films));
-    // // elem.isWatched ? count++ : ;
-    // films.reduce((accumulator, currentValue) => {
-    //   // console.log(currentValue.isWatched);
-    //   if (currentValue.isWatched) {
-    //     count++;
-    //   }
-    // });
-    // console.log('->>>>' + getRatingUser(films));
   }
 
 }

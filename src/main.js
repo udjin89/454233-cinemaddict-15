@@ -34,11 +34,9 @@ const siteMainElement = document.querySelector('.main');
 const siteHeaderElement = document.querySelector('.header');
 const siteFooterStatistics = document.querySelector('.footer__statistics');
 
-const movies = new Array(FILMS_COUNT).fill().map(generateMovie);
+// const movies = new Array(FILMS_COUNT).fill().map(generateMovie);
 
 const api = new Api(END_POINT, AUTHORIZATION);
-
-
 
 const filmsModel = new FilmsModel(); // создаем класс модели списка фильмов
 // filmsModel.setFilms(movies); // передаем в модель данные
@@ -48,13 +46,13 @@ const filterModel = new FilterModel();
 const profilePresenter = new ProfilePresenter(siteHeaderElement, filmsModel);
 profilePresenter.init();
 
-
+// console.log('API -> ' + api)
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel);
 filterPresenter.init();
 
 //siteMainElement - куда рендерим
 //filmsModelм модель с данными (фильмов)
-const filmsPresenter = new FilmListPresenter(siteMainElement, filmsModel, filterModel);
+const filmsPresenter = new FilmListPresenter(siteMainElement, filmsModel, filterModel, api);
 filmsPresenter.init(); //теперь мы не будем напрямую передавать данные, презентер сам возьмет их из модели
 
 const statsPresenter = new StatsPresenter(siteMainElement, filmsModel);
@@ -105,17 +103,13 @@ statsPresenter.init();
 
 render(siteFooterStatistics, new FooterStatView(), RenderPosition.BEFOREEND);
 
-//------------------------------------------------------
-//++++++++++++++++++++++  POPUP  ++++++++++++++++++++++
-//------------------------------------------------------
-// render(siteBody, new PopupView(movies[0]).getElement(), RenderPosition.BEFOREEND);
-
 api.getFilms()
   .then((movies) => {
     console.log(movies);
-    console.log('update INIT!');
+    // console.log('update INIT!');
     filmsModel.setFilms(UpdateType.INIT, movies);// передаем в модель данные
   })
   .catch(() => {
-    filmsModel.setFilms(UpdateType.INIT, []);
+    // filmsModel.setFilms(UpdateType.INIT, []);
   });
+
