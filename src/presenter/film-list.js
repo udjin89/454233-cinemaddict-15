@@ -8,6 +8,7 @@ import FilmsListContainerView from '../view/view-film-list-container.js';
 import ButtonShowMoreView from '../view/view-show-more.js';
 import { RenderPosition, render, removeComponent, replace } from '../utils/render.js';
 import FilmCardPresenter from './film-card.js';
+import PopupPresenter from './popup.js';
 import { updateFilmById, sortByDate, sortByRating } from '../utils/common.js';
 import { sortType, UpdateType, UserAction, FilterType } from '../const.js';
 import { AbstractObserver } from '../model/abstract-observer.js';
@@ -39,11 +40,9 @@ export default class FilmList {
     this._emptyList = new NoFilms(this._filterType);
     this._filmListContainer = new FilmsListContainerView();
     this._loadingComponent = new LoadingView();
-    // this._buttonShowMore = new ButtonShowMoreView();
-    // this._sortComponent = new SortView();
-
     this._buttonShowMore = null;
     this._sortComponent = null;
+    this._popupPresenter = null;
 
     this._handleShowMoreButtonClick = this._handleShowMoreButtonClick.bind(this);
     this._handleChangeFilm = this._handleChangeFilm.bind(this);
@@ -105,8 +104,8 @@ export default class FilmList {
     // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
     // update - обновленные данные
     // mode - открыт ли попап
-    console.log('go-> ' + mode);
-    console.log(actionType, updateType, update);
+    // console.log('go-> ' + mode);
+    // console.log(actionType, updateType, update);
     // this._filmsModel.updateFilmById(UpdateType.MINOR, update);
     // Здесь будем вызывать обновление модели.
     switch (actionType) {
@@ -135,12 +134,13 @@ export default class FilmList {
 
     switch (updateType) {
       case UpdateType.PATCH:
+        this._updatePopup(data);
         this._updateCard(data);
         break;
       case UpdateType.MINOR:
         // - обновить список, когда добавили в избранное, просмотренное или в список желаний
         // добавление и удаление комментария
-        this._updateCard(data);
+        this._updatePopup(data);
         this._clearFilmsList();
         this._renderFilmList();
         // this._renderFilmCards();
@@ -151,15 +151,20 @@ export default class FilmList {
 
         this._clearFilmsList({ resetRenderedFilmsCount: true, resetSortType: true });
 
+        const profile = new StatsView();
+        const stats = new ChartsView(this._filmsModel);
+
         if (data === 'stats') {
-          this._clearFilmsList();
-          const profile = new StatsView();
+          // this._clearFilmsList();
+
           render(siteMainElement, profile, RenderPosition.BEFOREEND);
-          const stats = new ChartsView(this._filmsModel);
+          // const stats = new ChartsView(this._filmsModel);
           render(siteMainElement, stats, RenderPosition.BEFOREEND);
           return;
         }
+
         // removeComponent(profile);
+        // removeComponent(stats);
         this._renderFilmList();
 
         // this._renderFilmCards();
@@ -180,6 +185,15 @@ export default class FilmList {
     }
   }
 
+  _updatePopup(filmCard) {
+    const presenter = this._popupPresenter;
+    // console.log(presenter.isOpen(filmCard));
+    if (presenter !== null && presenter.isOpen(filmCard)) {
+      // presenter.init(filmCard);
+      presenter.init(filmCard);
+    }
+  }
+
   _clearFilmsList({ resetRenderedFilmsCount = false, resetSortType = false } = {}) {
     Object.values(this._filmCardPresenter).forEach((presenter) => presenter.destroy());
     this._filmCardPresenter = {};
@@ -194,12 +208,10 @@ export default class FilmList {
   }
 
   _handleSortTypeChange(type) {
-    // console.log(type);
     if (this._currentSortType === type) {
       return;
     }
     this._currentSortType = type;
-    // this._sortFilms(type);
     this._clearFilmsList();
     this._renderFilmList();
   }
@@ -215,15 +227,10 @@ export default class FilmList {
     render(this._filmsContainer, this._sortComponent, RenderPosition.BEFOREEND);
   }
 
-  _renderFilter() {
-    //  Метод для рендеринга фильтров
-
-  }
-
-  _handleModeChange() {
-    //this._renderPopup(film);
+  _handleModeChange(film) {
+    this._renderPopup(film);
     // console.log(this._filmCardPresenter);
-    Object.values(this._filmCardPresenter).forEach((presenter) => { presenter.closePopup(); });
+    // Object.values(this._filmCardPresenter).forEach((presenter) => { presenter.closePopup(); });
   }
 
   _renderFilmCard(filmCard) {
@@ -251,11 +258,7 @@ export default class FilmList {
   }
 
   _handleShowMoreButtonClick() {
-    //отрисовываем карточки фильмов
-    // this._renderFilmCards(this._renderedFilmsCount, this._renderedFilmsCount + FILMS_BY_STEP);
-    // прибавляем к счетчику
-    // const newRenderedFilmsCount = Math.min(filmsCount, this._renderedFilmsCount + FILMS_BY_STEP);
-    // получаем количество всех фильмов
+
     const filmsCount = this._getFilmsList().length;
     // вычисляем номер последнего фильма который надо дорисовать
     const newRenderedFilmsCount = Math.min(filmsCount, this._renderedFilmsCount + FILMS_BY_STEP);
@@ -302,12 +305,6 @@ export default class FilmList {
       // вызываем метод отрисовки всех фильмов
       // console.log(films);
       this._renderFilmCards(films.slice(0, Math.min(filmsCount, FILMS_BY_STEP)));
-      //создаем контейнер в films-list, в котором будут карточки фильмов
-      // console.log("asfd");
-      // console.log(this._filmsList);
-      // debugger;
-      // render(this._filmsList, this._filmListContainer, RenderPosition.BEFOREEND);
-      // console.log("Go filmList>>>>>>>>>>>>>>>>>");
 
       render(this._filmsContainer, this._filmsList, RenderPosition.BEFOREEND);
       render(this._filmsList, this._filmListContainer, RenderPosition.BEFOREEND);
@@ -316,6 +313,14 @@ export default class FilmList {
         this._renderButtonShowMore();
       }
     }
+  }
+
+  _renderPopup(film) {
+    if (this._popupPresenter === null) {
+      this._popupPresenter = new PopupPresenter(document.body, this._handleViewAction);
+    }
+
+    this._popupPresenter.init(film);
   }
 
   show() {
@@ -328,7 +333,12 @@ export default class FilmList {
   hide() {
     this._emptyList.hide();
     this._sortComponent.hide();
-    // this._buttonShowMore.hide();
+    this._buttonShowMore.hide();
     this._filmsList.hide();
+  }
+
+  _renderFilter() {
+    //  Метод для рендеринга фильтров
+
   }
 }

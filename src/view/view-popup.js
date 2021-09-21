@@ -200,9 +200,9 @@ export default class popup extends SmartView {
   }
 
   restoreHandlers() {
-    this.setWatchListHandlerClick(this._callback.clickAddWatchList);
-    this.setAsWatchedListHandlerClick(this._callback.clickAddAsWatchedList);
-    this.setFavoriteHandlerClick(this._callback.clickAddFavorite);
+    // this.setWatchListHandlerClick(this._callback.clickAddWatchList);
+    // this.setAsWatchedListHandlerClick(this._callback.clickAddAsWatchedList);
+    // this.setFavoriteHandlerClick(this._callback.clickAddFavorite);
 
     this._setInnerHandlers();
   }
@@ -238,7 +238,14 @@ export default class popup extends SmartView {
     this.getElement().querySelectorAll('.film-details__emoji-item').forEach((item) => {
       item.addEventListener('change', this._emojiChangeHandler);
     });
+
+    this.setWatchListHandlerClick(this._callback.clickAddWatchList);
+    this.setAsWatchedListHandlerClick(this._callback.clickAddAsWatchedList);
+    this.setFavoriteHandlerClick(this._callback.clickAddFavorite);
+
     this.getElement().querySelector('.film-details__comment-input').addEventListener('keydown', this._onDeleteKeyDown);
+    this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._clickClosePopup);
+
 
   }
 
@@ -255,7 +262,6 @@ export default class popup extends SmartView {
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    // this._callback.formSubmit(this._movie);
     this._callback.formSubmit(popup.parseStateToInfo(this._data));
   }
 
@@ -267,7 +273,6 @@ export default class popup extends SmartView {
   _clickWatchList(evt) {
     evt.preventDefault();
     this._callback.clickAddWatchList(); // метод записан с обьекте callback
-    // this.restoreHandlers();
   }
 
   setWatchListHandlerClick(callback) {

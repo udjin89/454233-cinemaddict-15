@@ -86,6 +86,25 @@ export default class Films extends AbstractObserver {
       {
         ['user_details']: {
           'favorite': film.isFavorite,
+          'already_watched': film.isWatched,
+          'watchlist': film.isWatchlist,
+          'watching_date': film.watchingDate,
+        },
+
+        ['film_info']: {
+          'title': film.filmInfo.title,
+          'alternative_title': film.filmInfo.alternativeTitle,
+          'total_rating': film.filmInfo.totalRating,
+          'poster': film.filmInfo.poster,
+          'age_rating': film.filmInfo.ageRating,
+          'director': film.filmInfo.director,
+          'writers': film.filmInfo.writers,
+          'actors': film.filmInfo.actors,
+          'release': film.filmInfo.release,
+          'runtime': film.filmInfo.runtime,
+          'genre': film.filmInfo.genre,
+          'description': film.filmInfo.description,
+
         },
         'due_date': film.dueDate instanceof Date ? film.dueDate.toISOString() : null, // На сервере дата хранится в ISO формате
         'is_archived': film.isArchive,
