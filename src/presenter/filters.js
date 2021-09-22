@@ -58,8 +58,8 @@ export default class Filter {
 
     if (filterType === FilterType.STATISTICS) {
       console.log('Stat open');
-      this._handleSiteMenuClick(FilterType.STATISTICS);
-
+      this._handleSiteMenuClick(filterType);
+      return;
     }
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
     this._handleSiteMenuClick(filterType);

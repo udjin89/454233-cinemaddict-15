@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
-import { ShowPeriod } from '../const.js';
+import { ShowPeriod } from "../const";
+
 
 const RATING_WATCHED = [
   { count: 1, rate: 'novice' },
@@ -7,20 +8,42 @@ const RATING_WATCHED = [
   { count: 21, rate: 'movie buff' },
 ];
 
-const getWatchedFilms = (films) => (films.filter((film) => film.isWatched));
+const getWatchedFilms = (films) => films.filter((film) => film.isWatched);
 
-const countWatchedFilms = (films) => films.reduce((count, film) => film.isWatched && count++, 0);
+const getCountGenres = (genres, genre) => {
+  const count = genres[genre];
+  genres[genre] = count === undefined ? 1 : count + 1;
+  return genres;
+};
 
-const getRatingUser = (count) => RATING_WATCHED.find((item) => item.count >= count).rate;
+const getSortedGenre = (genres) => Object.entries(genres).map(([ key, value ]) => ({ genre: key , count: value })).sort((a, b) => b.count - a.count);
 
-const filterWatchedFilmsInPeriod = ({ films, period }) => {
-  if (period === ShowPeriod.ALL_TIME) {
+
+const getWatchedInfo = (films) => films.reduce((info, film) => {
+  if(film.isWatched) {
+    info.watched += 1;
+    info.allTime += film.filmInfo.runtime;
+    info.genres = film.filmInfo.genre.reduce(getCountGenres, info.genres);
+  }
+
+  return info;
+}, {watched: 0, allTime: 0, genres: {}});
+
+
+const countWatchedFilms = (films) => films.reduce((count, film) => film.isWatched ? ++count : count, 0);
+
+const getRatingUser = (count) =>
+  RATING_WATCHED.find((item) => item.count >= count).rate;
+
+const filterWachedFilmsInPeriod = ( {films, period} ) => {
+  if(period === ShowPeriod.ALL_TIME) {
     return films;
   }
-  films.filter((film) => {
+
+  return films.filter((film) => {
     const dateNow = dayjs();
     return dayjs(film.watchingDate).isSame(dateNow, period);
   });
 };
 
-export { getRatingUser, countWatchedFilms, getWatchedFilms, filterWatchedFilmsInPeriod };
+export { getRatingUser, getWatchedFilms, countWatchedFilms, filterWachedFilmsInPeriod , getWatchedInfo, getSortedGenre};

@@ -40,28 +40,32 @@ export default class Films extends AbstractObserver {
 
   static adaptToClient(film) {
     // console.log('DATA -> ' + film.film_info.title);
+    const info = film.film_info;
+    const release = film.film_info.release;
+    const details = film.user_details;
     const adaptedFilm = Object.assign(
       {},
       film,
       {
-        watchingDate: film.user_details.watching_date !== null ? new Date(film.user_details.watching_date) : film.user_details.watching_date, // На клиенте дата хранится как экземпляр Date
-        isWatched: film.user_details['already_watched'],
-        isFavorite: film.user_details['favorite'],
-        isWatchlist: film.user_details['watchlist'],
+        watchingDate: details.watching_date !== null ? new Date(film.user_details.watching_date) : film.user_details.watching_date, // На клиенте дата хранится как экземпляр Date
+        isWatched: details['already_watched'],
+        isFavorite: details['favorite'],
+        isWatchlist: details['watchlist'],
 
         filmInfo: {
-          title: film.film_info.title,
-          alternativeTitle: film.film_info.alternative_title,
-          totalRating: film.film_info.total_rating,
-          poster: film.film_info.poster,
-          ageRating: film.film_info.age_rating,
-          director: film.film_info.director,
-          writers: film.film_info.writers,
-          actors: film.film_info.actors,
-          release: film.film_info.release,
-          runtime: film.film_info.runtime,
-          genre: film.film_info.genre,
-          description: film.film_info.description,
+          title: info.title,
+          alternativeTitle: info.alternative_title,
+          totalRating: info.total_rating,
+          poster: info.poster,
+          ageRating: info.age_rating,
+          director: info.director,
+          writers: info.writers,
+          actors: info.actors,
+          date: release.date !== null ? new Date(release.date) : release.date,
+          country: release.release_country,
+          runtime: info.runtime,
+          genre: info.genre,
+          description: info.description,
         },
       },
     );
@@ -88,7 +92,7 @@ export default class Films extends AbstractObserver {
           'favorite': film.isFavorite,
           'already_watched': film.isWatched,
           'watchlist': film.isWatchlist,
-          'watching_date': film.watchingDate,
+          'watching_date': film.watchingDate instanceof Date ? film.watchingDate.toISOString() : film.watchingDate,
         },
 
         ['film_info']: {
@@ -100,16 +104,19 @@ export default class Films extends AbstractObserver {
           'director': film.filmInfo.director,
           'writers': film.filmInfo.writers,
           'actors': film.filmInfo.actors,
-          'release': film.filmInfo.release,
+          'release': {
+            'date': film.filmInfo.date instanceof Date ? film.filmInfo.date.toISOString() : film.filmInfo.date,
+            'release_country': film.filmInfo.country,
+          },
           'runtime': film.filmInfo.runtime,
           'genre': film.filmInfo.genre,
           'description': film.filmInfo.description,
 
         },
-        'due_date': film.dueDate instanceof Date ? film.dueDate.toISOString() : null, // На сервере дата хранится в ISO формате
-        'is_archived': film.isArchive,
+        // 'due_date': film.dueDate instanceof Date ? film.dueDate.toISOString() : null, // На сервере дата хранится в ISO формате
+        // 'is_archived': film.isArchive,
         // 'is_favorite': film.isFavorite,
-        'repeating_days': film.repeating,
+        // 'repeating_days': film.repeating,
       },
     );
     console.log(adaptedFilm);

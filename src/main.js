@@ -1,35 +1,37 @@
-import FilterView from './view/view-filter.js'; // Импортируем класс menu как MenuView
-import SortView from './view/view-sort.js';
-import ProfileView from './view/view-profile.js';
-import FilmsSectionView from './view/view-films.js';
-import FilmsListView from './view/view-films-list.js';
-import FilmsListContainerView from './view/view-film-list-container.js';
-import NoFilms from './view/view-empty-list.js';
-import FilmCardView from './view/view-film-card.js';
+// import FilterView from './view/view-filter.js'; // Импортируем класс menu как MenuView
+// import SortView from './view/view-sort.js';
+// import ProfileView from './view/view-profile.js';
+// import FilmsSectionView from './view/view-films.js';
+// import FilmsListView from './view/view-films-list.js';
+// import FilmsListContainerView from './view/view-film-list-container.js';
+// import NoFilms from './view/view-empty-list.js';
+// import FilmCardView from './view/view-film-card.js';
 import FooterStatView from './view/view-footer-statistics.js';
-import ButtonShowMoreView from './view/view-show-more.js';
-import FilmExtraListView from './view/view-film-extra.js';
-import StatsView from './view/view-stats.js';
+// import ButtonShowMoreView from './view/view-show-more.js';
+// import FilmExtraListView from './view/view-film-extra.js';
+// import StatsView from './view/view-stats.js';
 
 import FilmsModel from './model/movies.js';
 import FilterModel from './model/filters.js';
+import CommentsModel from './model/comments.js';
 import FilmListPresenter from './presenter/film-list.js';
 import FilterPresenter from './presenter/filters.js';
 import ProfilePresenter from './presenter/profile.js';
 import StatsPresenter from './presenter/stats.js';
-import { generateMovie } from './mock/generate-movie.js';
+// import { generateMovie } from './mock/generate-movie.js';
 import { RenderPosition, render } from './utils/render.js';
 
 import Api from './api.js';
 
-import { sortType, UpdateType, UserAction, FilterType } from './const.js';
+import { UpdateType, FilterType } from './const.js';
 
-const FILMS_COUNT = 11;
-const FILMS_BY_STEP = 5;
+// const FILMS_COUNT = 11;
+// const FILMS_BY_STEP = 5;
+
 const AUTHORIZATION = 'Basic hS2sd999Swc99992j';
 const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict';
 
-const siteBody = document.querySelector('body');
+// const siteBody = document.querySelector('body');
 const siteMainElement = document.querySelector('.main');
 const siteHeaderElement = document.querySelector('.header');
 const siteFooterStatistics = document.querySelector('.footer__statistics');
@@ -43,38 +45,43 @@ const filmsModel = new FilmsModel(); // создаем класс модели �
 
 const filterModel = new FilterModel();
 
+const commentsModel = new CommentsModel();
+
 const profilePresenter = new ProfilePresenter(siteHeaderElement, filmsModel);
-profilePresenter.init();
 
 // console.log('API -> ' + api)
 const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsModel);
-filterPresenter.init();
 
 //siteMainElement - куда рендерим
 //filmsModelм модель с данными (фильмов)
-const filmsPresenter = new FilmListPresenter(siteMainElement, filmsModel, filterModel, api);
-filmsPresenter.init(); //теперь мы не будем напрямую передавать данные, презентер сам возьмет их из модели
-
+const filmsPresenter = new FilmListPresenter(siteMainElement, filmsModel, filterModel, commentsModel, api);
 const statsPresenter = new StatsPresenter(siteMainElement, filmsModel);
 
 const handleSiteMenuClick = (filterType) => {
   switch (filterType) {
     case FilterType.STATISTICS:
+
       filmsPresenter.hide();
+      statsPresenter.init();
       statsPresenter.show();
       break;
     case FilterType.ALL:
     case FilterType.WATCHLIST:
     case FilterType.FAVORITES:
     case FilterType.HISTORY:
+    default:
       filmsPresenter.show();
       statsPresenter.hide();
   }
-
 };
 filterPresenter.setMenuClickHandler(handleSiteMenuClick);
-statsPresenter.init();
 
+profilePresenter.init();
+filterPresenter.init();
+filmsPresenter.init();
+
+// statsPresenter.init();
+// statsPresenter.hide();
 //------------------------------------------------------
 //++++++++++++++++++++++  EXTRA LIST  ++++++++++++++++++
 //------------------------------------------------------
@@ -105,9 +112,10 @@ render(siteFooterStatistics, new FooterStatView(), RenderPosition.BEFOREEND);
 
 api.getFilms()
   .then((movies) => {
-    console.log(movies);
+    // console.log(movies);
     // console.log('update INIT!');
     filmsModel.setFilms(UpdateType.INIT, movies);// передаем в модель данные
+    // statsPresenter.hide();
   })
   .catch(() => {
     // filmsModel.setFilms(UpdateType.INIT, []);

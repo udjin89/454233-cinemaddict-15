@@ -1,7 +1,7 @@
 import FilmsListView from '../view/view-films-list.js';
 import SortView from '../view/view-sort.js';
-import StatsView from '../view/view-stats.js';
-import ChartsView from '../view/view-chart.js';
+// import StatsView from '../view/view-stats.js';
+// import ChartsView from '../view/view-chart.js';
 import NoFilms from '../view/view-empty-list.js';
 import LoadingView from '../view/view-loading.js';
 import FilmsListContainerView from '../view/view-film-list-container.js';
@@ -11,7 +11,6 @@ import FilmCardPresenter from './film-card.js';
 import PopupPresenter from './popup.js';
 import { updateFilmById, sortByDate, sortByRating } from '../utils/common.js';
 import { sortType, UpdateType, UserAction, FilterType } from '../const.js';
-import { AbstractObserver } from '../model/abstract-observer.js';
 import { filterTypeToFilterFilms } from '../utils/filter.js';
 
 const siteMainElement = document.querySelector('.main');
@@ -23,11 +22,13 @@ const Mode = {
 
 
 export default class FilmList {
-  constructor(filmsContainer, filmsModel, filterModel, api) {
+  constructor(filmsContainer, filmsModel, filterModel, commentsModel, api, statsPresenter) {
     // console.log(api)
+    this._statsPresenter = statsPresenter;
     this._filmsModel = filmsModel; //данные
     this._filmsContainer = filmsContainer; //контейнер куда рендерим
     this._filterModel = filterModel; //данные фильтра
+    this._commentsModel = commentsModel;
     this._api = api;
 
     this._renderedFilmsCount = FILMS_BY_STEP; //хранит количество отрисованных фильмов
@@ -87,7 +88,6 @@ export default class FilmList {
 
   _handleChangeFilm(updateFilm, modePopup) {
     // здесь вызываем обновление модели
-
     this._films = updateFilmById(this._films, updateFilm);
     this._filmCardPresenter[updateFilm.id].init(updateFilm);
 
@@ -99,7 +99,7 @@ export default class FilmList {
     }
   }
 
-  _handleViewAction(actionType, updateType, update, mode) {
+  _handleViewAction(actionType, updateType, update) {
     // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
     // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
     // update - обновленные данные
@@ -110,7 +110,6 @@ export default class FilmList {
     // Здесь будем вызывать обновление модели.
     switch (actionType) {
       case UserAction.UPDATE_FILM:
-
         this._api.updateFilm(update).then((response) => {
           this._filmsModel.updateFilmById(updateType, response);
         });
@@ -118,10 +117,16 @@ export default class FilmList {
         // this._filmCardPresenter[filmCard.id].replacePopup();
         break;
       case UserAction.ADD_COMMENT:
-        // this._filmsModel.addTask(updateType, update);
+        this._api.addComment(update.idFilm, update.comment)
+          .then(({movie, comments}) => {
+            this._commentsModel.setComments(updateType, movie.id, comments);
+            this._filmsModel.updateFilmById(updateType, movie);
+            this._popupPresenter.resetInput();
+          })
+          .catch((err) => console.log('Ошибка сервера при создании комментария', err));
         break;
       case UserAction.DELETE_COMMENT:
-        // this._filmsModel.deleteTask(updateType, update);
+        this._filmsModel.updateFilmById(updateType, update);
         break;
     }
 
@@ -131,7 +136,6 @@ export default class FilmList {
   _handleModelEvent(updateType, data) { // колбек, который предается в модель, она будет выполнена при изменении модели
     // console.log(updateType, data);
     // В зависимости от типа изменений решаем, что делать:
-
     switch (updateType) {
       case UpdateType.PATCH:
         this._updatePopup(data);
@@ -148,26 +152,9 @@ export default class FilmList {
       case UpdateType.MAJOR:
         // - обновить всё, когда поменяли фильтр
         // console.log('major data -> ' + data);
-
         this._clearFilmsList({ resetRenderedFilmsCount: true, resetSortType: true });
-
-        const profile = new StatsView();
-        const stats = new ChartsView(this._filmsModel);
-
-        if (data === 'stats') {
-          // this._clearFilmsList();
-
-          render(siteMainElement, profile, RenderPosition.BEFOREEND);
-          // const stats = new ChartsView(this._filmsModel);
-          render(siteMainElement, stats, RenderPosition.BEFOREEND);
-          return;
-        }
-
-        // removeComponent(profile);
-        // removeComponent(stats);
         this._renderFilmList();
 
-        // this._renderFilmCards();
         break;
 
       case UpdateType.INIT:
@@ -317,7 +304,7 @@ export default class FilmList {
 
   _renderPopup(film) {
     if (this._popupPresenter === null) {
-      this._popupPresenter = new PopupPresenter(document.body, this._handleViewAction);
+      this._popupPresenter = new PopupPresenter(document.body, this._handleViewAction, this._commentsModel, this._api);
     }
 
     this._popupPresenter.init(film);

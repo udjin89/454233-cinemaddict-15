@@ -1,5 +1,12 @@
 const VISUALLY_HIDDEN = 'visually-hidden';
 
+const Emojis = [
+  'smile',
+  'sleeping',
+  'puke',
+  'angry',
+];
+
 const sortType = {
   DEFAULT: 'default',
   DATE: 'date',
@@ -29,7 +36,7 @@ const ShowPeriod = {
   ALL_TIME: 'all-time',
   DAY: 'day',
   WEEK: 'week',
-  MONTH: 'month',
+  MOUTH: 'mouth',
   YEAR: 'year',
 };
-export { sortType, UserAction, UpdateType, FilterType, ShowPeriod, VISUALLY_HIDDEN };
+export { sortType, UserAction, UpdateType, FilterType, ShowPeriod, VISUALLY_HIDDEN, Emojis };

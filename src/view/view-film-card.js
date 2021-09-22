@@ -1,9 +1,10 @@
+import { formatDateToYear } from '../utils/formating-date.js';
 import AbstractView from './abstract.js';
 
 const createFilmCard = (movie) => {
   //деструктуируем то что пришло в movie
   const { filmInfo, comments, isWatchlist, isWatched, isFavorite } = movie;
-  const { title, totalRating, poster, genre, runtime, release } = filmInfo;
+  const { title, totalRating, poster, genre, runtime, date } = filmInfo;
   const countComments = comments.length;
 
   //если более 140 символов, добавляем "..."
@@ -15,13 +16,13 @@ const createFilmCard = (movie) => {
   <h3 class="film-card__title">${title}</h3>
   <p class="film-card__rating">${totalRating}</p>
   <p class="film-card__info">
-    <span class="film-card__year">${release.date}</span>
+    <span class="film-card__year">${formatDateToYear(date)}</span>
     <span class="film-card__duration">${runtimeView}</span>
     <span class="film-card__genre">${genre[0]}</span>
   </p>
-  <img src="https://15.ecmascript.pages.academy/cinemaddict/${poster}" alt="" class="film-card__poster">
+  <img src="${poster}" alt="" class="film-card__poster">
   <p class="film-card__description">${curDescription}</p>
-  <a class="film-card__comments">${countComments}</a>
+  <a class="film-card__comments">${countComments} comments</a>
   <div class="film-card__controls">
     <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${isWatchlist ? 'film-card__controls-item--active' : ''}" type="button">Add to watchlist</button>
     <button class="film-card__controls-item film-card__controls-item--mark-as-watched ${isWatched ? 'film-card__controls-item--active' : ''}" type="button">Mark as watched</button>
