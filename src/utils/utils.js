@@ -12,5 +12,6 @@ const getRandomFloat = (a = 0, b = 10) => {
   return (Math.random() * 10).toFixed(1);
 };
 
+const getAttributeChecked = (isChecked = false) =>  isChecked ? 'checked' : '';
 
-export { getRandomInteger, getRandomFloat };
+export { getRandomInteger, getRandomFloat, getAttributeChecked };

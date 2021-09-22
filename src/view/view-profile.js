@@ -11,7 +11,7 @@ const createProfile = (status) => (
 export default class profile extends AbstractView {
   constructor(status) {
     super();
-    console.log('view -> ' + status);
+    // console.log('view -> ' + status);
     this._status = status;
   }
 

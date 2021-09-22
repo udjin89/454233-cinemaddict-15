@@ -13,7 +13,7 @@ export const updateFilmById = (items, update) => {
 
 export const sortByDate = (dateA, dateB) => {
   // console.log(dateB);
-  return dayjs(dateA.filmInfo.release.date).diff(dayjs(dateB.filmInfo.release.date));
+  return dayjs(dateA.filmInfo.date).diff(dayjs(dateB.filmInfo.date));
 };
 
 export const sortByRating = (a, b) => {
