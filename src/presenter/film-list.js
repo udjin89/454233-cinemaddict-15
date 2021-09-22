@@ -118,7 +118,7 @@ export default class FilmList {
         break;
       case UserAction.ADD_COMMENT:
         this._api.addComment(update.idFilm, update.comment)
-          .then(({movie, comments}) => {
+          .then(({ movie, comments }) => {
             this._commentsModel.setComments(updateType, movie.id, comments);
             this._filmsModel.updateFilmById(updateType, movie);
             this._popupPresenter.resetInput();
@@ -145,7 +145,7 @@ export default class FilmList {
         // - обновить список, когда добавили в избранное, просмотренное или в список желаний
         // добавление и удаление комментария
         this._updatePopup(data);
-        this._clearFilmsList();
+        this._clearFilmsList({ resetRenderedFilmsCount: false, resetSortType: false });
         this._renderFilmList();
         // this._renderFilmCards();
         break;
@@ -184,8 +184,10 @@ export default class FilmList {
   _clearFilmsList({ resetRenderedFilmsCount = false, resetSortType = false } = {}) {
     Object.values(this._filmCardPresenter).forEach((presenter) => presenter.destroy());
     this._filmCardPresenter = {};
-    this._resetRenderedFilmsCount = resetRenderedFilmsCount ? FILMS_BY_STEP : Math.min(this._getFilmsList().length + FILMS_BY_STEP, this._renderedFilmsCount);
+    this._renderedFilmsCount = resetRenderedFilmsCount ? FILMS_BY_STEP : Math.min(this._getFilmsList().length + FILMS_BY_STEP, this._renderedFilmsCount);
     // this._renderedFilmsCount = FILMS_BY_STEP;
+    console.log('resetRenderedFilmsCount:####', resetRenderedFilmsCount);
+    console.log('this._resetRenderedFilmsCount:####', this._renderedFilmsCount);
     if (resetSortType) {
       this._currentSortType = sortType.DEFAULT;
     }
@@ -245,7 +247,6 @@ export default class FilmList {
   }
 
   _handleShowMoreButtonClick() {
-
     const filmsCount = this._getFilmsList().length;
     // вычисляем номер последнего фильма который надо дорисовать
     const newRenderedFilmsCount = Math.min(filmsCount, this._renderedFilmsCount + FILMS_BY_STEP);
@@ -282,7 +283,6 @@ export default class FilmList {
       return;
     }
     else {
-
       // получаем уже отсортированные фильмы с помощью this._getFilmsList()
       const films = this._getFilmsList();
       // получаем количество фильмов из модели
@@ -291,12 +291,12 @@ export default class FilmList {
       this._renderSort();
       // вызываем метод отрисовки всех фильмов
       // console.log(films);
-      this._renderFilmCards(films.slice(0, Math.min(filmsCount, FILMS_BY_STEP)));
+      this._renderFilmCards(films.slice(0, Math.min(filmsCount, this._renderedFilmsCount)));
 
       render(this._filmsContainer, this._filmsList, RenderPosition.BEFOREEND);
       render(this._filmsList, this._filmListContainer, RenderPosition.BEFOREEND);
       // this._renderSort();
-      if (filmsCount > FILMS_BY_STEP) {
+      if (filmsCount > this._renderedFilmsCount) {
         this._renderButtonShowMore();
       }
     }

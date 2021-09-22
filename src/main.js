@@ -56,11 +56,9 @@ const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsM
 //filmsModelм модель с данными (фильмов)
 const filmsPresenter = new FilmListPresenter(siteMainElement, filmsModel, filterModel, commentsModel, api);
 const statsPresenter = new StatsPresenter(siteMainElement, filmsModel);
-
 const handleSiteMenuClick = (filterType) => {
   switch (filterType) {
     case FilterType.STATISTICS:
-
       filmsPresenter.hide();
       statsPresenter.init();
       statsPresenter.show();
@@ -71,6 +69,7 @@ const handleSiteMenuClick = (filterType) => {
     case FilterType.HISTORY:
     default:
       filmsPresenter.show();
+      statsPresenter.init();
       statsPresenter.hide();
   }
 };
