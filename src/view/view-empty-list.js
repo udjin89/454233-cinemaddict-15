@@ -24,10 +24,6 @@ const createEmptyList = (filterType) => (
   `
 );
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 051a8c2
 export default class noFilms extends AbstractView {
   constructor(filterType) {
     super();

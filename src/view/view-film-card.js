@@ -2,10 +2,6 @@ import { formatDateToYear } from '../utils/formating-date.js';
 import AbstractView from './abstract.js';
 
 const createFilmCard = (movie) => {
-<<<<<<< HEAD
-
-=======
->>>>>>> 051a8c2
   const { filmInfo, comments, isWatchlist, isWatched, isFavorite } = movie;
   const { title, totalRating, poster, genre, runtime, date } = filmInfo;
   const countComments = comments.length;

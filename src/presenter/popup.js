@@ -22,10 +22,6 @@ export default class Popup {
     this._handleDeleteComment = this._handleDeleteComment.bind(this);
     this.setDefaultState = this.setDefaultState.bind(this);
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
-<<<<<<< HEAD
-
-=======
->>>>>>> 051a8c2
   }
 
   init(film) {
@@ -106,10 +102,6 @@ export default class Popup {
     this._view.setAsWatchedListHandlerClick(this._handleAsWatchedClick);
     this._view.setFavoriteHandlerClick(this._handleFavoriteClick);
     this._view.setDeleteCommentHandler(this._handleDeleteComment);
-<<<<<<< HEAD
-
-=======
->>>>>>> 051a8c2
     this._view.setClosePopup(() => {
       this._closeCardPopup();
     });
@@ -152,10 +144,6 @@ export default class Popup {
 
     this._view = new PopupView(this._film);
     this._loadComments();
-<<<<<<< HEAD
-
-=======
->>>>>>> 051a8c2
     render(document.body, this._view, RenderPosition.BEFOREEND);
 
     this._setPopupHandlers();
@@ -186,11 +174,7 @@ export default class Popup {
           this._view.update(film, commentsData);
         }
       })
-<<<<<<< HEAD
-      .catch((err) => (`Запрос за комментариями вызвал ошибку ${err}`));
-=======
       .catch();
->>>>>>> 051a8c2
   }
 
   _closeCardPopup() {

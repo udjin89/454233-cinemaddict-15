@@ -13,10 +13,6 @@ export default class Profile {
   }
 
   init() {
-<<<<<<< HEAD
-
-=======
->>>>>>> 051a8c2
     this._filmsModel.addObserver(this._handleModelEvent);
     this._renderProfile();
   }
@@ -33,10 +29,6 @@ export default class Profile {
   }
 
   _handleModelEvent() {
-<<<<<<< HEAD
-
-=======
->>>>>>> 051a8c2
     removeComponent(this._profile);
     this.init();
   }

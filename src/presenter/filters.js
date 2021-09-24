@@ -21,12 +21,7 @@ export default class Filter {
 
   init() {
     const filters = this._getFilters();
-
     const prevFilterComponent = this._filterComponent;
-<<<<<<< HEAD
-=======
-
->>>>>>> 051a8c2
     this._filterComponent = new FilterView(filters, this._filterModel.getFilter());
 
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);

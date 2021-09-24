@@ -8,15 +8,8 @@ const getRandomInteger = (a = 0, b = 1) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
-<<<<<<< HEAD
-const getRandomFloat = () => {
-  (Math.random() * 10).toFixed(1);
-};
-=======
-const getRandomFloat = () => (
-  (Math.random() * 10).toFixed(1)
+const getRandomFloat = () => ((Math.random() * 10).toFixed(1)
 );
->>>>>>> 051a8c2
 
 const getAttributeChecked = (isChecked = false) => isChecked ? 'checked' : '';
 
