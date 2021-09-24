@@ -1,15 +1,4 @@
-// import FilterView from './view/view-filter.js'; // Импортируем класс menu как MenuView
-// import SortView from './view/view-sort.js';
-// import ProfileView from './view/view-profile.js';
-// import FilmsSectionView from './view/view-films.js';
-// import FilmsListView from './view/view-films-list.js';
-// import FilmsListContainerView from './view/view-film-list-container.js';
-// import NoFilms from './view/view-empty-list.js';
-// import FilmCardView from './view/view-film-card.js';
 import FooterStatView from './view/view-footer-statistics.js';
-// import ButtonShowMoreView from './view/view-show-more.js';
-// import FilmExtraListView from './view/view-film-extra.js';
-// import StatsView from './view/view-stats.js';
 
 import FilmsModel from './model/movies.js';
 import FilterModel from './model/filters.js';
@@ -56,6 +45,7 @@ const filterPresenter = new FilterPresenter(siteMainElement, filterModel, filmsM
 //filmsModelм модель с данными (фильмов)
 const filmsPresenter = new FilmListPresenter(siteMainElement, filmsModel, filterModel, commentsModel, api);
 const statsPresenter = new StatsPresenter(siteMainElement, filmsModel);
+
 const handleSiteMenuClick = (filterType) => {
   switch (filterType) {
     case FilterType.STATISTICS:
@@ -73,6 +63,7 @@ const handleSiteMenuClick = (filterType) => {
       statsPresenter.hide();
   }
 };
+
 filterPresenter.setMenuClickHandler(handleSiteMenuClick);
 
 profilePresenter.init();
@@ -107,16 +98,17 @@ filmsPresenter.init();
 //++++++++++++++++++++++  FOOTER  ++++++++++++++++++++++
 //------------------------------------------------------
 
-render(siteFooterStatistics, new FooterStatView(), RenderPosition.BEFOREEND);
 
 api.getFilms()
   .then((movies) => {
-    console.log(movies);
+    // console.log(movies);
     // console.log('update INIT!');
+    // console.log(movies);
     filmsModel.setFilms(UpdateType.INIT, movies);// передаем в модель данные
+    render(siteFooterStatistics, new FooterStatView(filmsModel.getFilms().length), RenderPosition.BEFOREEND);
     // statsPresenter.hide();
   })
-  .catch(() => {
-    // filmsModel.setFilms(UpdateType.INIT, []);
+  .catch((err) => {
+    filmsModel.setFilms(UpdateType.INIT, []);
   });
 
