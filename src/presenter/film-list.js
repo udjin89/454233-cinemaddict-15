@@ -236,6 +236,7 @@ export default class FilmList {
 
   _renderFilmList() {
     if (this._isLoading) {
+
       this._renderLoading();
       return;
     }

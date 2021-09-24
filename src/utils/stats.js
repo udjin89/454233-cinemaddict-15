@@ -33,7 +33,6 @@ const getWatchedInfo = (films) => films.reduce((info, film) => {
   watched: 0,
   allTime: 0,
   genres: {
-
   },
 });
 
