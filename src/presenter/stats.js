@@ -1,15 +1,13 @@
-import {ShowPeriod} from '../const';
+import { ShowPeriod } from '../const';
 import { removeComponent, render, RenderPosition, replace } from '../utils/render';
 import { countWatchedFilms, getRatingUser } from '../utils/stats';
 import StatsView from '../view/view-stats';
 
 export default class Stats {
-  constructor( container, filmsModel) {
+  constructor(container, filmsModel) {
     this._container = container;
     this._filmModel = filmsModel;
     this._statsView = null;
-    // this._handleModelEvent = this._handleModelEvent.bind(this);
-    // this._filmModel.addObserver(this._handleModelEvent);
   }
 
   init() {
@@ -19,9 +17,6 @@ export default class Stats {
     };
 
     this._render();
-    // render(this._container, this._statsView);
-    // this._container.append(this._statsView.getElement())
-    // console.log(this._statsView.getElement());
   }
 
   show() {
@@ -44,18 +39,14 @@ export default class Stats {
     return this._filmModel.getFilms();
   }
 
-  _render () {
+  _render() {
     const prevStatsView = this._statsView;
     this._statsView = new StatsView(this._state, this._getStatus());
 
-    if(prevStatsView === null) {
+    if (prevStatsView === null) {
       render(this._container, this._statsView, RenderPosition.BEFOREEND);
       return;
     }
-
-    // render(this._container, this._statsView, RenderPosition.BEFOREEND);
-
-
     replace(this._statsView, prevStatsView);
     removeComponent(prevStatsView);
   }

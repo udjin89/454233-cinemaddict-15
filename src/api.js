@@ -1,6 +1,5 @@
 import MoviesModel from './model/movies.js';
 import CommentModel from './model/comments.js';
-import { sortType, UpdateType, UserAction, FilterType } from './const.js';
 
 const Method = {
   GET: 'GET',
@@ -16,7 +15,7 @@ const SuccessHTTPStatusRange = {
 
 export default class Api {
   constructor(endPoint, authorization) {
-    this._endPoint = endPoint; //ссылка на адрес сервера
+    this._endPoint = endPoint;
     this._authorization = authorization;
   }
 
@@ -39,9 +38,8 @@ export default class Api {
 
 
   getComments(filmID) {
-    return this._load({ url: `comments/${filmID}`})
-      .then(Api.toJSON)
-      // .then((comment) => comment.map(CommentModel.adaptToClient));
+    return this._load({ url: `comments/${filmID}` })
+      .then(Api.toJSON);
   }
 
   addComment(filmID, comment) {
@@ -49,10 +47,10 @@ export default class Api {
       url: `comments/${filmID}`,
       method: Method.POST,
       body: JSON.stringify(CommentModel.adaptToServer(comment)),
-      headers: new Headers({ 'Content-Type': 'application/json'}),
+      headers: new Headers({ 'Content-Type': 'application/json' }),
     })
       .then(Api.toJSON)
-      .then(({movie, comments}) => ({
+      .then(({ movie, comments }) => ({
         movie: MoviesModel.adaptToClient(movie),
         comments: CommentModel.adaptToClient(comments),
       }));

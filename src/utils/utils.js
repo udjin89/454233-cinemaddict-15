@@ -8,10 +8,10 @@ const getRandomInteger = (a = 0, b = 1) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
-const getRandomFloat = (a = 0, b = 10) => {
-  return (Math.random() * 10).toFixed(1);
+const getRandomFloat = () => {
+  (Math.random() * 10).toFixed(1);
 };
 
-const getAttributeChecked = (isChecked = false) =>  isChecked ? 'checked' : '';
+const getAttributeChecked = (isChecked = false) => isChecked ? 'checked' : '';
 
 export { getRandomInteger, getRandomFloat, getAttributeChecked };

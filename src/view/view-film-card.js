@@ -2,12 +2,11 @@ import { formatDateToYear } from '../utils/formating-date.js';
 import AbstractView from './abstract.js';
 
 const createFilmCard = (movie) => {
-  //деструктуируем то что пришло в movie
+
   const { filmInfo, comments, isWatchlist, isWatched, isFavorite } = movie;
   const { title, totalRating, poster, genre, runtime, date } = filmInfo;
   const countComments = comments.length;
 
-  //если более 140 символов, добавляем "..."
   const curDescription = filmInfo.description.length > 140 ? filmInfo.description.slice(0, 139).concat('...') : filmInfo.description;
 
   const runtimeView = `${Math.trunc(runtime / 60)}h ${(runtime - Math.trunc(runtime / 60) * 60)}m`;
@@ -31,26 +30,25 @@ const createFilmCard = (movie) => {
   </article>
   `;
 };
-// Класс filmCard, экспортируем по умолчанию, для удобства
-// filmCard делаем дочерним от Abstract, и он наследует все методы
+
 export default class filmCard extends AbstractView {
   constructor(movie) {
-    super(); // наследуем конструктор из class Abstract
+    super();
     this._movieCard = movie;
 
-    this._clickFilm = this._clickFilm.bind(this); //?????
+    this._clickFilm = this._clickFilm.bind(this);
     this._clickWatchList = this._clickWatchList.bind(this);
     this._clickAsWatchedList = this._clickAsWatchedList.bind(this);
     this._clickFavorite = this._clickFavorite.bind(this);
   }
 
-  getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
+  getTemplate() {
     return createFilmCard(this._movieCard);
   }
 
   _clickWatchList(evt) {
     evt.preventDefault();
-    this._callback.clickAddWatchList(); // метод записан с обьекте callback
+    this._callback.clickAddWatchList();
   }
 
   setWatchListHandlerClick(callback) {
@@ -60,7 +58,7 @@ export default class filmCard extends AbstractView {
 
   _clickAsWatchedList(evt) {
     evt.preventDefault();
-    this._callback.clickAddAsWatchedList(); // метод записан с обьекте callback
+    this._callback.clickAddAsWatchedList();
   }
 
   setAsWatchedListHandlerClick(callback) {
@@ -70,7 +68,7 @@ export default class filmCard extends AbstractView {
 
   _clickFavorite(evt) {
     evt.preventDefault();
-    this._callback.clickAddFavorite(); // метод записан с обьекте callback
+    this._callback.clickAddFavorite();
   }
 
   setFavoriteHandlerClick(callback) {
@@ -80,7 +78,7 @@ export default class filmCard extends AbstractView {
 
   _clickFilm(evt) {
     evt.preventDefault();
-    this._callback.clickFilm(); //???
+    this._callback.clickFilm();
   }
 
   setClickFilm(callback) {

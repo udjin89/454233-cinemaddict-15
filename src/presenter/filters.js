@@ -2,12 +2,6 @@ import FilterView from '../view/view-filter.js';
 import { RenderPosition, render, removeComponent, replace } from '../utils/render.js';
 import { FilterType, UpdateType } from '../const.js';
 import { filterTypeToFilterFilms } from '../utils/filter.js';
-// const filterTypeToFilterFilms = {
-//   [FilterType.ALL]: (films) => films.length,
-//   [FilterType.WATCHLIST]: (films) => films.filter((film) => film.isWatchlist).length,
-//   [FilterType.HISTORY]: (films) => films.filter((film) => film.isWatched).length,
-//   [FilterType.FAVORITES]: (films) => films.filter((film) => film.isFavorite).length,
-// };
 
 export default class Filter {
 
@@ -29,7 +23,6 @@ export default class Filter {
     const filters = this._getFilters();
 
     const prevFilterComponent = this._filterComponent;
-    //
     this._filterComponent = new FilterView(filters, this._filterModel.getFilter());
 
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
@@ -47,19 +40,13 @@ export default class Filter {
     this.init();
   }
 
-  // _handleItemTypeClick(filterType) {
-
-  // }
-
   _handleFilterTypeChange(filterType) {
-    // console.log(this._filterModel.getFilter() === filterType);
     if (this._filterModel.getFilter() === filterType && this._filterModel.getFilter() !== FilterType.STATISTICS) {
       return;
     }
 
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
     this._handleSiteMenuClick(filterType);
-    // console.log('-> ' + this._filterModel.getFilter());
   }
 
   _getFilters() {

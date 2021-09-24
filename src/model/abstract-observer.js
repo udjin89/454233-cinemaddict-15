@@ -1,12 +1,9 @@
 export default class AbstractObserver {
   constructor() {
-    // тут хранятся колбеки, которые мы установим
-    this._observers = new Set(); // класс???
-    // Объект Set – это особый вид коллекции: «множество» значений (без ключей),
-    // где каждое значение может появляться только один раз.
+    this._observers = new Set();
   }
 
-  addObserver(observer) { //добавление наблюдателя и передача ему коллбека
+  addObserver(observer) {
     this._observers.add(observer);
   }
 
@@ -15,9 +12,6 @@ export default class AbstractObserver {
   }
 
   _notify(event, payload) {
-    // вызываем все установленные колбеки
-    // сообщаем тип события и передаем данные
-    // данные(payload) - за них отвечает модель
     this._observers.forEach((observer) => observer(event, payload));
   }
 }

@@ -24,19 +24,18 @@ const createEmptyList = (filterType) => (
   `
 );
 
-// Класс noFilms, экспортируем по умолчанию, для удобства
-// Делаем его потомком от class Abstract
+
 export default class noFilms extends AbstractView {
   constructor(filterType) {
     super();
-    this._filterType = filterType; //сохраняем преданные данные
+    this._filterType = filterType;
   }
 
   setFilter(filterType) {
-    this._filterType  = filterType;
+    this._filterType = filterType;
   }
 
-  getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
+  getTemplate() {
     return createEmptyList(this._filterType);
   }
 }

@@ -24,8 +24,6 @@ export default class Popup {
 
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
 
-    // this.closePopup = this.closePopup.bind(this);
-
   }
 
   init(film) {
@@ -33,25 +31,7 @@ export default class Popup {
     this._renderPopup();
   }
 
-  // replacePopup() {
-  //   console.log('replacePopup');
-  //   // this._removeCardPopup();
-  //   this._openCardPopup();
-  //   this._restoreHandlers();
-  // }
-
-  // closePopup() {
-  //   if (this._mode === Mode.OPEN) {
-  //     // console.log('Mode.OPEN - do closePopup');
-  //     this._removeCardPopup();
-  //     // this._view.destroy();
-  //     // this.destroy();
-  //   }
-  // }
-
   _handleWatchListClick() {
-    // в this._changeData хранится колбек, переданный из film-list.js при создании презентера карточки фильма
-    //_handleViewAction(actionType, updateType, update)
     this._changeData(
       UserAction.UPDATE_FILM,
       UpdateType.MINOR,
@@ -67,8 +47,6 @@ export default class Popup {
   }
 
   _handleAsWatchedClick() {
-    // в this._changeData хранится колбек, переданный из film-list.js при создании презентера карточки фильма
-    //_handleViewAction(actionType, updateType, update)
     this._changeData(
       UserAction.UPDATE_FILM,
       UpdateType.MINOR,
@@ -84,9 +62,6 @@ export default class Popup {
   }
 
   _handleFavoriteClick() {
-    // в this._changeData хранится колбек, переданный из film-list.js при создании презентера карточки фильма
-    //_handleViewAction(actionType, updateType, update)
-    // console.log(this._film);
     this._changeData(
       UserAction.UPDATE_FILM,
       UpdateType.MINOR,
@@ -102,7 +77,7 @@ export default class Popup {
   }
 
   _handleInputChange(evt) {
-    if(isControlEnterEvent(evt)){
+    if (isControlEnterEvent(evt)) {
       evt.preventDefault();
       const comment = this._view.getInput();
 
@@ -110,7 +85,7 @@ export default class Popup {
         UserAction.ADD_COMMENT,
         UpdateType.PATCH,
         {
-          idFilm:  this._film.id,
+          idFilm: this._film.id,
           comment,
         },
       );
@@ -121,8 +96,6 @@ export default class Popup {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
       this._closeCardPopup();
-      //this._mode = Mode.CLOSE;
-      //document.removeEventListener('keydown', this._onEscKeyDown);
     }
   }
 
@@ -132,9 +105,7 @@ export default class Popup {
     this._view.setFavoriteHandlerClick(this._handleFavoriteClick);
     this._view.setDeleteCommentHandler(this._handleDeleteComment);
 
-    //this._view.setFormSubmitHandler();
     this._view.setClosePopup(() => {
-      // console.log(this);
       this._closeCardPopup();
     });
   }
@@ -162,7 +133,7 @@ export default class Popup {
       .catch(() => {
         this._view.setState(PopupState.REJECTED);
       })
-      .finally(()=>{
+      .finally(() => {
         this._view.setState(PopupState.DEFAULT);
       });
   }
@@ -176,7 +147,7 @@ export default class Popup {
 
     this._view = new PopupView(this._film);
     this._loadComments();
-    // console.log(this._view);
+
     render(document.body, this._view, RenderPosition.BEFOREEND);
 
     this._setPopupHandlers();
@@ -186,14 +157,12 @@ export default class Popup {
     document.body.classList.add(HIDE_CLASS);
   }
 
-  _updateComment () {
+  _updateComment() {
     const film = this._film;
-    if(this._commentsModel.has(film.id)) {
-      // console.log('Обновляем');
+    if (this._commentsModel.has(film.id)) {
       const comments = this._commentsModel.getComments(film.id);
       this._view.update(film, comments);
     } else {
-      // console.log('Создаем');
       this._loadComments();
       this._view.update(film);
     }
@@ -205,43 +174,38 @@ export default class Popup {
     this._api.getComments(film.id)
       .then((commentsData) => {
         this._commentsModel.setComments(UpdateType.PATCH, film.id, commentsData);
-        if(this.isOpen(film)){
+        if (this.isOpen(film)) {
           this._view.update(film, commentsData);
         }
       })
-      .catch((err)=> console.log('Запрос за комментариями вызвал ошибку', err));
+      .catch((err) => (`Запрос за комментариями вызвал ошибку ${err}`));
   }
 
   _closeCardPopup() {
     removeComponent(this._view);
     this._view = null;
-    // this.destroy();
     document.removeEventListener('keydown', this._onEscKeyDown);
     document.removeEventListener('keydown', this._handleInputChange);
     document.body.classList.remove(HIDE_CLASS);
-    // this._view.reset(this._film);
-    // this._mode = Mode.CLOSE;
   }
 
-  setDefaultState(){
+  setDefaultState() {
     this._view.setState(PopupState.DEFAULT);
   }
 
-  setDisabledState(){
+  setDisabledState() {
     this._view.setState(PopupState.DISABLED);
   }
 
-  setDeletedState(){
+  setDeletedState() {
     this._view.setState(PopupState.DELETE);
   }
 
-  setRejectedState(){
+  setRejectedState() {
     this._view.setState(PopupState.REJECTED);
-    console.log(this._view.getElement());
-
   }
 
-  shakeInputForm(){
+  shakeInputForm() {
     this._view.shakeInputForm();
   }
 

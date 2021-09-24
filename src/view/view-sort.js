@@ -14,7 +14,7 @@ const createSortList = (initialSortType) => (
 
 </ul>
 `);
-// Класс sort, экспортируем по умолчанию, для удобства
+
 export default class sort extends AbstractView {
   constructor(initialSortType) {
     super();
@@ -22,7 +22,7 @@ export default class sort extends AbstractView {
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
   }
 
-  getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
+  getTemplate() {
 
     return createSortList(this._initialSortType);
   }
@@ -37,7 +37,6 @@ export default class sort extends AbstractView {
       elem.classList.remove('sort__button--active');
     });
     evt.target.classList.add('sort__button--active');
-    // console.log(evt.target);
     this._callback.sortTypeChange(evt.target.dataset.sortType);
   }
 

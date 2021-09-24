@@ -12,7 +12,7 @@ export default class filmExtraList extends AbstractView {
     this._title = title;
   }
 
-  getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
+  getTemplate() {
 
     return createFilmExtraList(this._title);
   }

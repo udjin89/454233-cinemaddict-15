@@ -7,15 +7,14 @@ const createProfile = (status) => (
    </section>
   `
 );
-// Класс profile, экспортируем по умолчанию, для удобства
+
 export default class profile extends AbstractView {
   constructor(status) {
     super();
-    // console.log('view -> ' + status);
     this._status = status;
   }
 
-  getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
+  getTemplate() {
     return createProfile(this._status);
   }
 }

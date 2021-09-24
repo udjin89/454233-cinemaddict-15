@@ -12,7 +12,7 @@ export default class footerStat extends AbstractView {
     this.countFilms = countFilms;
   }
 
-  getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
+  getTemplate() {
 
     return createFooterStatistics(this.countFilms);
   }

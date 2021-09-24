@@ -5,9 +5,9 @@ const createFilmsList = () => (
     </section>
   `
 );
-// Класс filmsList, экспортируем по умолчанию, для удобства
+
 export default class filmsList extends AbstractView {
-  getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
+  getTemplate() {
 
     return createFilmsList();
   }

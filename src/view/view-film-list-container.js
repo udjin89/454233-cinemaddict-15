@@ -6,10 +6,10 @@ const createFilmsListContainer = () => (
     </div>
   `
 );
-// Класс filmsListContainer, экспортируем по умолчанию, для удобства
+
 export default class filmsListContainer extends AbstractView {
 
-  getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
+  getTemplate() {
     return createFilmsListContainer();
   }
 }
