@@ -7,7 +7,9 @@ export default class Films extends AbstractObserver {
   }
 
   setFilms(updateType, films) {
+
     this._films = films.slice();
+
     this._notify(updateType, films);
   }
 
@@ -21,7 +23,6 @@ export default class Films extends AbstractObserver {
     if (index === -1) {
       throw new Error('Can\'t update unexisting task');
     }
-
     this._films = [...this._films.slice(0, index), update, ...this._films.slice(index + 1)];
     this._notify(updateType, update);
   }
@@ -104,7 +105,6 @@ export default class Films extends AbstractObserver {
         },
       },
     );
-
     delete adaptedFilm.watchingDate;
     delete adaptedFilm.isWatched;
     delete adaptedFilm.isFavorite;

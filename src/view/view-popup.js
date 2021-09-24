@@ -342,6 +342,4 @@ export default class popup extends SmartView {
       },
     );
   }
-
-
 }

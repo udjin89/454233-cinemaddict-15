@@ -1,5 +1,4 @@
 import FooterStatView from './view/view-footer-statistics.js';
-
 import FilmsModel from './model/movies.js';
 import FilterModel from './model/filters.js';
 import CommentsModel from './model/comments.js';
@@ -8,7 +7,6 @@ import FilterPresenter from './presenter/filters.js';
 import ProfilePresenter from './presenter/profile.js';
 import StatsPresenter from './presenter/stats.js';
 import { RenderPosition, render } from './utils/render.js';
-
 import Api from './api.js';
 
 import { UpdateType, FilterType } from './const.js';

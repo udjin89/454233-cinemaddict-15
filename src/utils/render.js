@@ -6,7 +6,10 @@ const RenderPosition = {
 };
 
 const render = (container, element, place) => {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 051a8c2
   if (container instanceof Abstract) {
     container = container.getElement();
   }
@@ -22,11 +25,17 @@ const render = (container, element, place) => {
   }
 };
 
+<<<<<<< HEAD
 
 const createElement = (template) => {
   const newElement = document.createElement('div');
   newElement.innerHTML = template;
 
+=======
+const createElement = (template) => {
+  const newElement = document.createElement('div');
+  newElement.innerHTML = template;
+>>>>>>> 051a8c2
   return newElement.firstChild;
 };
 
@@ -40,10 +49,18 @@ const replace = (newElement, oldElement) => {
   if (newElement instanceof Abstract) {
     newElement = newElement.getElement();
   }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 051a8c2
   const parent = oldElement.parentElement;
   if (parent === 0) {
     throw new Error('No parent Element');
   }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 051a8c2
   parent.replaceChild(newElement, oldElement);
 };
 

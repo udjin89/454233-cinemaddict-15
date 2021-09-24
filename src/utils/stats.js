@@ -21,6 +21,10 @@ const getSortedGenre = (genres) => Object.entries(genres).map(([key, value]) => 
 
 
 const getWatchedInfo = (films) => films.reduce((info, film) => {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 051a8c2
   if (film.isWatched) {
     info.watched += 1;
     info.allTime += film.filmInfo.runtime;
@@ -32,7 +36,10 @@ const getWatchedInfo = (films) => films.reduce((info, film) => {
   watched: 0,
   allTime: 0,
   genres: {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 051a8c2
   },
 });
 

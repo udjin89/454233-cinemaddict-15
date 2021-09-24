@@ -236,13 +236,13 @@ export default class FilmList {
 
   _renderFilmList() {
     if (this._isLoading) {
+
       this._renderLoading();
       return;
     }
 
     if (this._filmsModel.isEmpty()) {
       this._renderNoFilms();
-      return;
     }
     else {
       const films = this._getFilmsList();

@@ -9,8 +9,8 @@ const createFiltersTemplate = (filters, currentFilterType) => (
   <a href="#favorites" data-type="favorites" class="main-navigation__item ${currentFilterType === 'favorites' ? 'main-navigation__item--active' : ''}">Favorites <span class="main-navigation__item-count">${filters.find((filterType) => filterType.type === 'favorites').count}</span></a>
   </div >
   <a href="#stats" data-type="stats" class="main-navigation__additional ${currentFilterType === 'stats' ? 'main-navigation__item--active' : ''}">Stats</a>
-</nav > `
-);
+</nav > `);
+
 
 export default class filter extends AbstractView {
   constructor(filters, currentFilterType) {

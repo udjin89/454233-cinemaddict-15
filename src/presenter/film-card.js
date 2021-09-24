@@ -14,12 +14,11 @@ export default class FilmCard {
     this._handleAsWatchedClick = this._handleAsWatchedClick.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleClickFilm = this._handleClickFilm.bind(this);
-
   }
 
   init(film) {
-    const prevFilmView = this._view;
 
+    const prevFilmView = this._view;
     this._film = film;
     this._view = new FilmCardView(this._film);
     this._view.setWatchListHandlerClick(this._handleWatchListClick);
@@ -38,9 +37,11 @@ export default class FilmCard {
 
   destroy() {
     removeComponent(this._view);
+
   }
 
   _handleWatchListClick() {
+
     this._changeData(
       UserAction.UPDATE_FILM,
       UpdateType.MINOR,
