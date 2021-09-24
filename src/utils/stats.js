@@ -28,14 +28,13 @@ const getWatchedInfo = (films) => films.reduce((info, film) => {
   }
 
   return info;
-},
-  {
-    watched: 0,
-    allTime: 0,
-    genres: {
+}, {
+  watched: 0,
+  allTime: 0,
+  genres: {
 
-    },
-  });
+  },
+});
 
 const countWatchedFilms = (films) => films.reduce((count, film) => film.isWatched ? ++count : count, 0);
 
