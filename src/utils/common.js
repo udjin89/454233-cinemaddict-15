@@ -20,3 +20,7 @@ export const sortByRating = (a, b) => {
   // console.log(a.filmInfo.totalRating + '-' + b.filmInfo.totalRating);
   return a.filmInfo.totalRating > b.filmInfo.totalRating ? 1 : -1;
 };
+
+export const shake = (element) =>  {
+  element.classList.add('shake');
+};

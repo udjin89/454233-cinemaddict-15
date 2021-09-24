@@ -3,9 +3,10 @@ import { ShowPeriod } from "../const";
 
 
 const RATING_WATCHED = [
-  { count: 1, rate: 'novice' },
-  { count: 11, rate: 'fan' },
   { count: 21, rate: 'movie buff' },
+  { count: 11, rate: 'fan' },
+  { count: 1, rate: 'novice' },
+  { count: 0, rate: '' },
 ];
 
 const getWatchedFilms = (films) => films.filter((film) => film.isWatched);
@@ -32,8 +33,9 @@ const getWatchedInfo = (films) => films.reduce((info, film) => {
 
 const countWatchedFilms = (films) => films.reduce((count, film) => film.isWatched ? ++count : count, 0);
 
-const getRatingUser = (count) =>
-  RATING_WATCHED.find((item) => item.count >= count).rate;
+const getRatingUser = (count = 0) => {
+  return RATING_WATCHED.find((item) => item.count <= count ).rate;
+}
 
 const filterWachedFilmsInPeriod = ( {films, period} ) => {
   if(period === ShowPeriod.ALL_TIME) {

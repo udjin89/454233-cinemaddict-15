@@ -29,6 +29,7 @@ export default class Profile {
     // console.log('get status in profile.js -> ' + status)
     this._profile = new ProfileView(status);
 
+
     render(this._container, this._profile, RenderPosition.BEFOREEND);
   }
 

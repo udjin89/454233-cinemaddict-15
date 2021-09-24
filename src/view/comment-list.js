@@ -3,7 +3,7 @@ import { Emojis } from '../const.js';
 import { getAttributeChecked } from '../utils/utils.js';
 
 
-const commentTemplate = (commentData) => {
+const commentTemplate = (commentData, isDeleted, currentCommentId) => {
   const {emotion, comment, author, date, id : commentId } = commentData;
 
   return (
@@ -16,18 +16,18 @@ const commentTemplate = (commentData) => {
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${author}</span>
           <span class="film-details__comment-day">${dayjs().to(dayjs(date))}</span>
-          <button class="film-details__comment-delete" data-id="${commentId}">Delete</button>
+          <button class="film-details__comment-delete" ${isDeleted && currentCommentId === commentId ? 'disabled' : ''} data-id="${commentId}">${isDeleted && currentCommentId === commentId ? 'Deleting...' : 'Delete'}</button>
         </p>
       </div>
     </li>`
   );
 };
 
-const emojiTemplate = (emojiArray, currentEmoji) =>
+const emojiTemplate = (emojiArray, currentEmoji, isDisabled) =>
   emojiArray.map((emoji) => {
     const isEmojiChecked = emoji === currentEmoji;
     return (
-      `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emoji}" value=${emoji} ${getAttributeChecked(isEmojiChecked)}>
+      `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emoji}" value=${emoji} ${getAttributeChecked(isEmojiChecked)} ${isDisabled ? ' disabled' : ''}>
       <label class="film-details__emoji-label" for="emoji-${emoji}">
         <img src="./images/emoji/${emoji}.png" width="30" height="30" alt=${emoji}>
       </label>`
@@ -35,11 +35,12 @@ const emojiTemplate = (emojiArray, currentEmoji) =>
   }).join('');
 
 const commentListTemplate = (comments, input) => {
+  // console.log(input);
   // console.log(comments);
-  const { currentEmoji, currentText } = input;
+  const { currentEmoji, currentText, isDeleted, isDisabled, commentId: currentCommentId } = input;
 
-  const commentsList = comments.map((commentData) => commentTemplate(commentData)).join('');
-  const emojiList = emojiTemplate(Emojis, currentEmoji);
+  const commentsList = comments.map((commentData) => commentTemplate(commentData, isDeleted, currentCommentId)).join('');
+  const emojiList = emojiTemplate(Emojis, currentEmoji, isDisabled);
 
   return (
     `<ul class="film-details__comments-list">
@@ -54,6 +55,7 @@ const commentListTemplate = (comments, input) => {
           class="film-details__comment-input"
           placeholder="Select reaction below and write comment here"
           name="comment"
+          ${isDisabled ? ' disabled': ''}
         >${currentText}</textarea>
       </label>
       <div class="film-details__emoji-list">

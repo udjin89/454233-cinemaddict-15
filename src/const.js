@@ -32,11 +32,20 @@ const FilterType = {
   FAVORITES: 'favorites',
   STATISTICS: 'stats',
 };
+
 const ShowPeriod = {
   ALL_TIME: 'all-time',
   DAY: 'day',
   WEEK: 'week',
-  MOUTH: 'mouth',
+  MOUTH: 'month',
   YEAR: 'year',
 };
-export { sortType, UserAction, UpdateType, FilterType, ShowPeriod, VISUALLY_HIDDEN, Emojis };
+
+const PopupState = {
+  DELETE: 'deleted',
+  DISABLED: 'disabled',
+  REJECTED:'rejected',
+  DEFAULT: 'default',
+};
+
+export { sortType, UserAction, UpdateType, FilterType, ShowPeriod, VISUALLY_HIDDEN, Emojis, PopupState };

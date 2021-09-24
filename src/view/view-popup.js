@@ -1,6 +1,8 @@
 import SmartView from './smart.js';
 import commentListTemplate from './comment-list.js';
 import { formatDateToRelease } from '../utils/formating-date.js';
+import { PopupState } from '../const.js';
+import { shake } from '../utils/common.js';
 
 const createFilmDetails = (movie) => {
   //деструктуируем то что пришло в movie
@@ -12,9 +14,11 @@ const createFilmDetails = (movie) => {
     isFavorite,
     currentEmoji = '',
     currentText = '',
+    isDeleted,
+    isDisabled,
+    isSubmit,
+    commentId,
   } = movie;
-
-  console.log('movie:####',movie);
 
   const {
     title,
@@ -133,7 +137,7 @@ const createFilmDetails = (movie) => {
         <div class="film-details__bottom-container">
           <section class="film-details__comments-wrap">
             <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
-            ${commentListTemplate(comments, {currentEmoji, currentText})}
+            ${commentListTemplate(comments, {currentEmoji, currentText, isDeleted, isDisabled, commentId})}
           </section>
        </div>
       </form>
@@ -166,6 +170,53 @@ export default class popup extends SmartView {
   getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
     // return createFilmDetails(this._movie);
     return createFilmDetails(this._data);
+  }
+
+  setState(state, commentId) {
+    switch (state) {
+      case PopupState.DISABLED:
+        this.updateData(
+          {
+            isDisabled: true,
+          },
+          false,
+        );
+        break;
+      case PopupState.DELETE:
+        this.updateData(
+          {
+            isDeleted: true,
+            commentId,
+          },
+          false,
+        );
+        break;
+      case PopupState.REJECTED:
+        this.updateData(
+          {
+            isDeleted: false,
+            isDisabled: false,
+          },
+          false,
+        );
+        break;
+      case PopupState.DEFAULT:
+        this.updateData(
+          {
+            isDeleted: false,
+            isDisabled: false,
+          },
+          false,
+        );
+        break;
+
+    }
+  }
+
+  shakeInputForm(){
+    const commentInput = this.getElement().querySelector('.film-details__comment-input');
+    console.log(this.getElement());
+    shake(commentInput);
   }
 
   update(data, comments = []) {
@@ -307,7 +358,8 @@ export default class popup extends SmartView {
   _commentsClickHandler(evt) {
     evt.preventDefault();
     if(evt.target.classList.contains('film-details__comment-delete')){
-      this._callback.clickListCommentDelete(evt.target.dataset.id);
+      this._commentId = evt.target.dataset.id;
+      this._callback.clickListCommentDelete(this._commentId);
     }
   }
 
@@ -323,6 +375,9 @@ export default class popup extends SmartView {
         currentComments: [],
         currentText: '',
         currentEmoji: '',
+        isDeleted: false,
+        isDisabled: false,
+        commentId: null,
       },
     );
   }

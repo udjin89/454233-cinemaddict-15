@@ -52,18 +52,14 @@ export default class Filter {
   // }
 
   _handleFilterTypeChange(filterType) {
-    console.log('filer type-> ' + filterType);
-
-    if (this._filterModel.getFilter() === filterType && this._filterModel.getFilter() !== 'STATISTICS') { return; }
-
-    if (filterType === FilterType.STATISTICS) {
-      console.log('Stat open');
-      this._handleSiteMenuClick(filterType);
+    // console.log(this._filterModel.getFilter() === filterType);
+    if (this._filterModel.getFilter() === filterType && this._filterModel.getFilter() !== FilterType.STATISTICS) {
       return;
     }
+
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
     this._handleSiteMenuClick(filterType);
-    console.log('-> ' + this._filterModel.getFilter());
+    // console.log('-> ' + this._filterModel.getFilter());
   }
 
   _getFilters() {

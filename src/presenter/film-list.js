@@ -117,13 +117,20 @@ export default class FilmList {
         // this._filmCardPresenter[filmCard.id].replacePopup();
         break;
       case UserAction.ADD_COMMENT:
+        this._popupPresenter.setDisabledState();
         this._api.addComment(update.idFilm, update.comment)
           .then(({ movie, comments }) => {
             this._commentsModel.setComments(updateType, movie.id, comments);
             this._filmsModel.updateFilmById(updateType, movie);
             this._popupPresenter.resetInput();
           })
-          .catch((err) => console.log('Ошибка сервера при создании комментария', err));
+          .catch(() => {
+            this._popupPresenter.setRejectedState();
+            this._popupPresenter.shakeInputForm();
+          })
+          .finally(()=>{
+            setTimeout(this._popupPresenter.setDefaultState, 300);
+          });
         break;
       case UserAction.DELETE_COMMENT:
         this._filmsModel.updateFilmById(updateType, update);
@@ -237,6 +244,7 @@ export default class FilmList {
 
   _renderNoFilms() {
     removeComponent(this._loadingComponent);
+    this._emptyList.setFilter(this._filterModel.getFilter());
     // Метод для рендеринга заглушки
     render(this._filmsList, this._emptyList, RenderPosition.BEFOREEND);
   }

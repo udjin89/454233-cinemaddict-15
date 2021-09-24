@@ -9,6 +9,7 @@ export default class Filter extends AbstractObserver {
 
   setFilter(updateType, filter) {
     this._activeFilter = filter;
+    console.log('setFilter MODEL');
     this._notify(updateType, filter);
   }
 

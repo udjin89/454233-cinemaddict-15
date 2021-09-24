@@ -82,8 +82,8 @@ const renderCharts = ({ genres: genresOriginal = {} }, statisticCtx) => {
 };
 
 
-const createStats = (rankName, {films, period}) => {
-  console.log(films, period);
+const createStats = (rankName, {films, period}, newStats) => {
+  console.log(newStats);
   const {watched, allTime, genres} = getWatchedInfo(films);
   const hours = Math.floor(allTime / HOUR);
   const minutes = Math.floor( allTime - hours * HOUR);
@@ -171,8 +171,9 @@ export default class Stats extends Smart {
     this._setFilterChangeHandler();
   }
 
-  _getWatchedFilms() {
-    return filterWachedFilmsInPeriod(this._state);
+
+  _getWachedInfo(){
+    return getWatchedInfo(filterWachedFilmsInPeriod(this._state));
   }
 
   _setFilterChangeHandler(){
@@ -200,11 +201,11 @@ export default class Stats extends Smart {
     }
     const statisticCtx = this.getElement().querySelector('.statistic__chart');
 
-    this._chart = renderCharts(getWatchedInfo(this._state.films), statisticCtx);
+    this._chart = renderCharts(this._getWachedInfo(), statisticCtx);
 
   }
 
   getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
-    return createStats(this._rankName, this._state, this._getWatchedFilms());
+    return createStats(this._rankName, this._state, filterWachedFilmsInPeriod(this._state));
   }
 }

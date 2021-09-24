@@ -39,7 +39,6 @@ export default class Films extends AbstractObserver {
   }
 
   static adaptToClient(film) {
-    console.log(film);
     // console.log('DATA -> ' + film.film_info.title);
     const info = film.film_info;
     const release = film.film_info.release;

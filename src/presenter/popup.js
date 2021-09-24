@@ -1,6 +1,6 @@
 import PopupView from '../view/view-popup.js';
 import { RenderPosition, render, removeComponent } from '../utils/render.js';
-import { UpdateType, UserAction } from '../const.js';
+import { PopupState, UpdateType, UserAction } from '../const.js';
 
 const isControlEnterEvent = (evt) => evt.key === 'Enter' && (evt.ctrlKey || evt.metaKey);
 
@@ -20,6 +20,7 @@ export default class Popup {
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleInputChange = this._handleInputChange.bind(this);
     this._handleDeleteComment = this._handleDeleteComment.bind(this);
+    this.setDefaultState = this.setDefaultState.bind(this);
 
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
 
@@ -139,6 +140,7 @@ export default class Popup {
   }
 
   _handleDeleteComment(commentId) {
+    this._view.setState(PopupState.DELETE, commentId);
     this._api.removeComment(commentId)
       .then(() => {
         this._commentsModel.removeComment(UpdateType.PATCH, this._film.id, commentId);
@@ -157,8 +159,11 @@ export default class Popup {
           ),
         );
       })
-      .catch((err) => {
-        console.log('Запрос на удаление вызвал ошибку', err);
+      .catch(() => {
+        this._view.setState(PopupState.REJECTED);
+      })
+      .finally(()=>{
+        this._view.setState(PopupState.DEFAULT);
       });
   }
 
@@ -216,6 +221,28 @@ export default class Popup {
     document.body.classList.remove(HIDE_CLASS);
     // this._view.reset(this._film);
     // this._mode = Mode.CLOSE;
+  }
+
+  setDefaultState(){
+    this._view.setState(PopupState.DEFAULT);
+  }
+
+  setDisabledState(){
+    this._view.setState(PopupState.DISABLED);
+  }
+
+  setDeletedState(){
+    this._view.setState(PopupState.DELETE);
+  }
+
+  setRejectedState(){
+    this._view.setState(PopupState.REJECTED);
+    console.log(this._view.getElement());
+
+  }
+
+  shakeInputForm(){
+    this._view.shakeInputForm();
   }
 
   resetInput() {
