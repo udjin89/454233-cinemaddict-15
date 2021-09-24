@@ -20,15 +20,15 @@ export default class Abstract {
   }
 
   getElement() {
-    if (!this._element) { //Если в поле _element, ничего нет то мы присваиваем результат функции createElement
+    if (!this._element) {
       this._element = createElement(this.getTemplate());
     }
-    // Если уже что то находится в  _element, просто возвращаем это
+
     return this._element;
   }
 
   removeElement() {
-    this._element = null; //затираем значение(разметку которая там)
+    this._element = null;
   }
 
   show() {

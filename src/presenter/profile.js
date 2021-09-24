@@ -1,10 +1,10 @@
 import ProfileView from '../view/view-profile.js';
-import { RenderPosition, render, removeComponent, replace } from '../utils/render.js';
+import { RenderPosition, render, removeComponent } from '../utils/render.js';
 import { getRatingUser, countWatchedFilms } from '../utils/stats.js';
 export default class Profile {
   constructor(container, filmsModel) {
-    this._container = container; //контейнер куда рендерим
-    this._filmsModel = filmsModel; //данные
+    this._container = container;
+    this._filmsModel = filmsModel;
 
     this._profile = null;
     this._countFilms = 0;
@@ -13,8 +13,6 @@ export default class Profile {
   }
 
   init() {
-    // console.log('profile');
-    // console.log(this._filmsModel);
     this._filmsModel.addObserver(this._handleModelEvent);
     this._renderProfile();
   }
@@ -26,7 +24,6 @@ export default class Profile {
     }
 
     const status = this.getStatus();
-    // console.log('get status in profile.js -> ' + status)
     this._profile = new ProfileView(status);
 
 
@@ -34,7 +31,6 @@ export default class Profile {
   }
 
   _handleModelEvent() {
-    // console.log('profile change model');
     removeComponent(this._profile);
     this.init();
   }

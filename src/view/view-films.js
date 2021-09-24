@@ -7,7 +7,7 @@ const createFilmsSection = () => (
 );
 
 export default class filmsSection extends AbstractView {
-  getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
+  getTemplate() {
 
     return createFilmsSection();
   }

@@ -5,7 +5,6 @@ import Smart from './smart.js';
 
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-// Chart.register(...registerables);
 
 const BAR_HEIGHT = 50;
 const BG_COLOR = '#ffe800';
@@ -24,7 +23,6 @@ const renderCharts = ({ genres: genresOriginal = {} }, statisticCtx) => {
   return new Chart(statisticCtx, {
     plugins: [ChartDataLabels],
     type: 'horizontalBar',
-    // type: 'bar',
     data: {
       labels: genres,
       datasets: [{
@@ -35,7 +33,6 @@ const renderCharts = ({ genres: genresOriginal = {} }, statisticCtx) => {
       }],
     },
     options: {
-      // indexAxis: 'y',
       plugins: {
         datalabels: {
           font: {
@@ -82,11 +79,10 @@ const renderCharts = ({ genres: genresOriginal = {} }, statisticCtx) => {
 };
 
 
-const createStats = (rankName, {films, period}, newStats) => {
-  console.log(newStats);
-  const {watched, allTime, genres} = getWatchedInfo(films);
+const createStats = (rankName, { films, period }) => {
+  const { watched, allTime, genres } = getWatchedInfo(films);
   const hours = Math.floor(allTime / HOUR);
-  const minutes = Math.floor( allTime - hours * HOUR);
+  const minutes = Math.floor(allTime - hours * HOUR);
 
 
   const getTopGenres = () => {
@@ -95,14 +91,6 @@ const createStats = (rankName, {films, period}, newStats) => {
     }
     return '';
   };
-
-  // console.log('getSortedGenre:####', getSortedGenre(genres));
-
-
-  // console.log('genres:#####', genres);
-  // console.log('rankName:#####', rankName);
-  // console.log('{films, period}:#####', films, period);
-  const genre = null;
   return (
     `<section class="statistic">
       <p class="statistic__rank">
@@ -157,7 +145,6 @@ const createStats = (rankName, {films, period}, newStats) => {
 };
 export default class Stats extends Smart {
   constructor(state, rankName) {
-    // console.log(state, rankName);
     super();
     this._chart = null;
     this._period = ShowPeriod.ALL_TIME;
@@ -172,11 +159,11 @@ export default class Stats extends Smart {
   }
 
 
-  _getWachedInfo(){
+  _getWachedInfo() {
     return getWatchedInfo(filterWachedFilmsInPeriod(this._state));
   }
 
-  _setFilterChangeHandler(){
+  _setFilterChangeHandler() {
     this.getElement().querySelector('.statistic__filters').addEventListener('change', this._filterChangeHandler);
   }
 
@@ -185,7 +172,7 @@ export default class Stats extends Smart {
     this._state.period = evt.target.value;
 
     this.updateData({
-      period : this._state.period,
+      period: this._state.period,
     });
 
   }
@@ -196,7 +183,7 @@ export default class Stats extends Smart {
   }
 
   _renderChart() {
-    if(this._chart !==null) {
+    if (this._chart !== null) {
       this._chart = null;
     }
     const statisticCtx = this.getElement().querySelector('.statistic__chart');
@@ -205,7 +192,7 @@ export default class Stats extends Smart {
 
   }
 
-  getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
+  getTemplate() {
     return createStats(this._rankName, this._state, filterWachedFilmsInPeriod(this._state));
   }
 }

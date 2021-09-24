@@ -5,7 +5,6 @@ import { PopupState } from '../const.js';
 import { shake } from '../utils/common.js';
 
 const createFilmDetails = (movie) => {
-  //деструктуируем то что пришло в movie
   const {
     filmInfo,
     currentComments: comments,
@@ -16,7 +15,6 @@ const createFilmDetails = (movie) => {
     currentText = '',
     isDeleted,
     isDisabled,
-    isSubmit,
     commentId,
   } = movie;
 
@@ -37,32 +35,16 @@ const createFilmDetails = (movie) => {
   } = filmInfo;
 
   const runtimeView = `${Math.trunc(runtime / 60)}h ${(runtime - Math.trunc(runtime / 60) * 60)}m`;
-  // console.log(genre);
-  // console.log('---' + movie.comments.emotion);
-
-  // const currentEmoji = movie.comments.emotion ? movie.comments.emotion : '';
-
-  // let genres = genre.join();
   const writersView = writers.join();
 
   const genreTemplate = (genreElement) => `<span class="film-details__genre">${genreElement}</span>`;
 
-  // const emojiTemplate = currentEmoji ? `<img src="images/emoji/${currentEmoji}.png" width="55" height="55" alt="emoji-${currentEmoji}">` : '';
-
   const genresItems = (genreParam) => {
 
     const genresItemsTemplate = genreParam.map((item, index) => genreTemplate(item, index)).join('');
-    // console.log(genresItemsTemplate);
     return genresItemsTemplate;
   };
 
-
-  // const commentsItems = (commentsItem) => {
-  //   const commentsItemsTemplate = commentsItem.map((item, index) => commentTemplate(item, index)).join('');
-  //   return commentsItemsTemplate;
-  // };
-
-  // const renderComents = commentsItems(comments);
   const renderGenres = genresItems(genre);
 
   return `<section class="film-details">
@@ -137,7 +119,7 @@ const createFilmDetails = (movie) => {
         <div class="film-details__bottom-container">
           <section class="film-details__comments-wrap">
             <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
-            ${commentListTemplate(comments, {currentEmoji, currentText, isDeleted, isDisabled, commentId})}
+            ${commentListTemplate(comments, { currentEmoji, currentText, isDeleted, isDisabled, commentId })}
           </section>
        </div>
       </form>
@@ -155,20 +137,18 @@ export default class popup extends SmartView {
     this._clickAsWatchedList = this._clickAsWatchedList.bind(this);
     this._clickFavorite = this._clickFavorite.bind(this);
 
-    // this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._descriptionInputHandler = this._descriptionInputHandler.bind(this);
     this._emojiChangeHandler = this._emojiChangeHandler.bind(this);
     this._commentsClickHandler = this._commentsClickHandler.bind(this);
     this._setInnerHandlers = this._setInnerHandlers.bind(this);
     this._onDeleteKeyDown = this._onDeleteKeyDown.bind(this);
 
-    this._descriptionChangeHandler = this._descriptionChangeHandler.bind(this); //состояние change, когда уводим фокус элемента
+    this._descriptionChangeHandler = this._descriptionChangeHandler.bind(this);
 
     this._setInnerHandlers();
   }
 
-  getTemplate() { //Возвращаем разметку, сделано для удобства отдельной функцией
-    // return createFilmDetails(this._movie);
+  getTemplate() {
     return createFilmDetails(this._data);
   }
 
@@ -213,14 +193,13 @@ export default class popup extends SmartView {
     }
   }
 
-  shakeInputForm(){
+  shakeInputForm() {
     const commentInput = this.getElement().querySelector('.film-details__comment-input');
-    console.log(this.getElement());
     shake(commentInput);
   }
 
   update(data, comments = []) {
-    // передаем вторым параметром false, тк нам надо обновить элемент, а не только состояние
+
     this.updateData({
       data,
       currentComments: comments,
@@ -246,16 +225,11 @@ export default class popup extends SmartView {
   }
 
   restoreHandlers() {
-    // this.setWatchListHandlerClick(this._callback.clickAddWatchList);
-    // this.setAsWatchedListHandlerClick(this._callback.clickAddAsWatchedList);
-    // this.setFavoriteHandlerClick(this._callback.clickAddFavorite);
-
     this._setInnerHandlers();
   }
 
   _descriptionInputHandler(evt) {
     evt.preventDefault();
-    // console.log('input text');
     this.updateData({
       currentText: evt.target.value,
     }, true);
@@ -297,7 +271,6 @@ export default class popup extends SmartView {
   _onDeleteKeyDown(evt) {
     if (evt.key === 'Delete') {
       evt.preventDefault();
-      // this._movie.comments.emotion = '';
       this.updateData({
         currentText: '',
         currentEmoji: '',
@@ -305,19 +278,9 @@ export default class popup extends SmartView {
     }
   }
 
-  // _formSubmitHandler(evt) {
-  //   evt.preventDefault();
-  //   this._callback.formSubmit(popup.parseStateToInfo(this._data));
-  // }
-
-  // setFormSubmitHandler(callback) {
-  //   this._callback.formSubmit = callback;
-  //   this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
-  // }
-
   _clickWatchList(evt) {
     evt.preventDefault();
-    this._callback.clickAddWatchList(); // метод записан с обьекте callback
+    this._callback.clickAddWatchList();
   }
 
   setWatchListHandlerClick(callback) {
@@ -327,7 +290,7 @@ export default class popup extends SmartView {
 
   _clickAsWatchedList(evt) {
     evt.preventDefault();
-    this._callback.clickAddAsWatchedList(); // метод записан с обьекте callback
+    this._callback.clickAddAsWatchedList();
   }
 
   setAsWatchedListHandlerClick(callback) {
@@ -337,7 +300,7 @@ export default class popup extends SmartView {
 
   _clickFavorite(evt) {
     evt.preventDefault();
-    this._callback.clickAddFavorite(); // метод записан с обьекте callback
+    this._callback.clickAddFavorite();
   }
 
   setFavoriteHandlerClick(callback) {
@@ -357,7 +320,7 @@ export default class popup extends SmartView {
 
   _commentsClickHandler(evt) {
     evt.preventDefault();
-    if(evt.target.classList.contains('film-details__comment-delete')){
+    if (evt.target.classList.contains('film-details__comment-delete')) {
       this._commentId = evt.target.dataset.id;
       this._callback.clickListCommentDelete(this._commentId);
     }
@@ -368,10 +331,11 @@ export default class popup extends SmartView {
     this.getElement().querySelector('.film-details__comments-list').addEventListener('click', this._commentsClickHandler);
   }
 
-  static parseInfoToState(movie) { // переводим данные в состояние
+  static parseInfoToState(movie) {
     return Object.assign(
       {},
-      movie,{
+      movie,
+      {
         currentComments: [],
         currentText: '',
         currentEmoji: '',
@@ -381,12 +345,4 @@ export default class popup extends SmartView {
       },
     );
   }
-
-  // static parseStateToInfo(data) { // состояние в данные, которые отправятся на сервер
-  //   data = Object.assign({}, data);
-
-  //   delete data.currentText;
-  //   delete data.currentEmoji;
-  //   return data;
-  // }
 }

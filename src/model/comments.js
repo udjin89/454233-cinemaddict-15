@@ -7,12 +7,12 @@ export default class Comments extends AbstractObserver {
   }
 
   setComments(updateType, filmId, comments) {
-    this._comments[filmId] = comments; //записываем массив обьектов(фильмов), получение данных
+    this._comments[filmId] = comments;
     this._notify(updateType, comments);
   }
 
   getComments(filmId) {
-    return this._comments[filmId] || []; //возвращаем список фильмов, тем кто вызовет этот метод
+    return this._comments[filmId] || [];
   }
 
   has(filmId) {

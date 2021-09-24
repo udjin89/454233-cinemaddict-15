@@ -4,7 +4,7 @@ import { getAttributeChecked } from '../utils/utils.js';
 
 
 const commentTemplate = (commentData, isDeleted, currentCommentId) => {
-  const {emotion, comment, author, date, id : commentId } = commentData;
+  const { emotion, comment, author, date, id: commentId } = commentData;
 
   return (
     `<li class="film-details__comment">
@@ -35,8 +35,7 @@ const emojiTemplate = (emojiArray, currentEmoji, isDisabled) =>
   }).join('');
 
 const commentListTemplate = (comments, input) => {
-  // console.log(input);
-  // console.log(comments);
+
   const { currentEmoji, currentText, isDeleted, isDisabled, commentId: currentCommentId } = input;
 
   const commentsList = comments.map((commentData) => commentTemplate(commentData, isDeleted, currentCommentId)).join('');
@@ -55,7 +54,7 @@ const commentListTemplate = (comments, input) => {
           class="film-details__comment-input"
           placeholder="Select reaction below and write comment here"
           name="comment"
-          ${isDisabled ? ' disabled': ''}
+          ${isDisabled ? ' disabled' : ''}
         >${currentText}</textarea>
       </label>
       <div class="film-details__emoji-list">

@@ -1,5 +1,5 @@
-import dayjs from "dayjs";
-import { ShowPeriod } from "../const";
+import dayjs from 'dayjs';
+import { ShowPeriod } from '../const';
 
 
 const RATING_WATCHED = [
@@ -17,28 +17,32 @@ const getCountGenres = (genres, genre) => {
   return genres;
 };
 
-const getSortedGenre = (genres) => Object.entries(genres).map(([ key, value ]) => ({ genre: key , count: value })).sort((a, b) => b.count - a.count);
+const getSortedGenre = (genres) => Object.entries(genres).map(([key, value]) => ({ genre: key, count: value })).sort((a, b) => b.count - a.count);
 
 
 const getWatchedInfo = (films) => films.reduce((info, film) => {
-  if(film.isWatched) {
+
+  if (film.isWatched) {
     info.watched += 1;
     info.allTime += film.filmInfo.runtime;
     info.genres = film.filmInfo.genre.reduce(getCountGenres, info.genres);
   }
 
   return info;
-}, {watched: 0, allTime: 0, genres: {}});
+}, {
+  watched: 0,
+  allTime: 0,
+  genres: {
 
+  },
+});
 
 const countWatchedFilms = (films) => films.reduce((count, film) => film.isWatched ? ++count : count, 0);
 
-const getRatingUser = (count = 0) => {
-  return RATING_WATCHED.find((item) => item.count <= count ).rate;
-}
+const getRatingUser = (count = 0) => (RATING_WATCHED.find((item) => item.count <= count).rate);
 
-const filterWachedFilmsInPeriod = ( {films, period} ) => {
-  if(period === ShowPeriod.ALL_TIME) {
+const filterWachedFilmsInPeriod = ({ films, period }) => {
+  if (period === ShowPeriod.ALL_TIME) {
     return films;
   }
 
@@ -48,4 +52,4 @@ const filterWachedFilmsInPeriod = ( {films, period} ) => {
   });
 };
 
-export { getRatingUser, getWatchedFilms, countWatchedFilms, filterWachedFilmsInPeriod , getWatchedInfo, getSortedGenre};
+export { getRatingUser, getWatchedFilms, countWatchedFilms, filterWachedFilmsInPeriod, getWatchedInfo, getSortedGenre };
