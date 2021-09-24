@@ -242,6 +242,7 @@ export default class FilmList {
 
     if (this._filmsModel.isEmpty()) {
       this._renderNoFilms();
+      return;
     }
     else {
       const films = this._getFilmsList();
