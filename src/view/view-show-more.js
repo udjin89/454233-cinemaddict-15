@@ -5,7 +5,7 @@ const createButtonShowMore = () => (
   `
 );
 
-export default class buttonShow extends AbstractView {
+export default class ViewShowMore extends AbstractView {
   constructor() {
     super();
     this._clickButtonShowMore = this._clickButtonShowMore.bind(this);

@@ -1,7 +1,7 @@
 import AbstractView from './abstract.js';
 import { FilterType } from '../const.js';
 
-const FILTERTYPES = {
+const FilterTypes = {
   [FilterType.ALL]: 'There are no movies in our database',
   [FilterType.WATCHLIST]: 'There are no movies to watch now',
   [FilterType.HISTORY]: 'There are no watched movies now',
@@ -10,7 +10,7 @@ const FILTERTYPES = {
 
 const createEmptyList = (filterType) => (
   `<section class="films-list">
-  <h2 class="films-list__title">${FILTERTYPES[filterType]}</h2>
+  <h2 class="films-list__title">${FilterTypes[filterType]}</h2>
 
   <!--
     Значение отображаемого текста зависит от выбранного фильтра:
@@ -24,7 +24,7 @@ const createEmptyList = (filterType) => (
   `
 );
 
-export default class noFilms extends AbstractView {
+export default class ViewEmptyList extends AbstractView {
   constructor(filterType) {
     super();
     this._filterType = filterType;

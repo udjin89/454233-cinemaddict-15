@@ -8,7 +8,7 @@ const createProfile = (status) => (
   `
 );
 
-export default class profile extends AbstractView {
+export default class ViewProfile extends AbstractView {
   constructor(status) {
     super();
     this._status = status;

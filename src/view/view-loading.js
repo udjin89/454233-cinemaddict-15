@@ -8,7 +8,7 @@ const createLoadingList = () => (
   `
 );
 
-export default class loadingList extends AbstractView {
+export default class ViewLoading extends AbstractView {
   getTemplate() {
     return createLoadingList();
   }

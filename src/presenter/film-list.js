@@ -1,6 +1,6 @@
 import FilmsListView from '../view/view-films-list.js';
 import SortView from '../view/view-sort.js';
-import NoFilms from '../view/view-empty-list.js';
+import ViewEmptyList from '../view/view-empty-list.js';
 import LoadingView from '../view/view-loading.js';
 import FilmsListContainerView from '../view/view-film-list-container.js';
 import ButtonShowMoreView from '../view/view-show-more.js';
@@ -35,7 +35,7 @@ export default class FilmList {
     this._isLoading = true;
 
     this._filmsList = new FilmsListView();
-    this._emptyList = new NoFilms(this._filterType);
+    this._emptyList = new ViewEmptyList(this._filterType);
     this._filmListContainer = new FilmsListContainerView();
     this._loadingComponent = new LoadingView();
     this._buttonShowMore = null;

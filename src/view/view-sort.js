@@ -15,7 +15,7 @@ const createSortList = (initialSortType) => (
 </ul>
 `);
 
-export default class sort extends AbstractView {
+export default class ViewSort extends AbstractView {
   constructor(initialSortType) {
     super();
     this._initialSortType = initialSortType;

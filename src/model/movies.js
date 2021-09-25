@@ -1,6 +1,6 @@
 import AbstractObserver from './abstract-observer.js';
 
-export default class Films extends AbstractObserver {
+export default class Movies extends AbstractObserver {
   constructor() {
     super();
     this._films = [];

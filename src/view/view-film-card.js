@@ -30,7 +30,7 @@ const createFilmCard = (movie) => {
   `;
 };
 
-export default class filmCard extends AbstractView {
+export default class ViewFilmCard extends AbstractView {
   constructor(movie) {
     super();
     this._movieCard = movie;

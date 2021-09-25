@@ -39,7 +39,7 @@ const countWatchedFilms = (films) => films.reduce((count, film) => film.isWatche
 
 const getRatingUser = (count = 0) => (RATING_WATCHED.find((item) => item.count <= count).rate);
 
-const filterWachedFilmsInPeriod = ({ films, period }) => {
+const filterWatchedFilmsInPeriod = ({ films, period }) => {
   if (period === ShowPeriod.ALL_TIME) {
     return films;
   }
@@ -50,4 +50,4 @@ const filterWachedFilmsInPeriod = ({ films, period }) => {
   });
 };
 
-export { getRatingUser, getWatchedFilms, countWatchedFilms, filterWachedFilmsInPeriod, getWatchedInfo, getSortedGenre };
+export { getRatingUser, getWatchedFilms, countWatchedFilms, filterWatchedFilmsInPeriod, getWatchedInfo, getSortedGenre };

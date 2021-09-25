@@ -5,7 +5,7 @@ const createFooterStatistics = (countFilms) => (
   `
 );
 
-export default class footerStat extends AbstractView {
+export default class ViewFooterStatistics extends AbstractView {
 
   constructor(countFilms) {
     super();

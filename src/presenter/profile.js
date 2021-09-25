@@ -7,7 +7,6 @@ export default class Profile {
     this._filmsModel = filmsModel;
 
     this._profile = null;
-    this._countFilms = 0;
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
   }

@@ -1,6 +1,6 @@
 
 import { ShowPeriod } from '../const.js';
-import { filterWachedFilmsInPeriod, getSortedGenre, getWatchedInfo } from '../utils/stats.js';
+import { filterWatchedFilmsInPeriod, getSortedGenre, getWatchedInfo } from '../utils/stats.js';
 import Smart from './smart.js';
 
 import Chart from 'chart.js';
@@ -143,7 +143,7 @@ const createStats = (rankName, { films, period }) => {
     `
   );
 };
-export default class Stats extends Smart {
+export default class ViewStats extends Smart {
   constructor(state, rankName) {
     super();
     this._chart = null;
@@ -160,7 +160,7 @@ export default class Stats extends Smart {
 
 
   _getWachedInfo() {
-    return getWatchedInfo(filterWachedFilmsInPeriod(this._state));
+    return getWatchedInfo(filterWatchedFilmsInPeriod(this._state));
   }
 
   _setFilterChangeHandler() {
@@ -193,6 +193,6 @@ export default class Stats extends Smart {
   }
 
   getTemplate() {
-    return createStats(this._rankName, this._state, filterWachedFilmsInPeriod(this._state));
+    return createStats(this._rankName, this._state, filterWatchedFilmsInPeriod(this._state));
   }
 }

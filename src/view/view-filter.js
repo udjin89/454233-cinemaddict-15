@@ -12,7 +12,7 @@ const createFiltersTemplate = (filters, currentFilterType) => (
 </nav > `);
 
 
-export default class filter extends AbstractView {
+export default class ViewFilter extends AbstractView {
   constructor(filters, currentFilterType) {
     super();
     this._filters = filters;

@@ -6,7 +6,7 @@ const createFilmsListContainer = () => (
     </div>
   `
 );
-export default class filmsListContainer extends AbstractView {
+export default class ViewFilmsListContainer extends AbstractView {
 
   getTemplate() {
     return createFilmsListContainer();

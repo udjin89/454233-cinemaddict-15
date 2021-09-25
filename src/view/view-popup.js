@@ -126,11 +126,11 @@ const createFilmDetails = (movie) => {
     `;
 };
 
-export default class popup extends SmartView {
+export default class ViewPopup extends SmartView {
   constructor(movie) {
     super();
     this._movie = movie;
-    this._data = popup.parseInfoToState(movie);
+    this._data = ViewPopup.parseInfoToState(movie);
     this._clickClosePopup = this._clickClosePopup.bind(this);
     this._clickWatchList = this._clickWatchList.bind(this);
     this._clickAsWatchedList = this._clickAsWatchedList.bind(this);
