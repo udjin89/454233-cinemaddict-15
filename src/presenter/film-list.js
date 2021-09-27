@@ -7,7 +7,7 @@ import ButtonShowMoreView from '../view/view-show-more.js';
 import { RenderPosition, render, removeComponent } from '../utils/render.js';
 import FilmCardPresenter from './film-card.js';
 import PopupPresenter from './popup.js';
-import { updateFilmById, sortByDate, sortByRating } from '../utils/common.js';
+import { updateFilmById, sortByDate, sortByRating, isOnline } from '../utils/common.js';
 import { sortType, UpdateType, UserAction, FilterType } from '../const.js';
 import { filterTypeToFilterFilms } from '../utils/filter.js';
 

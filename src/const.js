@@ -44,8 +44,15 @@ const ShowPeriod = {
 const PopupState = {
   DELETE: 'deleted',
   DISABLED: 'disabled',
-  REJECTED:'rejected',
+  REJECTED: 'rejected',
   DEFAULT: 'default',
 };
 
-export { sortType, UserAction, UpdateType, FilterType, ShowPeriod, VISUALLY_HIDDEN, Emojis, PopupState };
+const Method = {
+  GET: 'GET',
+  PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
+};
+
+export { sortType, UserAction, UpdateType, FilterType, ShowPeriod, VISUALLY_HIDDEN, Emojis, PopupState, Method };

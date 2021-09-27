@@ -20,3 +20,5 @@ export const sortByRating = (a, b) => (
 export const shake = (element) => {
   element.classList.add('shake');
 };
+
+export const isOnline = () => window.navigator.onLine;

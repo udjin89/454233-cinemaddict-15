@@ -1,7 +1,8 @@
 import PopupView from '../view/view-popup.js';
 import { RenderPosition, render, removeComponent } from '../utils/render.js';
 import { PopupState, UpdateType, UserAction } from '../const.js';
-
+import { toast } from '../utils/toast.js';
+import { isOnline } from '../utils/common.js';
 const isControlEnterEvent = (evt) => evt.key === 'Enter' && (evt.ctrlKey || evt.metaKey);
 
 const HIDE_CLASS = 'hide-overflow';
@@ -108,6 +109,10 @@ export default class Popup {
   }
 
   _handleDeleteComment(commentId) {
+    if (!isOnline()) {
+      toast('You can\'t edit task offline');
+      return;
+    }
     this._view.setState(PopupState.DELETE, commentId);
     this._api.removeComment(commentId)
       .then(() => {
